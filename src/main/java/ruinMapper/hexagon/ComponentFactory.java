@@ -50,7 +50,7 @@ public class ComponentFactory {
 
     public static Tag createTag(String type) {
         Tag newTag = new Tag(type,
-                tagRepository, new HashSet<>(),
+                tagRepository, stateKeeper,
                 UUID.randomUUID());
         tagRepository.create(newTag);
         return newTag;
@@ -66,7 +66,7 @@ public class ComponentFactory {
     public static Room createRoom() {
         Room newRoom = new Room("", "",
                 new HashSet<>(), stateKeeper,
-                new HashSet<>(), roomRepository,
+                stateKeeper, roomRepository,
                 UUID.randomUUID());
         roomRepository.create(newRoom);
         return newRoom;
@@ -74,7 +74,7 @@ public class ComponentFactory {
 
     public static Context createContext() {
         Context newContext = new Context(new HashSet<>(),
-                new HashSet<>(), new HashSet<>(),
+                stateKeeper, stateKeeper,
                 contextRepository, UUID.randomUUID());
         contextRepository.create(newContext);
         return newContext;
@@ -83,11 +83,11 @@ public class ComponentFactory {
     public static QuestAndRoomStateKeeper createStateKeeper() {
         QuestAndRoomStateKeeper stateKeeper = new QuestAndRoomStateKeeper(
                 new HashMap<>(), new HashMap<>(),
-                stateKeeperRepository, UUID.randomUUID());
+                new HashSet<>(), stateKeeperRepository,
+                UUID.randomUUID());
         stateKeeperRepository.create(stateKeeper);
         return stateKeeper;
     }
-
 
 
     public static void setQuestRepository(

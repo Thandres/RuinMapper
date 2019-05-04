@@ -1,6 +1,10 @@
 package ruinMapper.hexagon.domain.room;
 
 import ruinMapper.hexagon.ComponentFactory;
+import ruinMapper.hexagon.domain.QuestManager;
+import ruinMapper.hexagon.domain.Questable;
+import ruinMapper.hexagon.domain.TagManager;
+import ruinMapper.hexagon.domain.Taggable;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.Quest;
@@ -12,13 +16,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Room implements RoomPort {
+public class Room implements RoomPort, Taggable,
+        Questable {
     private String title;
     private String notes;
     private Set<HintPort> hintSet;
     private QuestManager questManager;
-
-    private Set<TagPort> tagSet;
+    private TagManager tagManager;
     private CRUDRepositoryPort<Room> roomRepository;
     private UUID roomID;
 
@@ -26,16 +30,14 @@ public class Room implements RoomPort {
     public Room(String title, String notes,
                 Set<HintPort> hintSet,
                 QuestManager questManager,
-                Set<TagPort> tagSet,
+                TagManager tagManager,
                 CRUDRepositoryPort<Room> roomRepository,
                 UUID roomID) {
         this.title = title;
         this.notes = notes;
         this.hintSet = hintSet;
         this.questManager = questManager;
-
-        this.tagSet = tagSet;
-
+        this.tagManager = tagManager;
         this.roomRepository = roomRepository;
         this.roomID = roomID;
     }
@@ -109,7 +111,6 @@ public class Room implements RoomPort {
     @Override
     public void addQuest(QuestPort quest) {
         questManager.addQuest(quest, this);
-
         saveState();
 
     }
@@ -117,9 +118,7 @@ public class Room implements RoomPort {
     @Override
     public void removeQuest(QuestPort quest) {
         questManager.removeQuest(quest, this);
-
         saveState();
-
     }
 
     @Override
@@ -128,27 +127,28 @@ public class Room implements RoomPort {
     }
 
     @Override
-    public void addTag(TagPort port) {
-        if (tagSet.add(port)) {
-            port.addTaggable(this);
-            saveState();
-        }
+    public void addTag(TagPort tagPort) {
+        tagManager.addTag(tagPort, this);
+        saveState();
     }
 
     @Override
-    public void removeTag(TagPort port) {
-        if (tagSet.remove(port)) {
-            port.removeTaggable(this);
-            saveState();
-        }
+    public void removeTag(TagPort tagPort) {
+        tagManager.removeTag(tagPort, this);
+        saveState();
     }
 
     @Override
     public Set<TagPort> accessTags() {
-        return new HashSet<>(tagSet);
+        return new HashSet<>(tagManager.accessTags(this));
     }
 
     private void saveState() {
         roomRepository.update(this);
+    }
+
+    @Override
+    public boolean isContext() {
+        return false;
     }
 }

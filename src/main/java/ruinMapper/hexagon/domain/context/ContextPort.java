@@ -1,6 +1,5 @@
 package ruinMapper.hexagon.domain.context;
 
-import ruinMapper.hexagon.domain.Taggable;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
@@ -13,14 +12,14 @@ import java.util.Set;
  * i.e. a game like Metroid, or Hollow Knight.
  * It keeps track of everything that is interesting on its own
  */
-public interface ContextPort extends Taggable {
+public interface ContextPort {
     public AreaPort createArea(String title);
 
     public Set<AreaPort> accessAreas();
 
     public TagPort createTag(String name);
 
-    public void deleteTag(TagPort tag);
+    public Set<TagPort> accessTags();
 
     public QuestPort createQuest(String title);
 

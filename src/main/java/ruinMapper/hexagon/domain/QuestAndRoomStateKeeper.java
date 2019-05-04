@@ -3,8 +3,9 @@ package ruinMapper.hexagon.domain;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.quest.RoomManager;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
-import ruinMapper.hexagon.domain.room.QuestManager;
 import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.tag.TagPort;
+import ruinMapper.hexagon.domain.tag.TaggableManager;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -13,21 +14,30 @@ import java.util.UUID;
 
 
 public class QuestAndRoomStateKeeper implements
-        QuestManager, RoomManager {
+        QuestManager, RoomManager, TagManager,
+        TaggableManager {
     private Map<RoomPort, Set<QuestPort>> roomToQuestsMap;
-
     private Map<QuestPort, Set<RoomPort>> questToRoomsMap;
+    private Set<QuestPort> contextQuests;
+
+
+    //TODO implement the TaggableManager and TagManager interface
+    private Map<Taggable, Set<TagPort>> taggableToTagsMap;
+    private Map<TagPort, Set<RoomPort>> roomToTagsMap;
+
     private CRUDRepositoryPort<QuestAndRoomStateKeeper> stateRepository;
     private UUID stateKeeperID;
 
     public QuestAndRoomStateKeeper(
             Map<RoomPort, Set<QuestPort>> roomToQuestsMap,
             Map<QuestPort, Set<RoomPort>> questToRoomsMap,
+            Set<QuestPort> contextQuests,
             CRUDRepositoryPort<QuestAndRoomStateKeeper> stateRepository,
             UUID stateKeeperID) {
 
         this.roomToQuestsMap = roomToQuestsMap;
         this.questToRoomsMap = questToRoomsMap;
+        this.contextQuests = contextQuests;
         this.stateRepository = stateRepository;
         this.stateKeeperID = stateKeeperID;
     }
@@ -35,26 +45,40 @@ public class QuestAndRoomStateKeeper implements
     // QuestManager
     @Override
     public void addQuest(QuestPort value,
-                         RoomPort key) {
-        addToMap(roomToQuestsMap, key,
-                value);
-        addToMap(questToRoomsMap, value, key);
+                         Questable key) {
+        if (!key.isContext()) {
+            addToMap(roomToQuestsMap, (RoomPort) key,
+                    value);
+            addToMap(questToRoomsMap, value,
+                    (RoomPort) key);
+        }
+        contextQuests.add(value);
         saveState();
     }
 
     @Override
     public void removeQuest(QuestPort value,
-                            RoomPort key) {
-        removeFromMap(roomToQuestsMap, key,
-                value);
-        removeFromMap(questToRoomsMap, value, key);
+                            Questable key) {
+        if (!key.isContext()) {
+            removeFromMap(roomToQuestsMap, (RoomPort) key,
+                    value);
+            removeFromMap(questToRoomsMap, value,
+                    (RoomPort) key);
+        }
+        contextQuests.remove(value);
         saveState();
 
     }
 
     @Override
-    public Set<QuestPort> accessQuests(RoomPort roomPort) {
-        return roomToQuestsMap.get(roomPort);
+    public Set<QuestPort> accessQuests(
+            Questable questable) {
+        if (!questable.isContext()) {
+            return new HashSet<>(roomToQuestsMap
+                    .get((RoomPort) questable));
+        } else {
+            return new HashSet<>(contextQuests);
+        }
     }
 
     /**********************************************************/
@@ -123,5 +147,25 @@ public class QuestAndRoomStateKeeper implements
 
     private void saveState() {
         stateRepository.update(this);
+    }
+
+    @Override
+    public void addTag(TagPort value, Taggable key) {
+
+    }
+
+    @Override
+    public void removeTag(TagPort value, Taggable key) {
+
+    }
+
+    @Override
+    public Set<TagPort> accessTags(Taggable taggable) {
+        return null;
+    }
+
+    @Override
+    public void deleteTag(TagPort tagPort) {
+
     }
 }

@@ -1,6 +1,10 @@
 package ruinMapper.hexagon.domain.context;
 
 import ruinMapper.hexagon.ComponentFactory;
+import ruinMapper.hexagon.domain.QuestManager;
+import ruinMapper.hexagon.domain.Questable;
+import ruinMapper.hexagon.domain.TagManager;
+import ruinMapper.hexagon.domain.Taggable;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
@@ -12,23 +16,27 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Context implements ContextPort {
+public class Context implements ContextPort, Taggable,
+        Questable {
 
     private Set<AreaPort> areaSet;
-    private Set<TagPort> possibleTagSet;
-    private Set<QuestPort> questSet;
+    private TagManager tagManager;
+    private QuestManager questManager;
+
     private CRUDRepositoryPort<Context> contextRepository;
     private UUID contextID;
 
     public Context(
             Set<AreaPort> areaSet,
-            Set<TagPort> possibleTagSet,
-            Set<QuestPort> questSet,
+            TagManager tagManager,
+
+            QuestManager questManager,
             CRUDRepositoryPort<Context> contextRepository,
             UUID contextID) {
         this.areaSet = areaSet;
-        this.possibleTagSet = possibleTagSet;
-        this.questSet = questSet;
+        this.tagManager = tagManager;
+        this.questManager = questManager;
+
         this.contextRepository = contextRepository;
         this.contextID = contextID;
     }
@@ -50,60 +58,34 @@ public class Context implements ContextPort {
     @Override
     public TagPort createTag(String name) {
         TagPort tag = ComponentFactory.createTag(name);
-        possibleTagSet.add(tag);
-        tag.addTaggable(this);
+        tagManager.addTag(tag, this);
         saveState();
         return tag;
     }
 
     @Override
-    public void deleteTag(TagPort tag) {
-        if (possibleTagSet.remove(tag)) {
-            tag.deleteTag();
-            saveState();
-        }
-    }
-
-    @Override
-    public void addTag(TagPort port) {
-        if (possibleTagSet.add(port)) {
-            port.addTaggable(this);
-            saveState();
-        }
-    }
-
-    // Context manages all possible Tags, so removing one is
-    // essentially deleting it from the context
-    @Override
-    public void removeTag(TagPort port) {
-        deleteTag(port);
-    }
-
-    @Override
     public Set<TagPort> accessTags() {
-        return new HashSet<>(possibleTagSet);
+        return new HashSet<>(tagManager.accessTags(this));
     }
 
     @Override
     public QuestPort createQuest(String title) {
         QuestPort quest = ComponentFactory
                 .createQuest(title);
-        questSet.add(quest);
+        questManager.addQuest(quest, this);
         saveState();
         return quest;
     }
 
     @Override
     public void deleteQuest(QuestPort quest) {
-        if (questSet.remove(quest)) {
-            quest.deleteQuest();
-            saveState();
-        }
+        questManager.removeQuest(quest, this);
+        saveState();
     }
 
     @Override
     public Set<QuestPort> accessQuests() {
-        return new HashSet<>(questSet);
+        return questManager.accessQuests(this);
     }
 
     @Override
@@ -116,5 +98,11 @@ public class Context implements ContextPort {
 
     private void saveState() {
         contextRepository.update(this);
+    }
+
+
+    @Override
+    public boolean isContext() {
+        return true;
     }
 }

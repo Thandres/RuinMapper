@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain.room;
+package ruinMapper.hexagon.domain;
 
 import ruinMapper.hexagon.domain.quest.QuestPort;
 
@@ -10,12 +10,12 @@ import java.util.Set;
 public interface QuestManager {
 
     public void addQuest(QuestPort value,
-                         RoomPort key);
+                         Questable key);
 
     public void removeQuest(QuestPort value,
-                            RoomPort key);
+                            Questable key);
 
     public Set<QuestPort> accessQuests(
-            RoomPort roomPort);
+            Questable questable);
 
 }

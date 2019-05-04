@@ -1,8 +1,8 @@
 package ruinMapper.hexagon.domain.room;
 
-import ruinMapper.hexagon.domain.Taggable;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
+import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.Set;
 
@@ -11,7 +11,7 @@ import java.util.Set;
  * creating and adding quests to rooms, adding hints and marking
  * the room with custom marks.
  */
-public interface RoomPort extends Taggable {
+public interface RoomPort {
     public void changeTitle(String newTitle);
 
     public String accessTitle();
@@ -35,5 +35,11 @@ public interface RoomPort extends Taggable {
     public void removeQuest(QuestPort quest);
 
     public Set<QuestPort> accessQuests();
+
+    public void addTag(TagPort tagPort);
+
+    public void removeTag(TagPort tagPort);
+
+    public Set<TagPort> accessTags();
 
 }
