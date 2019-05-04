@@ -16,7 +16,8 @@ public class Room implements RoomPort {
     private String title;
     private String notes;
     private Set<HintPort> hintSet;
-    private Set<QuestPort> questSet;
+    private QuestManager questManager;
+
     private Set<TagPort> tagSet;
     private CRUDRepositoryPort<Room> roomRepository;
     private UUID roomID;
@@ -24,14 +25,15 @@ public class Room implements RoomPort {
 
     public Room(String title, String notes,
                 Set<HintPort> hintSet,
-                Set<QuestPort> questSet,
+                QuestManager questManager,
                 Set<TagPort> tagSet,
                 CRUDRepositoryPort<Room> roomRepository,
                 UUID roomID) {
         this.title = title;
         this.notes = notes;
         this.hintSet = hintSet;
-        this.questSet = questSet;
+        this.questManager = questManager;
+
         this.tagSet = tagSet;
 
         this.roomRepository = roomRepository;
@@ -98,7 +100,7 @@ public class Room implements RoomPort {
     public QuestPort createQuest(String title) {
         Quest newQuest = ComponentFactory
                 .createQuest(title);
-        questSet.add(newQuest);
+        questManager.addQuest(newQuest, this);
         newQuest.addRoom(this);
         saveState();
         return newQuest;
@@ -106,23 +108,23 @@ public class Room implements RoomPort {
 
     @Override
     public void addQuest(QuestPort quest) {
-        if (questSet.add(quest)) {
-            quest.addRoom(this);
-            saveState();
-        }
+        questManager.addQuest(quest, this);
+
+        saveState();
+
     }
 
     @Override
     public void removeQuest(QuestPort quest) {
-        if (questSet.remove(quest)) {
-            quest.removeRoom(this);
-            saveState();
-        }
+        questManager.removeQuest(quest, this);
+
+        saveState();
+
     }
 
     @Override
     public Set<QuestPort> accessQuests() {
-        return new HashSet<>(questSet);
+        return questManager.accessQuests(this);
     }
 
     @Override
@@ -145,7 +147,6 @@ public class Room implements RoomPort {
     public Set<TagPort> accessTags() {
         return new HashSet<>(tagSet);
     }
-
 
     private void saveState() {
         roomRepository.update(this);

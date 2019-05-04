@@ -6,6 +6,9 @@ import java.util.Set;
 
 
 /**
+ * The interface for use by the application layer. Every outside concern
+ * of a quest comes through the questPort
+ * <p>
  * Lets you keep track of quests that arise and the rooms
  * relevant to that quest. Also keeps track of the queststatus
  * and lets you take additional notes

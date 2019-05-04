@@ -1,5 +1,6 @@
 package ruinMapper.hexagon;
 
+import ruinMapper.hexagon.domain.QuestAndRoomStateKeeper;
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.hint.Hint;
@@ -8,6 +9,7 @@ import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestStatus;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.Room;
+import ruinMapper.hexagon.domain.room.RoomPort;
 import ruinMapper.hexagon.domain.tag.Tag;
 
 import java.util.HashMap;
@@ -22,12 +24,15 @@ public class ComponentFactory {
     private static CRUDRepositoryPort<Tag> tagRepository;
     private static CRUDRepositoryPort<Area> areaRepository;
     private static CRUDRepositoryPort<Context> contextRepository;
+    private static CRUDRepositoryPort<QuestAndRoomStateKeeper> stateKeeperRepository;
+
+    private static QuestAndRoomStateKeeper stateKeeper;
 
     public static Quest createQuest(String title) {
         Quest newQuest = new Quest(title,
                 "",
-                "", QuestStatus.ACTIVE,
-                new HashSet<>(), questRepository,
+                "", stateKeeper, QuestStatus.ACTIVE,
+                questRepository,
                 UUID.randomUUID()
         );
         questRepository.create(newQuest);
@@ -35,7 +40,7 @@ public class ComponentFactory {
     }
 
     public static Hint createHint(String content,
-                                  Room room) {
+                                  RoomPort room) {
         Hint newHint = new Hint(content,
                 "", room, HintStatus.NO_IDEA,
                 hintRepository, UUID.randomUUID());
@@ -60,7 +65,7 @@ public class ComponentFactory {
 
     public static Room createRoom() {
         Room newRoom = new Room("", "",
-                new HashSet<>(), new HashSet<>(),
+                new HashSet<>(), stateKeeper,
                 new HashSet<>(), roomRepository,
                 UUID.randomUUID());
         roomRepository.create(newRoom);
@@ -74,6 +79,16 @@ public class ComponentFactory {
         contextRepository.create(newContext);
         return newContext;
     }
+
+    public static QuestAndRoomStateKeeper createStateKeeper() {
+        QuestAndRoomStateKeeper stateKeeper = new QuestAndRoomStateKeeper(
+                new HashMap<>(), new HashMap<>(),
+                stateKeeperRepository, UUID.randomUUID());
+        stateKeeperRepository.create(stateKeeper);
+        return stateKeeper;
+    }
+
+
 
     public static void setQuestRepository(
             CRUDRepositoryPort<Quest> questRepository) {
@@ -104,5 +119,16 @@ public class ComponentFactory {
     public static void setContextRepository(
             CRUDRepositoryPort<Context> contextRepository) {
         ComponentFactory.contextRepository = contextRepository;
+    }
+
+    public static void setStateKeeperRepository(
+            CRUDRepositoryPort<QuestAndRoomStateKeeper> stateKeeperRepository) {
+        ComponentFactory.stateKeeperRepository = stateKeeperRepository;
+    }
+
+    // TODO replace this Setter with repository.read
+    public static void setStateKeeper(
+            QuestAndRoomStateKeeper stateKeeper) {
+        ComponentFactory.stateKeeper = stateKeeper;
     }
 }

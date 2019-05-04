@@ -3,7 +3,6 @@ package ruinMapper.hexagon.domain.quest;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,23 +11,24 @@ public class Quest implements QuestPort {
     private String title;
     private String description;
     private String notes;
-
-    private Set<RoomPort> roomSet;
+    private RoomManager roomManager;
     private QuestStatus status;
     private CRUDRepositoryPort<Quest> questRepository;
     private UUID questID;
 
 
     public Quest(String title, String description,
-                 String notes, QuestStatus status,
-                 Set<RoomPort> roomSet,
+                 String notes,
+                 RoomManager roomManager,
+                 QuestStatus status,
                  CRUDRepositoryPort<Quest> questRepository,
                  UUID questID) {
         this.title = title;
         this.description = description;
         this.notes = notes;
+        this.roomManager = roomManager;
         this.status = status;
-        this.roomSet = roomSet;
+
         this.questRepository = questRepository;
         this.questID = questID;
     }
@@ -80,28 +80,26 @@ public class Quest implements QuestPort {
 
     @Override
     public Set<RoomPort> accessQuestRooms() {
-        return new HashSet<>(roomSet);
+        return roomManager.accessRooms(this);
     }
 
     @Override
     public void addRoom(RoomPort room) {
-        if (roomSet.add(room)) {
-            saveState();
-        }
+        roomManager.addRoom(room, this);
+        saveState();
     }
 
     @Override
     public void removeRoom(RoomPort room) {
-        if (roomSet.remove(room)) {
-            saveState();
-        }
+        roomManager.removeRoom(room, this);
+        saveState();
     }
 
     @Override
     public void deleteQuest() {
-        roomSet.forEach(
-                roomPort -> roomPort
-                        .removeQuest(this));
+        roomManager.accessRooms(this).forEach(
+                roomPort -> roomManager
+                        .removeRoom(roomPort, this));
         questRepository.delete(questID.toString());
     }
 

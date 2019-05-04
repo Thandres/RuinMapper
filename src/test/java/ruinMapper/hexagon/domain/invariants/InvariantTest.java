@@ -49,7 +49,7 @@ public class InvariantTest {
     }
 
     @Test
-    public void taggableConractTest() {
+    public void taggableContractTest() {
         TagPort tag = context.createTag("tag1");
         TaggableManager taggableManager = tag;
         Taggable tContext = context;
