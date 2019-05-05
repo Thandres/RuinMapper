@@ -15,6 +15,7 @@ import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
 import ruinMapper.hexagon.domain.tag.Tag;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -79,15 +80,15 @@ public class ComponentFactory implements
     }
 
     public static Area createArea(String title) {
-        Area newArea = new Area(title, new HashMap<>(),
+        Area newArea = new Area(title, "", new HashMap<>(),
                 areaRepository, UUID.randomUUID());
         areaRepository.create(newArea);
         return newArea;
     }
 
-    public static Room createRoom() {
+    public static Room createRoom(int x, int y) {
         Room newRoom = new Room("", "",
-                new HashSet<>(), stateKeeper,
+                new Point(x, y), stateKeeper, stateKeeper,
                 stateKeeper, roomRepository,
                 UUID.randomUUID());
         roomRepository.create(newRoom);

@@ -21,5 +21,9 @@ public interface AreaPort {
 
     public String accessTitle();
 
+    public void changeNotes(String newNotes);
+
+    public String accessNotes();
+
     public Set<HintPort> accessHintsOnArea();
 }

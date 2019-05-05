@@ -4,6 +4,7 @@ import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
+import java.awt.*;
 import java.util.Set;
 
 /**
@@ -41,5 +42,9 @@ public interface RoomPort {
     public void removeTag(TagPort tagPort);
 
     public Set<TagPort> accessTags();
+
+    public Point accessCoordinates();
+
+    public void changeCoordinates(Point newCoordinates);
 
 }

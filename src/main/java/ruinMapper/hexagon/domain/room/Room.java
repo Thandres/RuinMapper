@@ -10,6 +10,7 @@ import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +21,7 @@ Room extends ComponentSuper implements
         HasHint {
     private String title;
     private String notes;
+    private Point coordinates;
     private HintManager hintManager;
     private QuestManager questManager;
     private TagManager tagManager;
@@ -28,6 +30,7 @@ Room extends ComponentSuper implements
 
 
     public Room(String title, String notes,
+                Point coordinates,
                 HintManager hintManager,
                 QuestManager questManager,
                 TagManager tagManager,
@@ -35,6 +38,7 @@ Room extends ComponentSuper implements
                 UUID roomID) {
         this.title = title;
         this.notes = notes;
+        this.coordinates = coordinates;
         this.hintManager = hintManager;
 
         this.questManager = questManager;
@@ -156,5 +160,15 @@ Room extends ComponentSuper implements
     @Override
     public String toString() {
         return roomID.toString();
+    }
+
+    @Override
+    public void changeCoordinates(Point point) {
+        coordinates = point;
+    }
+
+    @Override
+    public Point accessCoordinates() {
+        return coordinates;
     }
 }
