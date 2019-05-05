@@ -5,10 +5,7 @@ import ruinMapper.hexagon.domain.QuestManager;
 import ruinMapper.hexagon.domain.TagManager;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.marker.ComponentType;
-import ruinMapper.hexagon.domain.marker.HasHint;
-import ruinMapper.hexagon.domain.marker.HasQuest;
-import ruinMapper.hexagon.domain.marker.HasTag;
+import ruinMapper.hexagon.domain.marker.*;
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
@@ -18,7 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Room implements RoomPort, HasQuest, HasTag,
+public class Room extends ComponentSuper implements
+        RoomPort, HasQuest, HasTag,
         HasHint {
     private String title;
     private String notes;
@@ -145,7 +143,8 @@ public class Room implements RoomPort, HasQuest, HasTag,
         return new HashSet<>(tagManager.accessTags(this));
     }
 
-    private void saveState() {
+    @Override
+    public void saveState() {
         roomRepository.update(this);
     }
 
@@ -153,5 +152,10 @@ public class Room implements RoomPort, HasQuest, HasTag,
     @Override
     public ComponentType getType() {
         return ComponentType.ROOM;
+    }
+
+    @Override
+    public String toString() {
+        return roomID.toString();
     }
 }

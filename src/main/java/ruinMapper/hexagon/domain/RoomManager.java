@@ -11,7 +11,7 @@ import java.util.Set;
  * Interface that keeps the Invariants concerning Rooms of classes tagged with HasRoom intact
  */
 public interface RoomManager {
-
+//TODO handle Area
     /**
      * Invariants:
      * 1. If a Room is added to a Quest, add the Quest to the Room as well
@@ -34,7 +34,7 @@ public interface RoomManager {
     public void removeRoom(RoomPort value, HasRoom key);
 
     /**
-     * Returns the Rooms assigned to HasRoom
+     * Returns the Rooms assigned to HasRoom or Area
      * @param hasRoom
      * @return
      */

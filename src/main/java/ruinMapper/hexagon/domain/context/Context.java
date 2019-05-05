@@ -5,6 +5,7 @@ import ruinMapper.hexagon.domain.QuestManager;
 import ruinMapper.hexagon.domain.TagManager;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.marker.ComponentSuper;
 import ruinMapper.hexagon.domain.marker.ComponentType;
 import ruinMapper.hexagon.domain.marker.HasQuest;
 import ruinMapper.hexagon.domain.marker.HasTag;
@@ -17,7 +18,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Context implements ContextPort, HasTag,
+public class Context extends ComponentSuper implements
+        ContextPort, HasTag,
         HasQuest {
 
     private Set<AreaPort> areaSet;
@@ -101,8 +103,13 @@ public class Context implements ContextPort, HasTag,
         return ComponentType.CONTEXT;
     }
 
-
-    private void saveState() {
+    @Override
+    public void saveState() {
         contextRepository.update(this);
+    }
+
+    @Override
+    public String toString() {
+        return contextID.toString();
     }
 }

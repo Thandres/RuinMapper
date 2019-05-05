@@ -1,11 +1,12 @@
 package ruinMapper.hexagon.domain.tag;
 
+import ruinMapper.hexagon.domain.marker.ComponentSuper;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
 import java.util.UUID;
 
 //TODO Validation
-public class Tag implements TagPort {
+public class Tag extends ComponentSuper implements TagPort {
     private String tagType;
     private CRUDRepositoryPort<Tag> tagRepository;
     private HasTagManager hasTagManager;
@@ -42,7 +43,12 @@ public class Tag implements TagPort {
         tagRepository.delete(tagID.toString());
     }
 
-    private void saveState() {
+    public void saveState() {
         tagRepository.update(this);
+    }
+
+    @Override
+    public String toString() {
+        return tagID.toString();
     }
 }

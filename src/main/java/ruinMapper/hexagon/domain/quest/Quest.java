@@ -1,6 +1,7 @@
 package ruinMapper.hexagon.domain.quest;
 
 import ruinMapper.hexagon.domain.RoomManager;
+import ruinMapper.hexagon.domain.marker.ComponentSuper;
 import ruinMapper.hexagon.domain.marker.ComponentType;
 import ruinMapper.hexagon.domain.marker.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
@@ -9,7 +10,8 @@ import ruinMapper.hexagon.domain.room.RoomPort;
 import java.util.Set;
 import java.util.UUID;
 
-public class Quest implements QuestPort, HasRoom {
+public class Quest extends ComponentSuper implements
+        QuestPort, HasRoom {
 
     private String title;
     private String description;
@@ -104,7 +106,8 @@ public class Quest implements QuestPort, HasRoom {
         questRepository.delete(questID.toString());
     }
 
-    private void saveState() {
+    @Override
+    public void saveState() {
         questRepository.update(this);
     }
 
@@ -112,5 +115,10 @@ public class Quest implements QuestPort, HasRoom {
     @Override
     public ComponentType getType() {
         return ComponentType.QUEST;
+    }
+
+    @Override
+    public String toString() {
+        return questID.toString();
     }
 }

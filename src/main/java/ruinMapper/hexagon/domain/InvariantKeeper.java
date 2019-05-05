@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain;
 
+import ruinMapper.hexagon.domain.marker.ComponentSuper;
 import ruinMapper.hexagon.domain.marker.HasQuest;
 import ruinMapper.hexagon.domain.marker.HasRoom;
 import ruinMapper.hexagon.domain.marker.HasTag;
@@ -17,7 +18,8 @@ import java.util.UUID;
  * Class that implements all the Manager interfaces to keep the
  * invariants of the domain intact
  */
-public class InvariantKeeper implements
+public class InvariantKeeper extends
+        ComponentSuper implements
         QuestManager, RoomManager, TagManager,
         HasTagManager {
     //TODO implement the IDs of component in a pre/postfix way so the maps can save strings instead of whole objects
@@ -38,7 +40,8 @@ public class InvariantKeeper implements
         this.stateKeeperID = stateKeeperID;
     }
 
-    private void saveState() {
+    @Override
+    public void saveState() {
         invariantKeeperRepository.update(this);
     }
 
@@ -123,5 +126,10 @@ public class InvariantKeeper implements
     public void deleteTag(TagPort tagPort) {
         tagAndTaggableDelegate.deleteTag(tagPort);
         saveState();
+    }
+
+    @Override
+    public String toString() {
+        return stateKeeperID.toString();
     }
 }
