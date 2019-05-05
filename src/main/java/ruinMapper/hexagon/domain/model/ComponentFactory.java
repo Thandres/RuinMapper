@@ -116,6 +116,7 @@ public class ComponentFactory implements
     public static RoomAndQuestDelegate createRQDelegate() {
         return new RoomAndQuestDelegate(
                 new HashMap<>(), new HashMap<>(),
+                new HashMap<>(), new HashMap<>(),
                 new HashSet<>());
     }
 

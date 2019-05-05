@@ -1,9 +1,7 @@
 package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.model.ComponentSuper;
-import ruinMapper.hexagon.domain.model.HasQuest;
-import ruinMapper.hexagon.domain.model.HasRoom;
-import ruinMapper.hexagon.domain.model.HasTag;
+import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.model.*;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
@@ -20,11 +18,10 @@ import java.util.UUID;
 public class InvariantKeeper extends
         ComponentSuper implements
         QuestManager, RoomManager, TagManager,
-        HasTagManager {
+        HasTagManager, HintManager {
 
     private RoomAndQuestDelegate roomAndQuestDelegate;
     private TagAndHasTagDelegate tagAndTaggableDelegate;
-
     private CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository;
     private UUID stateKeeperID;
 
@@ -127,5 +124,24 @@ public class InvariantKeeper extends
     @Override
     public String toString() {
         return stateKeeperID.toString();
+    }
+
+    /**********************************************************/
+    //HintManager
+    @Override
+    public void addHint(HintPort value, HasHint key) {
+        roomAndQuestDelegate.addHint(value, key);
+        saveState();
+    }
+
+    @Override
+    public void removeHint(HintPort value, HasHint key) {
+        roomAndQuestDelegate.removeHint(value, key);
+        saveState();
+    }
+
+    @Override
+    public Set<HintPort> accessHints(HasHint hasHint) {
+        return roomAndQuestDelegate.accessHints(hasHint);
     }
 }

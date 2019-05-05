@@ -2,6 +2,7 @@ package ruinMapper.hexagon.domain.invariant;
 
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.model.ComponentType;
+import ruinMapper.hexagon.domain.model.HasHint;
 import ruinMapper.hexagon.domain.model.HasQuest;
 import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.quest.QuestPort;
@@ -16,7 +17,7 @@ import static ruinMapper.hexagon.domain.invariant.CircularManagmentHelper.*;
 // Handles the HasQuest and HasRoom Invariants
 public class RoomAndQuestDelegate implements
         QuestManager,
-        RoomManager {
+        RoomManager, HintManager {
     private Map<String, Set<QuestPort>> roomToQuestsMap;
     private Map<String, Set<RoomPort>> questToRoomsMap;
     private Map<String, Set<HintPort>> roomToHintsMap;
@@ -26,9 +27,13 @@ public class RoomAndQuestDelegate implements
     public RoomAndQuestDelegate(
             Map<String, Set<QuestPort>> roomToQuestsMap,
             Map<String, Set<RoomPort>> questToRoomsMap,
+            Map<String, Set<HintPort>> roomToHintsMap,
+            Map<String, RoomPort> hintToRoomMap,
             Set<QuestPort> contextQuests) {
         this.roomToQuestsMap = roomToQuestsMap;
         this.questToRoomsMap = questToRoomsMap;
+        this.roomToHintsMap = roomToHintsMap;
+        this.hintToRoomMap = hintToRoomMap;
         this.contextQuests = contextQuests;
     }
 
@@ -39,6 +44,7 @@ public class RoomAndQuestDelegate implements
     }
 
 
+    //#############QUESTMANAGER####################
     @Override
     public void addQuest(QuestPort value, HasQuest key) {
         // Invariant 1
@@ -106,13 +112,48 @@ public class RoomAndQuestDelegate implements
 
     @Override
     public Set<RoomPort> accessRooms(HasRoom hasRoom) {
-        return new HashSet<>(
-                questToRoomsMap.get(hasRoom.toString()));
+        if (ComponentType.QUEST.equals(hasRoom.getType())) {
+            return new HashSet<>(
+                    questToRoomsMap
+                            .get(hasRoom.toString()));
+        } else {//TODO maybe explicit type check?
+            RoomPort room = hintToRoomMap
+                    .get(hasRoom.toString());
+            Set<RoomPort> temp = new HashSet<>();
+            temp.add(room);
+            return temp;
+        }
     }
 
     @Override
     public void deleteQuest(QuestPort questPort) {
         // Invariant 1
         deleteQuestImpl(questPort);
+    }
+
+    //#############HINTMANAGER####################
+
+    @Override
+    public void addHint(HintPort value, HasHint key) {
+        addToSetMap(roomToHintsMap, key.toString(), value);
+        if (ComponentType.ROOM.equals(key.getType())) {
+            hintToRoomMap
+                    .put(value.toString(), (RoomPort) key);
+        }
+    }
+
+    @Override
+    public void removeHint(HintPort value, HasHint key) {
+        removeFromMap(roomToHintsMap, key.toString(),
+                value);
+        if (ComponentType.ROOM.equals(key.getType())) {
+            hintToRoomMap.remove(value.toString());
+        }
+    }
+
+    @Override
+    public Set<HintPort> accessHints(HasHint hasHint) {
+        return new HashSet<>(
+                roomToHintsMap.get(hasHint.toString()));
     }
 }
