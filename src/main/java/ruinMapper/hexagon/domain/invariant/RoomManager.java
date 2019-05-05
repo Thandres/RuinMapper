@@ -45,5 +45,6 @@ public interface RoomManager {
      * 1. if a Quest is deleted remove all references in all Rooms to the Quest
      * @param questPort
      */
-    public void deleteQuest(QuestPort questPort);
+    public void deleteQuest(
+            QuestPort questPort); //TODO refactor to deleteHasQuest
 }
