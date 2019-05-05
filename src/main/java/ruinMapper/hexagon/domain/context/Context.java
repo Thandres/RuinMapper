@@ -1,14 +1,14 @@
 package ruinMapper.hexagon.domain.context;
 
 import ruinMapper.hexagon.ComponentFactory;
-import ruinMapper.hexagon.domain.ComponentSuper;
-import ruinMapper.hexagon.domain.ComponentType;
-import ruinMapper.hexagon.domain.HasQuest;
-import ruinMapper.hexagon.domain.HasTag;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.invariant.QuestManager;
 import ruinMapper.hexagon.domain.invariant.TagManager;
+import ruinMapper.hexagon.domain.model.ComponentSuper;
+import ruinMapper.hexagon.domain.model.ComponentType;
+import ruinMapper.hexagon.domain.model.HasQuest;
+import ruinMapper.hexagon.domain.model.HasTag;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;

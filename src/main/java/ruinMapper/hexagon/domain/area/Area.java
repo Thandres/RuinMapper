@@ -1,10 +1,10 @@
 package ruinMapper.hexagon.domain.area;
 
 import ruinMapper.hexagon.ComponentFactory;
-import ruinMapper.hexagon.domain.ComponentSuper;
-import ruinMapper.hexagon.domain.ComponentType;
-import ruinMapper.hexagon.domain.HasRoom;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.model.ComponentSuper;
+import ruinMapper.hexagon.domain.model.ComponentType;
+import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 

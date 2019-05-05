@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.model;
 
 public enum ComponentType {
     AREA,

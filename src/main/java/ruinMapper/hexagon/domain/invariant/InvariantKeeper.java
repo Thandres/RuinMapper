@@ -1,9 +1,9 @@
 package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.ComponentSuper;
-import ruinMapper.hexagon.domain.HasQuest;
-import ruinMapper.hexagon.domain.HasRoom;
-import ruinMapper.hexagon.domain.HasTag;
+import ruinMapper.hexagon.domain.model.ComponentSuper;
+import ruinMapper.hexagon.domain.model.HasQuest;
+import ruinMapper.hexagon.domain.model.HasRoom;
+import ruinMapper.hexagon.domain.model.HasTag;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;

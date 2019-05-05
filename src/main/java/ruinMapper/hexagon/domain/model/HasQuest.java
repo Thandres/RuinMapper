@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.model;
 
 /**
  * Marker interface used to lessen invariant complexity.

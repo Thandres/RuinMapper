@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.ComponentType;
-import ruinMapper.hexagon.domain.HasTag;
+import ruinMapper.hexagon.domain.model.ComponentType;
+import ruinMapper.hexagon.domain.model.HasTag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.HashSet;
