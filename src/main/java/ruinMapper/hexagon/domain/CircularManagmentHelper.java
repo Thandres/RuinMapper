@@ -24,7 +24,7 @@ public class CircularManagmentHelper {
         removeFromMap(dMap, value, key);
     }
 
-    public static <T, D> void addToMap(
+    public static <T, D> void addToSetMap(
             Map<T, Set<D>> map, T key, D value) {
         if (map.containsKey(key)) {
             map.get(key).add(
@@ -39,8 +39,8 @@ public class CircularManagmentHelper {
     public static <T, D> void linkedAdd(Map<T, Set<D>> tMap,
                                         Map<D, Set<T>> dMap,
                                         T key, D value) {
-        addToMap(tMap, key, value);
-        addToMap(dMap, value, key);
+        addToSetMap(tMap, key, value);
+        addToSetMap(dMap, value, key);
     }
 
     // deletes recordToDelete from every Set in dSetMap
