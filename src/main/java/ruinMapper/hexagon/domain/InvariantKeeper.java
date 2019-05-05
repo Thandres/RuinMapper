@@ -21,9 +21,8 @@ public class InvariantKeeper implements
         QuestManager, RoomManager, TagManager,
         TaggableManager {
     //TODO implement the IDs of component in a pre/postfix way so the maps can save strings instead of whole objects
-    private Map<RoomPort, Set<QuestPort>> roomToQuestsMap;
-    private Map<QuestPort, Set<RoomPort>> questToRoomsMap;
-    private Set<QuestPort> contextQuests;
+
+    private RoomAndQuestableDelegate roomAndQuestableDelegate;
 
 
     //TODO implement the TaggableManager and TagManager interface
@@ -35,15 +34,10 @@ public class InvariantKeeper implements
     private UUID stateKeeperID;
 
     public InvariantKeeper(
-            Map<RoomPort, Set<QuestPort>> roomToQuestsMap,
-            Map<QuestPort, Set<RoomPort>> questToRoomsMap,
-            Set<QuestPort> contextQuests,
+            RoomAndQuestableDelegate roomAndQuestableDelegate,
             CRUDRepositoryPort<InvariantKeeper> stateRepository,
             UUID stateKeeperID) {
-
-        this.roomToQuestsMap = roomToQuestsMap;
-        this.questToRoomsMap = questToRoomsMap;
-        this.contextQuests = contextQuests;
+        this.roomAndQuestableDelegate = roomAndQuestableDelegate;
         this.stateRepository = stateRepository;
         this.stateKeeperID = stateKeeperID;
     }
@@ -52,66 +46,6 @@ public class InvariantKeeper implements
         stateRepository.update(this);
     }
 
-    private <T, D> void removeFromMap(Map<T, Set<D>> map,
-                                      T key, D value) {
-        if (map.containsKey(key)) {
-            map.get(key).remove(
-                    value);
-        } else {
-            //TODO Exceptions for everything
-        }
-    }
-
-    private <T, D> void linkedRemove(Map<T, Set<D>> tMap,
-                                     Map<D, Set<T>> dMap,
-                                     T key, D value) {
-        removeFromMap(tMap, key, value);
-        removeFromMap(dMap, value, key);
-    }
-
-    private <T, D> void addToMap(
-            Map<T, Set<D>> map, T key, D value) {
-        if (map.containsKey(key)) {
-            map.get(key).add(
-                    value);
-        } else {
-            map.put(key,
-                    new HashSet<>());
-            map.get(key).add(value);
-        }
-    }
-
-    private <T, D> void linkedAdd(Map<T, Set<D>> tMap,
-                                  Map<D, Set<T>> dMap,
-                                  T key, D value) {
-        addToMap(tMap, key, value);
-        addToMap(dMap, value, key);
-    }
-
-    // deletes recordToDelete from every Set in dSetMap
-    private <T, D> void deleteRecord(Map<D, Set<T>> dSetMap,
-                                     T recordToDelete) {
-        for (Set<T> tSet : dSetMap.values()) {
-            tSet.remove(recordToDelete);
-        }
-    }
-
-    private <T, D> void deleteLinkedRecord(
-            Map<T, Set<D>> tSetMap,
-            Map<D, Set<T>> dSetMap,
-            T recordToDelete) {
-        if (tSetMap.containsKey(recordToDelete)) {
-            tSetMap.remove(recordToDelete)
-                    .forEach(d -> removeFromMap(dSetMap, d,
-                            recordToDelete));
-        }
-    }
-
-    private void deleteQuestImpl(QuestPort questToDelete) {
-        contextQuests.remove(questToDelete);
-        deleteLinkedRecord(questToRoomsMap,
-                roomToQuestsMap, questToDelete);
-    }
 
     private void deleteTagImpl(TagPort tagPort) {
         contextTags.remove(tagPort);
@@ -125,27 +59,14 @@ public class InvariantKeeper implements
     @Override
     public void addQuest(QuestPort value,
                          Questable key) {
-        if (!key.isContext()) {
-            linkedAdd(roomToQuestsMap, questToRoomsMap,
-                    (RoomPort) key, value);
-        }
-        // cant add duplicate objects to a set, so adding
-        // is either successful or the object is already there
-        contextQuests.add(value);
+        roomAndQuestableDelegate.addQuest(value, key);
         saveState();
     }
 
     @Override
     public void removeQuest(QuestPort value,
                             Questable key) {
-        if (!key.isContext()) {
-            // Invariant 1
-            linkedRemove(roomToQuestsMap, questToRoomsMap,
-                    (RoomPort) key, value);
-        } else {
-            // Invariant 2
-            deleteQuestImpl(value);
-        }
+        roomAndQuestableDelegate.removeQuest(value, key);
         saveState();
 
     }
@@ -153,12 +74,8 @@ public class InvariantKeeper implements
     @Override
     public Set<QuestPort> accessQuests(
             Questable questable) {
-        if (!questable.isContext()) {
-            return new HashSet<>(roomToQuestsMap
-                    .get((RoomPort) questable));
-        } else {
-            return new HashSet<>(contextQuests);
-        }
+        return roomAndQuestableDelegate
+                .accessQuests(questable);
     }
 
     /**********************************************************/
@@ -166,31 +83,26 @@ public class InvariantKeeper implements
     @Override
     public void addRoom(RoomPort value,
                         QuestPort key) {
-        // Invariant 1
-        linkedAdd(questToRoomsMap, roomToQuestsMap, key,
-                value);
+        roomAndQuestableDelegate.addRoom(value, key);
         saveState();
     }
 
     @Override
     public void removeRoom(RoomPort value,
                            QuestPort key) {
-        // Invariant 1
-        linkedRemove(questToRoomsMap, roomToQuestsMap, key,
-                value);
+        roomAndQuestableDelegate.removeRoom(value, key);
         saveState();
     }
 
     @Override
     public Set<RoomPort> accessRooms(QuestPort questPort) {
-        return new HashSet<>(
-                questToRoomsMap.get(questPort));
+        return roomAndQuestableDelegate
+                .accessRooms(questPort);
     }
 
     @Override
     public void deleteQuest(QuestPort questPort) {
-        // Invariant 1
-        deleteQuestImpl(questPort);
+        roomAndQuestableDelegate.deleteQuest(questPort);
         saveState();
     }
 
