@@ -88,11 +88,6 @@ public class InvariantKeeper extends
                 .accessRooms(hasRoom);
     }
 
-    @Override
-    public void deleteQuest(QuestPort questPort) {
-        roomAndQuestDelegate.deleteQuest(questPort);
-        saveState();
-    }
 
     /**********************************************************/
 // TagManager
@@ -114,12 +109,8 @@ public class InvariantKeeper extends
     }
 
     /**********************************************************/
-    //HasTagManager
-    @Override
-    public void deleteTag(TagPort tagPort) {
-        tagAndTaggableDelegate.deleteTag(tagPort);
-        saveState();
-    }
+    // ComponentSuper
+
 
     @Override
     public String toString() {
@@ -143,5 +134,33 @@ public class InvariantKeeper extends
     @Override
     public Set<HintPort> accessHints(HasHint hasHint) {
         return roomAndQuestDelegate.accessHints(hasHint);
+    }
+
+    /**********************************************************/
+    @Override
+    public <T extends ComponentTag> void deleteManagedObject(
+            T managedObject) {
+        switch (managedObject.getType()) {
+            case QUEST:// Same as Hint
+            case HINT:
+                roomAndQuestDelegate
+                        .deleteManagedObject(managedObject);
+                break;
+            case ROOM:
+                roomAndQuestDelegate
+                        .deleteManagedObject(managedObject);
+                tagAndTaggableDelegate
+                        .deleteManagedObject(managedObject);
+                break;
+            case TAG:
+                tagAndTaggableDelegate
+                        .deleteManagedObject(managedObject);
+                break;
+            case AREA://TODO
+            case CONTEXT://TODO, also necessary? Special case or just ignore, because when the context gets deleted the main entry point just references another context
+                roomAndQuestDelegate
+                        .deleteManagedObject(managedObject);
+        }
+        saveState();
     }
 }

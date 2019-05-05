@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.model.ComponentTag;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasTag;
 import ruinMapper.hexagon.domain.tag.TagPort;
@@ -67,9 +68,14 @@ public class TagAndHasTagDelegate implements TagManager,
         }
     }
 
+
     @Override
-    public void deleteTag(TagPort tagPort) {
-        // Invariant 1
-        deleteTagImpl(tagPort);
+    public <T extends ComponentTag> void deleteManagedObject(
+            T managedObject) {
+        switch (managedObject.getType()) {
+            case TAG:
+                deleteTagImpl((TagPort) managedObject);
+                break;
+        }
     }
 }

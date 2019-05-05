@@ -1,5 +1,5 @@
 package ruinMapper.hexagon.domain.model;
 
-public interface HasHint extends HasComponent {
+public interface HasHint extends ComponentTag {
 
 }

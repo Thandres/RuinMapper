@@ -1,11 +1,12 @@
 package ruinMapper.hexagon.domain.invariant;
 
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.model.ComponentManager;
 import ruinMapper.hexagon.domain.model.HasHint;
 
 import java.util.Set;
 
-public interface HintManager {
+public interface HintManager extends ComponentManager {
     /**
      * Invariants:
      * 1. Add the hint to the HasHint object and if it is a Room

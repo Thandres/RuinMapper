@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.model.ComponentManager;
 import ruinMapper.hexagon.domain.model.HasQuest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 /**
  * Interface that keeps the Invariants of Questables intact
  */
-public interface QuestManager {
+public interface QuestManager extends ComponentManager {
 
     /**
      * Invariant:

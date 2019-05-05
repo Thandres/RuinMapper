@@ -102,7 +102,7 @@ public class Quest extends ComponentSuper implements
 
     @Override
     public void deleteQuest() {
-        roomManager.deleteQuest(this);
+        roomManager.deleteManagedObject(this);
         questRepository.delete(questID.toString());
     }
 

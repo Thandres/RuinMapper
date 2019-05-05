@@ -41,7 +41,7 @@ public class InvariantKeeperTest {
     public void QuestRoomInvarianttest() {
         RoomPort room = ComponentFactory.createRoom();
         ContextPort context = ComponentFactory
-                .createContext();
+                .createContext("");
         QuestPort quest = context.createQuest("");
 
         room.addQuest(quest);

@@ -2,9 +2,9 @@ package ruinMapper.hexagon.domain.model;
 
 /**
  * Marker interface used to lessen invariant complexity.
- * Indicates the type of Manager the implementing class uses to access
- * the components
+ * Indicates that the implementing class uses a Manager to access
+ * the indicated component
  */
-public interface HasComponent {
+public interface ComponentTag {
     public ComponentType getType();
 }

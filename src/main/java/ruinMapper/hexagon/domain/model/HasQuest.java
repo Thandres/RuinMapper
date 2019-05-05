@@ -1,6 +1,6 @@
 package ruinMapper.hexagon.domain.model;
 
 
-public interface HasQuest extends HasComponent {
+public interface HasQuest extends ComponentTag {
 
 }

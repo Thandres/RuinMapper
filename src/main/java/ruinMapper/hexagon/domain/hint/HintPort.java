@@ -19,10 +19,6 @@ public interface HintPort {
 
     public RoomPort accessRoom();
 
-    public void removeRoom();
-
-    public void addRoom(RoomPort room);
-
     public void deleteHint();
 
     public HintStatus getHintStatus();

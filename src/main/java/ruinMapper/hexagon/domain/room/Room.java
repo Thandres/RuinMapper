@@ -14,7 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Room extends ComponentSuper implements
+public class
+Room extends ComponentSuper implements
         RoomPort, HasQuest, HasTag,
         HasHint {
     private String title;

@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.hint;
 
+import ruinMapper.hexagon.domain.invariant.RoomManager;
 import ruinMapper.hexagon.domain.model.ComponentSuper;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasRoom;
@@ -13,21 +14,21 @@ public class Hint extends ComponentSuper implements
 
     private String content;
     private String notes;
-    private RoomPort room;
+    private RoomManager roomManager;
     private HintStatus status;
     private CRUDRepositoryPort<Hint> hintRepository;
     private UUID hintID;
 
 
     public Hint(String content, String notes,
-                RoomPort room,
+                RoomManager roomManager,
                 HintStatus status,
                 CRUDRepositoryPort<Hint> hintRepository,
                 UUID hintID) {
 
         this.content = content;
         this.notes = notes;
-        this.room = room;
+        this.roomManager = roomManager;
         this.status = status;
         this.hintRepository = hintRepository;
         this.hintID = hintID;
@@ -57,32 +58,13 @@ public class Hint extends ComponentSuper implements
 
     @Override
     public RoomPort accessRoom() {
-        return room;
-    }
-
-    @Override
-    public void removeRoom() {
-        if (room != null) {
-            room.removeHint(this);
-            room = null;
-            saveState();
-        }
-    }
-
-    @Override
-    public void addRoom(RoomPort room) {
-        //TODO in all methods that have this pattern:
-        // TODO Validation logik ausbauen
-        if (this.room != null) {
-            this.room = room;
-            room.addHint(this);
-            saveState();
-        }
+        return roomManager.accessRooms(this).iterator()
+                .next();
     }
 
     @Override
     public void deleteHint() {
-        room.removeHint(this);
+        roomManager.deleteManagedObject(this);
         hintRepository.delete(hintID.toString());
     }
 

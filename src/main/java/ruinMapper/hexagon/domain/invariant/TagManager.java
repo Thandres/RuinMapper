@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.model.ComponentManager;
 import ruinMapper.hexagon.domain.model.HasTag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 /**
  * Interface that keeps the Invariants of Taggables intact
  */
-public interface TagManager {
+public interface TagManager extends ComponentManager {
 
     /**
      * Invariants:

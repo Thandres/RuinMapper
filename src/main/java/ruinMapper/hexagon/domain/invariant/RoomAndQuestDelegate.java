@@ -1,10 +1,7 @@
 package ruinMapper.hexagon.domain.invariant;
 
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.model.ComponentType;
-import ruinMapper.hexagon.domain.model.HasHint;
-import ruinMapper.hexagon.domain.model.HasQuest;
-import ruinMapper.hexagon.domain.model.HasRoom;
+import ruinMapper.hexagon.domain.model.*;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -43,8 +40,13 @@ public class RoomAndQuestDelegate implements
                 roomToQuestsMap, questToDelete);
     }
 
+    private void deleteHintImpl(HintPort hintPort) {
+        hintToRoomMap.remove(hintPort.toString());
+        deleteRecord(roomToHintsMap, hintPort);
+    }
 
     //#############QUESTMANAGER####################
+
     @Override
     public void addQuest(QuestPort value, HasQuest key) {
         // Invariant 1
@@ -80,8 +82,8 @@ public class RoomAndQuestDelegate implements
             return new HashSet<>(contextQuests);
         }
     }
-
     //#############ROOMMANAGER####################
+
     @Override
     public void addRoom(RoomPort value, HasRoom key) {
         if (ComponentType.QUEST.equals(key.getType())) {
@@ -125,12 +127,6 @@ public class RoomAndQuestDelegate implements
         }
     }
 
-    @Override
-    public void deleteQuest(QuestPort questPort) {
-        // Invariant 1
-        deleteQuestImpl(questPort);
-    }
-
     //#############HINTMANAGER####################
 
     @Override
@@ -144,10 +140,12 @@ public class RoomAndQuestDelegate implements
 
     @Override
     public void removeHint(HintPort value, HasHint key) {
-        removeFromMap(roomToHintsMap, key.toString(),
-                value);
+
         if (ComponentType.ROOM.equals(key.getType())) {
-            hintToRoomMap.remove(value.toString());
+            deleteHintImpl(value);
+        } else {
+            removeFromMap(roomToHintsMap, key.toString(),
+                    value);
         }
     }
 
@@ -155,5 +153,19 @@ public class RoomAndQuestDelegate implements
     public Set<HintPort> accessHints(HasHint hasHint) {
         return new HashSet<>(
                 roomToHintsMap.get(hasHint.toString()));
+    }
+
+
+    @Override
+    public <T extends ComponentTag> void deleteManagedObject(
+            T managedObject) {
+        switch (managedObject.getType()) {
+            case QUEST:
+                deleteQuestImpl((QuestPort) managedObject);
+                break;
+            case HINT:
+                deleteHintImpl((HintPort) managedObject);
+                break;
+        }
     }
 }

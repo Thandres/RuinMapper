@@ -1,6 +1,6 @@
 package ruinMapper.hexagon.domain.model;
 
 
-public interface HasRoom extends HasComponent {
+public interface HasRoom extends ComponentTag {
 
 }
