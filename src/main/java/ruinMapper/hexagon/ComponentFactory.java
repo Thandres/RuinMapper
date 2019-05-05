@@ -1,6 +1,6 @@
 package ruinMapper.hexagon;
 
-import ruinMapper.hexagon.domain.QuestAndRoomStateKeeper;
+import ruinMapper.hexagon.domain.InvariantKeeper;
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.hint.Hint;
@@ -24,9 +24,9 @@ public class ComponentFactory {
     private static CRUDRepositoryPort<Tag> tagRepository;
     private static CRUDRepositoryPort<Area> areaRepository;
     private static CRUDRepositoryPort<Context> contextRepository;
-    private static CRUDRepositoryPort<QuestAndRoomStateKeeper> stateKeeperRepository;
+    private static CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository;
 
-    private static QuestAndRoomStateKeeper stateKeeper;
+    private static InvariantKeeper stateKeeper;
 
     public static Quest createQuest(String title) {
         Quest newQuest = new Quest(title,
@@ -80,8 +80,8 @@ public class ComponentFactory {
         return newContext;
     }
 
-    public static QuestAndRoomStateKeeper createStateKeeper() {
-        QuestAndRoomStateKeeper stateKeeper = new QuestAndRoomStateKeeper(
+    public static InvariantKeeper createStateKeeper() {
+        InvariantKeeper stateKeeper = new InvariantKeeper(
                 new HashMap<>(), new HashMap<>(),
                 new HashSet<>(), stateKeeperRepository,
                 UUID.randomUUID());
@@ -122,13 +122,13 @@ public class ComponentFactory {
     }
 
     public static void setStateKeeperRepository(
-            CRUDRepositoryPort<QuestAndRoomStateKeeper> stateKeeperRepository) {
+            CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository) {
         ComponentFactory.stateKeeperRepository = stateKeeperRepository;
     }
 
     // TODO replace this Setter with repository.read
     public static void setStateKeeper(
-            QuestAndRoomStateKeeper stateKeeper) {
+            InvariantKeeper stateKeeper) {
         ComponentFactory.stateKeeper = stateKeeper;
     }
 }

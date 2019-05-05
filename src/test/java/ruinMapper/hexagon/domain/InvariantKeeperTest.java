@@ -10,9 +10,9 @@ import ruinMapper.hexagon.domain.room.RoomPort;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class QuestAndRoomStateKeeperTest {
+public class InvariantKeeperTest {
 
-    private QuestAndRoomStateKeeper stateKeeper;
+    private InvariantKeeper stateKeeper;
 
     @Before
     public void setup() {

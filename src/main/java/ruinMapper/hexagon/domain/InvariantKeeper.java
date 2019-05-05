@@ -13,9 +13,14 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class QuestAndRoomStateKeeper implements
+/**
+ * Class that implements all the Manager interfaces to keep the
+ * invariants of the domain intact
+ */
+public class InvariantKeeper implements
         QuestManager, RoomManager, TagManager,
         TaggableManager {
+    //TODO implement the IDs of component in a pre/postfix way so the maps can save strings instead of whole objects
     private Map<RoomPort, Set<QuestPort>> roomToQuestsMap;
     private Map<QuestPort, Set<RoomPort>> questToRoomsMap;
     private Set<QuestPort> contextQuests;
@@ -25,14 +30,14 @@ public class QuestAndRoomStateKeeper implements
     private Map<Taggable, Set<TagPort>> taggableToTagsMap;
     private Map<TagPort, Set<RoomPort>> roomToTagsMap;
 
-    private CRUDRepositoryPort<QuestAndRoomStateKeeper> stateRepository;
+    private CRUDRepositoryPort<InvariantKeeper> stateRepository;
     private UUID stateKeeperID;
 
-    public QuestAndRoomStateKeeper(
+    public InvariantKeeper(
             Map<RoomPort, Set<QuestPort>> roomToQuestsMap,
             Map<QuestPort, Set<RoomPort>> questToRoomsMap,
             Set<QuestPort> contextQuests,
-            CRUDRepositoryPort<QuestAndRoomStateKeeper> stateRepository,
+            CRUDRepositoryPort<InvariantKeeper> stateRepository,
             UUID stateKeeperID) {
 
         this.roomToQuestsMap = roomToQuestsMap;
@@ -41,6 +46,34 @@ public class QuestAndRoomStateKeeper implements
         this.stateRepository = stateRepository;
         this.stateKeeperID = stateKeeperID;
     }
+
+    private void saveState() {
+        stateRepository.update(this);
+    }
+
+    private <T, D> void removeFromMap(Map<T, Set<D>> map,
+                                      T key, D value) {
+        if (map.containsKey(key)) {
+            map.get(key).remove(
+                    value);
+        } else {
+            //TODO Exceptions for everything
+        }
+    }
+
+    private <T, D> void deleteRecord(Map<T, Set<D>> tSetMap,
+                                     Map<D, Set<T>> dSetMap,
+                                     T recordToDelete) {
+        if (tSetMap.containsKey(recordToDelete)) {
+            tSetMap.remove(recordToDelete)
+                    .forEach(d -> dSetMap.get(d)
+                            .remove(recordToDelete));
+        }
+    }
+
+    //Interface implementations
+
+    /*******************************************************/
 
     // QuestManager
     @Override
@@ -123,30 +156,6 @@ public class QuestAndRoomStateKeeper implements
                     new HashSet<>());
             map.get(key).add(value);
         }
-    }
-
-    private <T, D> void removeFromMap(Map<T, Set<D>> map,
-                                      T key, D value) {
-        if (map.containsKey(key)) {
-            map.get(key).remove(
-                    value);
-        } else {
-            //TODO Exceptions for everything
-        }
-    }
-
-    private <T, D> void deleteRecord(Map<T, Set<D>> tSetMap,
-                                     Map<D, Set<T>> dSetMap,
-                                     T recordToDelete) {
-        if (tSetMap.containsKey(recordToDelete)) {
-            tSetMap.remove(recordToDelete)
-                    .forEach(d -> dSetMap.get(d)
-                            .remove(recordToDelete));
-        }
-    }
-
-    private void saveState() {
-        stateRepository.update(this);
     }
 
     @Override

@@ -1,22 +1,22 @@
 package ruinMapper.fixtures;
 
-import ruinMapper.hexagon.domain.QuestAndRoomStateKeeper;
+import ruinMapper.hexagon.domain.InvariantKeeper;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
 public class StateKeeperRepoDummy implements
-        CRUDRepositoryPort<QuestAndRoomStateKeeper> {
+        CRUDRepositoryPort<InvariantKeeper> {
     @Override
-    public void create(QuestAndRoomStateKeeper object) {
+    public void create(InvariantKeeper object) {
 
     }
 
     @Override
-    public QuestAndRoomStateKeeper read(String ID) {
+    public InvariantKeeper read(String ID) {
         return null;
     }
 
     @Override
-    public void update(QuestAndRoomStateKeeper object) {
+    public void update(InvariantKeeper object) {
 
     }
 
