@@ -61,6 +61,18 @@ public class InvariantKeeper implements
         }
     }
 
+    private <T, D> void addToMap(
+            Map<T, Set<D>> map, T key, D value) {
+        if (map.containsKey(key)) {
+            map.get(key).add(
+                    value);
+        } else {
+            map.put(key,
+                    new HashSet<>());
+            map.get(key).add(value);
+        }
+    }
+
     private <T, D> void deleteRecord(Map<T, Set<D>> tSetMap,
                                      Map<D, Set<T>> dSetMap,
                                      T recordToDelete) {
@@ -145,19 +157,7 @@ public class InvariantKeeper implements
     }
 
     /**********************************************************/
-
-    private <T, D> void addToMap(
-            Map<T, Set<D>> map, T key, D value) {
-        if (map.containsKey(key)) {
-            map.get(key).add(
-                    value);
-        } else {
-            map.put(key,
-                    new HashSet<>());
-            map.get(key).add(value);
-        }
-    }
-
+// TagManager
     @Override
     public void addTag(TagPort value, Taggable key) {
 
@@ -173,6 +173,8 @@ public class InvariantKeeper implements
         return null;
     }
 
+    /**********************************************************/
+    //TaggableManager
     @Override
     public void deleteTag(TagPort tagPort) {
 

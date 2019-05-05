@@ -32,9 +32,12 @@ public interface QuestPort {
 
     public Set<RoomPort> accessQuestRooms();
 
+    // Adding a room also updates the Room
     public void addRoom(RoomPort room);
 
+    // Removing a room also updates the Room
     public void removeRoom(RoomPort room);
 
+    // Deleting the Quest completely removes all references to the Quest from everywhere
     public void deleteQuest();
 }

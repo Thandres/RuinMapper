@@ -97,9 +97,7 @@ public class Quest implements QuestPort {
 
     @Override
     public void deleteQuest() {
-        roomManager.accessRooms(this).forEach(
-                roomPort -> roomManager
-                        .removeRoom(roomPort, this));
+        roomManager.deleteQuest(this);
         questRepository.delete(questID.toString());
     }
 
