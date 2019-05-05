@@ -112,6 +112,11 @@ public class InvariantKeeper implements
         deleteLinkedRecord(questToRoomsMap,
                 roomToQuestsMap, questToDelete);
     }
+
+    private void deleteTagImpl(TagPort tagPort) {
+        contextTags.remove(tagPort);
+        deleteRecord(roomToTagsMap, tagPort);
+    }
     //Interface implementations
 
     /*******************************************************/
@@ -194,8 +199,10 @@ public class InvariantKeeper implements
     @Override
     public void addTag(TagPort value, Taggable key) {
         if (key.isContext()) {
+            // Invariant 1
             contextTags.add(value);
         } else {
+            // Invariant 2
             if (contextTags.contains(value)) {
                 addToMap(roomToTagsMap, (RoomPort) key,
                         value);
@@ -207,21 +214,32 @@ public class InvariantKeeper implements
 
     @Override
     public void removeTag(TagPort value, Taggable key) {
-
+        if (key.isContext()) {
+            // Invariant 1
+            deleteTagImpl(value);
+        } else {
+            // Invariant 2
+            removeFromMap(roomToTagsMap, (RoomPort) key,
+                    value);
+        }
     }
 
     @Override
     public Set<TagPort> accessTags(Taggable taggable) {
-        return null;
+        if (taggable.isContext()) {
+            return new HashSet<>(contextTags);
+        } else {
+            return new HashSet<>(
+                    roomToTagsMap.get((RoomPort) taggable));
+        }
     }
 
     /**********************************************************/
     //TaggableManager
     @Override
     public void deleteTag(TagPort tagPort) {
-        contextTags.remove(tagPort);
-        deleteLinkedRecord(tagToRoomsMap, roomToTagsMap,
-                tagPort);
+        // Invariant 1
+        deleteTagImpl(tagPort);
         saveState();
     }
 }
