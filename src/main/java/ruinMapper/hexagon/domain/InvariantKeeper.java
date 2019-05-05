@@ -27,8 +27,9 @@ public class InvariantKeeper implements
 
 
     //TODO implement the TaggableManager and TagManager interface
-    private Map<Taggable, Set<TagPort>> taggableToTagsMap;
-    private Map<TagPort, Set<RoomPort>> roomToTagsMap;
+    private Map<RoomPort, Set<TagPort>> roomToTagsMap;
+    private Map<TagPort, Set<RoomPort>> tagToRoomsMap;
+    private Set<TagPort> contextTags;
 
     private CRUDRepositoryPort<InvariantKeeper> stateRepository;
     private UUID stateKeeperID;
@@ -61,6 +62,13 @@ public class InvariantKeeper implements
         }
     }
 
+    private <T, D> void linkedRemove(Map<T, Set<D>> tMap,
+                                     Map<D, Set<T>> dMap,
+                                     T key, D value) {
+        removeFromMap(tMap, key, value);
+        removeFromMap(dMap, value, key);
+    }
+
     private <T, D> void addToMap(
             Map<T, Set<D>> map, T key, D value) {
         if (map.containsKey(key)) {
@@ -73,16 +81,37 @@ public class InvariantKeeper implements
         }
     }
 
-    private <T, D> void deleteRecord(Map<T, Set<D>> tSetMap,
-                                     Map<D, Set<T>> dSetMap,
+    private <T, D> void linkedAdd(Map<T, Set<D>> tMap,
+                                  Map<D, Set<T>> dMap,
+                                  T key, D value) {
+        addToMap(tMap, key, value);
+        addToMap(dMap, value, key);
+    }
+
+    // deletes recordToDelete from every Set in dSetMap
+    private <T, D> void deleteRecord(Map<D, Set<T>> dSetMap,
                                      T recordToDelete) {
-        if (tSetMap.containsKey(recordToDelete)) {
-            tSetMap.remove(recordToDelete)
-                    .forEach(d -> dSetMap.get(d)
-                            .remove(recordToDelete));
+        for (Set<T> tSet : dSetMap.values()) {
+            tSet.remove(recordToDelete);
         }
     }
 
+    private <T, D> void deleteLinkedRecord(
+            Map<T, Set<D>> tSetMap,
+            Map<D, Set<T>> dSetMap,
+            T recordToDelete) {
+        if (tSetMap.containsKey(recordToDelete)) {
+            tSetMap.remove(recordToDelete)
+                    .forEach(d -> removeFromMap(dSetMap, d,
+                            recordToDelete));
+        }
+    }
+
+    private void deleteQuestImpl(QuestPort questToDelete) {
+        contextQuests.remove(questToDelete);
+        deleteLinkedRecord(questToRoomsMap,
+                roomToQuestsMap, questToDelete);
+    }
     //Interface implementations
 
     /*******************************************************/
@@ -92,11 +121,11 @@ public class InvariantKeeper implements
     public void addQuest(QuestPort value,
                          Questable key) {
         if (!key.isContext()) {
-            addToMap(roomToQuestsMap, (RoomPort) key,
-                    value);
-            addToMap(questToRoomsMap, value,
-                    (RoomPort) key);
+            linkedAdd(roomToQuestsMap, questToRoomsMap,
+                    (RoomPort) key, value);
         }
+        // cant add duplicate objects to a set, so adding
+        // is either successful or the object is already there
         contextQuests.add(value);
         saveState();
     }
@@ -105,12 +134,13 @@ public class InvariantKeeper implements
     public void removeQuest(QuestPort value,
                             Questable key) {
         if (!key.isContext()) {
-            removeFromMap(roomToQuestsMap, (RoomPort) key,
-                    value);
-            removeFromMap(questToRoomsMap, value,
-                    (RoomPort) key);
+            // Invariant 1
+            linkedRemove(roomToQuestsMap, questToRoomsMap,
+                    (RoomPort) key, value);
+        } else {
+            // Invariant 2
+            deleteQuestImpl(value);
         }
-        contextQuests.remove(value);
         saveState();
 
     }
@@ -131,28 +161,31 @@ public class InvariantKeeper implements
     @Override
     public void addRoom(RoomPort value,
                         QuestPort key) {
-        addToMap(questToRoomsMap, key, value);
-        addToMap(roomToQuestsMap, value, key);
+        // Invariant 1
+        linkedAdd(questToRoomsMap, roomToQuestsMap, key,
+                value);
         saveState();
     }
 
     @Override
     public void removeRoom(RoomPort value,
                            QuestPort key) {
-        removeFromMap(questToRoomsMap, key, value);
-        removeFromMap(roomToQuestsMap, value, key);
+        // Invariant 1
+        linkedRemove(questToRoomsMap, roomToQuestsMap, key,
+                value);
         saveState();
     }
 
     @Override
     public Set<RoomPort> accessRooms(QuestPort questPort) {
-        return questToRoomsMap.get(questPort);
+        return new HashSet<>(
+                questToRoomsMap.get(questPort));
     }
 
     @Override
     public void deleteQuest(QuestPort questPort) {
-        deleteRecord(questToRoomsMap, roomToQuestsMap,
-                questPort);
+        // Invariant 1
+        deleteQuestImpl(questPort);
         saveState();
     }
 
@@ -160,7 +193,16 @@ public class InvariantKeeper implements
 // TagManager
     @Override
     public void addTag(TagPort value, Taggable key) {
-
+        if (key.isContext()) {
+            contextTags.add(value);
+        } else {
+            if (contextTags.contains(value)) {
+                addToMap(roomToTagsMap, (RoomPort) key,
+                        value);
+            } else {
+                //TODO invalid tag handling
+            }
+        }
     }
 
     @Override
@@ -177,6 +219,9 @@ public class InvariantKeeper implements
     //TaggableManager
     @Override
     public void deleteTag(TagPort tagPort) {
-
+        contextTags.remove(tagPort);
+        deleteLinkedRecord(tagToRoomsMap, roomToTagsMap,
+                tagPort);
+        saveState();
     }
 }

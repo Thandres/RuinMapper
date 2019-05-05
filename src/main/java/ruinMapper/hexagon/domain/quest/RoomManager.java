@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * Interface that keeps the Invariants of Quests intact
+ * Interface that keeps the Invariants concernig Rooms of Quests intact
  */
 public interface RoomManager {
 
