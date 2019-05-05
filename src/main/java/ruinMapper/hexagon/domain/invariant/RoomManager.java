@@ -11,7 +11,7 @@ import java.util.Set;
  * Interface that keeps the Invariants concerning Rooms of classes tagged with HasRoom intact
  */
 public interface RoomManager extends ComponentManager {
-//TODO handle Area
+
 
     /**
      * Invariants:

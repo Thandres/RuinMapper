@@ -2,10 +2,7 @@ package ruinMapper.hexagon.domain.area;
 
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.invariant.RoomManager;
-import ruinMapper.hexagon.domain.model.ComponentFactory;
-import ruinMapper.hexagon.domain.model.ComponentSuper;
-import ruinMapper.hexagon.domain.model.ComponentTag;
-import ruinMapper.hexagon.domain.model.HasRoom;
+import ruinMapper.hexagon.domain.model.*;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -16,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Area extends ComponentSuper implements
-        AreaPort, RoomManager {
+        AreaPort, RoomManager, HasRoom {
     private String title;
     private String notes;
     private Map<Point, RoomPort> areaMap;
@@ -40,7 +37,7 @@ public class Area extends ComponentSuper implements
     public RoomPort createRoom(int x, int y) {
         RoomPort newRoom = ComponentFactory
                 .createRoom(x, y);
-        areaMap.put(new Point(x, y), newRoom);
+        addRoom(newRoom, this);
         saveState();
         return newRoom;
     }
@@ -58,10 +55,8 @@ public class Area extends ComponentSuper implements
     @Override
     public void deleteRoom(int x, int y) {
         Point point = new Point(x, y);
-        if (areaMap.containsKey(point)) {
-            areaMap.remove(point);
-            saveState();
-        }
+        removeRoom(areaMap.get(point), this);
+        saveState();
     }
 
     @Override
@@ -109,13 +104,11 @@ public class Area extends ComponentSuper implements
     @Override
     public void addRoom(RoomPort value, HasRoom key) {
         areaMap.put(value.accessCoordinates(), value);
-        saveState();
     }
 
     @Override
     public void removeRoom(RoomPort value, HasRoom key) {
         areaMap.remove(value.accessCoordinates());
-        saveState();
     }
 
     @Override
@@ -127,5 +120,10 @@ public class Area extends ComponentSuper implements
     public <T extends ComponentTag> void deleteManagedObject(
             T managedObject) {
 
+    }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.AREA;
     }
 }
