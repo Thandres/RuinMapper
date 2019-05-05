@@ -1,6 +1,6 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.marker.HasTag;
+import ruinMapper.hexagon.domain.HasTag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.Set;

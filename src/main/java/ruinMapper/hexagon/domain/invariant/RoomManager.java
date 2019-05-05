@@ -1,6 +1,6 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.marker.HasRoom;
+import ruinMapper.hexagon.domain.HasRoom;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 

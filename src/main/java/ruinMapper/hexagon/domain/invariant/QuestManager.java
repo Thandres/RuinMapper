@@ -1,6 +1,6 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.marker.HasQuest;
+import ruinMapper.hexagon.domain.HasQuest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 
 import java.util.Set;

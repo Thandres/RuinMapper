@@ -5,6 +5,7 @@ import org.junit.Test;
 import ruinMapper.fixtures.*;
 import ruinMapper.hexagon.ComponentFactory;
 import ruinMapper.hexagon.domain.context.ContextPort;
+import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 

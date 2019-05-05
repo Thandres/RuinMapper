@@ -1,12 +1,12 @@
 package ruinMapper.hexagon;
 
-import ruinMapper.hexagon.domain.InvariantKeeper;
-import ruinMapper.hexagon.domain.RoomAndQuestDelegate;
-import ruinMapper.hexagon.domain.TagAndHasTagDelegate;
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintStatus;
+import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
+import ruinMapper.hexagon.domain.invariant.RoomAndQuestDelegate;
+import ruinMapper.hexagon.domain.invariant.TagAndHasTagDelegate;
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestStatus;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;

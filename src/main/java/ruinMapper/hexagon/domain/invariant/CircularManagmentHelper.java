@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
 import java.util.HashSet;
 import java.util.Map;

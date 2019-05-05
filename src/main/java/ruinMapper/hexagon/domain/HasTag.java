@@ -1,10 +1,10 @@
-package ruinMapper.hexagon.domain.marker;
+package ruinMapper.hexagon.domain;
 
 /**
  * Marker interface used to lessen invariant complexity.
  * isContext() is useful for implementing invariants
  */
-public interface HasTag extends HasSuper {
+public interface HasTag extends HasComponent {
 
 
 }

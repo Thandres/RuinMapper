@@ -1,6 +1,6 @@
 package ruinMapper.fixtures;
 
-import ruinMapper.hexagon.domain.InvariantKeeper;
+import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
 public class StateKeeperRepoDummy implements

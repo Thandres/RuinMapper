@@ -1,13 +1,12 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.marker.ComponentSuper;
-import ruinMapper.hexagon.domain.marker.HasQuest;
-import ruinMapper.hexagon.domain.marker.HasRoom;
-import ruinMapper.hexagon.domain.marker.HasTag;
+import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.HasQuest;
+import ruinMapper.hexagon.domain.HasRoom;
+import ruinMapper.hexagon.domain.HasTag;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
-import ruinMapper.hexagon.domain.tag.HasTagManager;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.Set;

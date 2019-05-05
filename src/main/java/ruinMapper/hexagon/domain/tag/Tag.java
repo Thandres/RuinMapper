@@ -1,6 +1,7 @@
 package ruinMapper.hexagon.domain.tag;
 
-import ruinMapper.hexagon.domain.marker.ComponentSuper;
+import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.invariant.HasTagManager;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
 import java.util.UUID;

@@ -1,15 +1,14 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
-import ruinMapper.hexagon.domain.marker.ComponentType;
-import ruinMapper.hexagon.domain.marker.HasTag;
-import ruinMapper.hexagon.domain.tag.HasTagManager;
+import ruinMapper.hexagon.domain.ComponentType;
+import ruinMapper.hexagon.domain.HasTag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static ruinMapper.hexagon.domain.CircularManagmentHelper.*;
+import static ruinMapper.hexagon.domain.invariant.CircularManagmentHelper.*;
 
 public class TagAndHasTagDelegate implements TagManager,
         HasTagManager {

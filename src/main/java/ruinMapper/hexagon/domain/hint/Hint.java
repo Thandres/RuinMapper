@@ -1,8 +1,8 @@
 package ruinMapper.hexagon.domain.hint;
 
-import ruinMapper.hexagon.domain.marker.ComponentSuper;
-import ruinMapper.hexagon.domain.marker.ComponentType;
-import ruinMapper.hexagon.domain.marker.HasRoom;
+import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.ComponentType;
+import ruinMapper.hexagon.domain.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 

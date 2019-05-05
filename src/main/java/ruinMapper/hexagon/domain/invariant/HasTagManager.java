@@ -1,4 +1,6 @@
-package ruinMapper.hexagon.domain.tag;
+package ruinMapper.hexagon.domain.invariant;
+
+import ruinMapper.hexagon.domain.tag.TagPort;
 
 /**
  * Interface that keeps the invariants of Tags intact

@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain.marker;
+package ruinMapper.hexagon.domain;
 
 public abstract class ComponentSuper implements
         HasRepository {

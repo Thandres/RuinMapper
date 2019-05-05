@@ -1,9 +1,9 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.ComponentType;
+import ruinMapper.hexagon.domain.HasQuest;
+import ruinMapper.hexagon.domain.HasRoom;
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.marker.ComponentType;
-import ruinMapper.hexagon.domain.marker.HasQuest;
-import ruinMapper.hexagon.domain.marker.HasRoom;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static ruinMapper.hexagon.domain.CircularManagmentHelper.*;
+import static ruinMapper.hexagon.domain.invariant.CircularManagmentHelper.*;
 
 // Handles the HasQuest and HasRoom Invariants
 public class RoomAndQuestDelegate implements
