@@ -1,14 +1,10 @@
 package ruinMapper.hexagon.domain.context;
 
-import ruinMapper.hexagon.ComponentFactory;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.invariant.QuestManager;
 import ruinMapper.hexagon.domain.invariant.TagManager;
-import ruinMapper.hexagon.domain.model.ComponentSuper;
-import ruinMapper.hexagon.domain.model.ComponentType;
-import ruinMapper.hexagon.domain.model.HasQuest;
-import ruinMapper.hexagon.domain.model.HasTag;
+import ruinMapper.hexagon.domain.model.*;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
@@ -22,26 +18,34 @@ public class Context extends ComponentSuper implements
         ContextPort, HasTag,
         HasQuest {
 
+    private String name;
     private Set<AreaPort> areaSet;
     private TagManager tagManager;
     private QuestManager questManager;
-
+    private String stateKeeperID;
     private CRUDRepositoryPort<Context> contextRepository;
     private UUID contextID;
 
     public Context(
-            Set<AreaPort> areaSet,
+            String name, Set<AreaPort> areaSet,
             TagManager tagManager,
-
             QuestManager questManager,
+            String stateKeeperID,
             CRUDRepositoryPort<Context> contextRepository,
             UUID contextID) {
+        this.name = name;
         this.areaSet = areaSet;
         this.tagManager = tagManager;
         this.questManager = questManager;
+        this.stateKeeperID = stateKeeperID;
 
         this.contextRepository = contextRepository;
         this.contextID = contextID;
+    }
+
+    @Override
+    public String accessName() {
+        return name;
     }
 
     @Override
@@ -99,6 +103,11 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
+    public String getID() {
+        return toString();
+    }
+
+    @Override
     public ComponentType getType() {
         return ComponentType.CONTEXT;
     }
@@ -111,5 +120,9 @@ public class Context extends ComponentSuper implements
     @Override
     public String toString() {
         return contextID.toString();
+    }
+
+    public String getStateKeeperID() {
+        return stateKeeperID;
     }
 }

@@ -1,6 +1,5 @@
 package ruinMapper.hexagon.domain.room;
 
-import ruinMapper.hexagon.ComponentFactory;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.invariant.QuestManager;

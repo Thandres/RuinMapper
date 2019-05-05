@@ -21,7 +21,7 @@ public class InvariantKeeper extends
         ComponentSuper implements
         QuestManager, RoomManager, TagManager,
         HasTagManager {
-    //TODO implement the IDs of component in a pre/postfix way so the maps can save strings instead of whole objects
+
     private RoomAndQuestDelegate roomAndQuestDelegate;
     private TagAndHasTagDelegate tagAndTaggableDelegate;
 
@@ -43,9 +43,6 @@ public class InvariantKeeper extends
     public void saveState() {
         invariantKeeperRepository.update(this);
     }
-
-
-    //Interface implementations
 
     /*******************************************************/
 

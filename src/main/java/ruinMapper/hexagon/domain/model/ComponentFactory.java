@@ -1,7 +1,8 @@
-package ruinMapper.hexagon;
+package ruinMapper.hexagon.domain.model;
 
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintStatus;
 import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
@@ -18,7 +19,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
-public class ComponentFactory {
+public class ComponentFactory implements
+        DomainLifecyclePort {
 
     private static CRUDRepositoryPort<Quest> questRepository;
     private static CRUDRepositoryPort<Room> roomRepository;
@@ -29,6 +31,24 @@ public class ComponentFactory {
     private static CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository;
 
     private static InvariantKeeper stateKeeper;
+
+    public ComponentFactory(
+            CRUDRepositoryPort<Quest> questRepository,
+            CRUDRepositoryPort<Room> roomRepository,
+            CRUDRepositoryPort<Hint> hintRepository,
+            CRUDRepositoryPort<Tag> tagRepository,
+            CRUDRepositoryPort<Area> areaRepository,
+            CRUDRepositoryPort<Context> contextRepository,
+            CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository) {
+
+        this.questRepository = questRepository;
+        this.roomRepository = roomRepository;
+        this.hintRepository = hintRepository;
+        this.tagRepository = tagRepository;
+        this.areaRepository = areaRepository;
+        this.contextRepository = contextRepository;
+        this.stateKeeperRepository = stateKeeperRepository;
+    }
 
     public static Quest createQuest(String title) {
         Quest newQuest = new Quest(title,
@@ -74,10 +94,12 @@ public class ComponentFactory {
         return newRoom;
     }
 
-    public static Context createContext() {
-        Context newContext = new Context(new HashSet<>(),
+    public static Context createContext(String name) {
+        Context newContext = new Context(name,
+                new HashSet<>(),
                 stateKeeper, stateKeeper,
-                contextRepository, UUID.randomUUID());
+                stateKeeper.toString(), contextRepository,
+                UUID.randomUUID());
         contextRepository.create(newContext);
         return newContext;
     }
@@ -142,5 +164,24 @@ public class ComponentFactory {
     public static void setStateKeeper(
             InvariantKeeper stateKeeper) {
         ComponentFactory.stateKeeper = stateKeeper;
+    }
+
+    @Override
+    public ContextPort createNewContext(String name) {
+        ComponentFactory.stateKeeper = createStateKeeper();
+        return createContext(name);
+    }
+
+    @Override
+    public void deleteContext(ContextPort contextPort) {
+        contextRepository.delete(contextPort.getID());
+    }
+
+    @Override
+    public ContextPort loadContextById(String id) {
+        Context loaded = contextRepository.read(id);
+        ComponentFactory.stateKeeper = stateKeeperRepository
+                .read(loaded.getStateKeeperID());
+        return loaded;
     }
 }

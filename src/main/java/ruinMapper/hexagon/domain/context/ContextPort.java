@@ -13,6 +13,7 @@ import java.util.Set;
  * It keeps track of everything that is interesting on its own
  */
 public interface ContextPort {
+    public String accessName();
     public AreaPort createArea(String title);
 
     public Set<AreaPort> accessAreas();
@@ -28,5 +29,7 @@ public interface ContextPort {
     public Set<QuestPort> accessQuests();
 
     public Set<HintPort> accessHints();
+
+    public String getID();
 
 }

@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.area;
 
-import ruinMapper.hexagon.ComponentFactory;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.model.ComponentFactory;
 import ruinMapper.hexagon.domain.model.ComponentSuper;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasRoom;
