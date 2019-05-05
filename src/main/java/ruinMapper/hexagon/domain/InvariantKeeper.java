@@ -7,8 +7,6 @@ import ruinMapper.hexagon.domain.room.RoomPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 import ruinMapper.hexagon.domain.tag.TaggableManager;
 
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,36 +19,28 @@ public class InvariantKeeper implements
         QuestManager, RoomManager, TagManager,
         TaggableManager {
     //TODO implement the IDs of component in a pre/postfix way so the maps can save strings instead of whole objects
-
     private RoomAndQuestableDelegate roomAndQuestableDelegate;
+    private TagAndTaggableDelegate tagAndTaggableDelegate;
 
-
-    //TODO implement the TaggableManager and TagManager interface
-    private Map<RoomPort, Set<TagPort>> roomToTagsMap;
-    private Map<TagPort, Set<RoomPort>> tagToRoomsMap;
-    private Set<TagPort> contextTags;
-
-    private CRUDRepositoryPort<InvariantKeeper> stateRepository;
+    private CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository;
     private UUID stateKeeperID;
 
     public InvariantKeeper(
             RoomAndQuestableDelegate roomAndQuestableDelegate,
-            CRUDRepositoryPort<InvariantKeeper> stateRepository,
+            TagAndTaggableDelegate tagAndTaggableDelegate,
+            CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository,
             UUID stateKeeperID) {
         this.roomAndQuestableDelegate = roomAndQuestableDelegate;
-        this.stateRepository = stateRepository;
+        this.tagAndTaggableDelegate = tagAndTaggableDelegate;
+        this.invariantKeeperRepository = invariantKeeperRepository;
         this.stateKeeperID = stateKeeperID;
     }
 
     private void saveState() {
-        stateRepository.update(this);
+        invariantKeeperRepository.update(this);
     }
 
 
-    private void deleteTagImpl(TagPort tagPort) {
-        contextTags.remove(tagPort);
-        deleteRecord(roomToTagsMap, tagPort);
-    }
     //Interface implementations
 
     /*******************************************************/
@@ -110,48 +100,26 @@ public class InvariantKeeper implements
 // TagManager
     @Override
     public void addTag(TagPort value, Taggable key) {
-        if (key.isContext()) {
-            // Invariant 1
-            contextTags.add(value);
-        } else {
-            // Invariant 2
-            if (contextTags.contains(value)) {
-                addToMap(roomToTagsMap, (RoomPort) key,
-                        value);
-            } else {
-                //TODO invalid tag handling
-            }
-        }
+        tagAndTaggableDelegate.addTag(value, key);
+        saveState();
     }
 
     @Override
     public void removeTag(TagPort value, Taggable key) {
-        if (key.isContext()) {
-            // Invariant 1
-            deleteTagImpl(value);
-        } else {
-            // Invariant 2
-            removeFromMap(roomToTagsMap, (RoomPort) key,
-                    value);
-        }
+        tagAndTaggableDelegate.removeTag(value, key);
+        saveState();
     }
 
     @Override
     public Set<TagPort> accessTags(Taggable taggable) {
-        if (taggable.isContext()) {
-            return new HashSet<>(contextTags);
-        } else {
-            return new HashSet<>(
-                    roomToTagsMap.get((RoomPort) taggable));
-        }
+        return tagAndTaggableDelegate.accessTags(taggable);
     }
 
     /**********************************************************/
     //TaggableManager
     @Override
     public void deleteTag(TagPort tagPort) {
-        // Invariant 1
-        deleteTagImpl(tagPort);
+        tagAndTaggableDelegate.deleteTag(tagPort);
         saveState();
     }
 }
