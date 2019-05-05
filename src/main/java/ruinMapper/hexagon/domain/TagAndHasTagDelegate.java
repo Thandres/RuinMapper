@@ -1,8 +1,9 @@
 package ruinMapper.hexagon.domain;
 
-import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.marker.ComponentType;
+import ruinMapper.hexagon.domain.marker.HasTag;
+import ruinMapper.hexagon.domain.tag.HasTagManager;
 import ruinMapper.hexagon.domain.tag.TagPort;
-import ruinMapper.hexagon.domain.tag.TaggableManager;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -10,13 +11,13 @@ import java.util.Set;
 
 import static ruinMapper.hexagon.domain.CircularManagmentHelper.*;
 
-public class TagAndTaggableDelegate implements TagManager,
-        TaggableManager {
-    private Map<RoomPort, Set<TagPort>> roomToTagsMap;
+public class TagAndHasTagDelegate implements TagManager,
+        HasTagManager {
+    private Map<String, Set<TagPort>> roomToTagsMap;
     private Set<TagPort> contextTags;
 
-    public TagAndTaggableDelegate(
-            Map<RoomPort, Set<TagPort>> roomToTagsMap,
+    public TagAndHasTagDelegate(
+            Map<String, Set<TagPort>> roomToTagsMap,
             Set<TagPort> contextTags) {
         this.roomToTagsMap = roomToTagsMap;
 
@@ -29,14 +30,14 @@ public class TagAndTaggableDelegate implements TagManager,
     }
 
     @Override
-    public void addTag(TagPort value, Taggable key) {
-        if (key.isContext()) {
+    public void addTag(TagPort value, HasTag key) {
+        if (ComponentType.CONTEXT.equals(key.getType())) {
             // Invariant 1
             contextTags.add(value);
         } else {
             // Invariant 2
             if (contextTags.contains(value)) {
-                addToMap(roomToTagsMap, (RoomPort) key,
+                addToSetMap(roomToTagsMap, key.toString(),
                         value);
             } else {
                 //TODO invalid tag handling
@@ -45,24 +46,25 @@ public class TagAndTaggableDelegate implements TagManager,
     }
 
     @Override
-    public void removeTag(TagPort value, Taggable key) {
-        if (key.isContext()) {
+    public void removeTag(TagPort value, HasTag key) {
+        if (ComponentType.CONTEXT.equals(key.getType())) {
             // Invariant 1
             deleteTagImpl(value);
         } else {
             // Invariant 2
-            removeFromMap(roomToTagsMap, (RoomPort) key,
+            removeFromMap(roomToTagsMap, key.toString(),
                     value);
         }
     }
 
     @Override
-    public Set<TagPort> accessTags(Taggable taggable) {
-        if (taggable.isContext()) {
+    public Set<TagPort> accessTags(HasTag hasTag) {
+        if (ComponentType.CONTEXT
+                .equals(hasTag.getType())) {
             return new HashSet<>(contextTags);
         } else {
             return new HashSet<>(
-                    roomToTagsMap.get((RoomPort) taggable));
+                    roomToTagsMap.get(hasTag.toString()));
         }
     }
 

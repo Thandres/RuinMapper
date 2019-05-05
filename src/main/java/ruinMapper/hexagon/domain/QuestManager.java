@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain;
 
+import ruinMapper.hexagon.domain.marker.HasQuest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 
 import java.util.Set;
@@ -11,32 +12,32 @@ public interface QuestManager {
 
     /**
      * Invariant:
-     * 1. when a Quest is added to the Questable and the Questable is a Room,
+     * 1. when a Quest is added to the HasQuest and the HasQuest is a Room,
      * add the Room to the Quest as well
      *
      * @param value the quest to add
      * @param key   the questable, either Room or Context
      */
     public void addQuest(QuestPort value,
-                         Questable key);
+                         HasQuest key);
 
     /**
      * Invariant:
-     * 1. When a Quest is removed from a Questable, remove the Questable from the Quest.
-     * 2. If the Questable is a Context, remove the Quest from all other Questables
+     * 1. When a Quest is removed from a HasQuest, remove the HasQuest from the Quest.
+     * 2. If the HasQuest is a Context, remove the Quest from all other Questables
      *
      * @param value the Quest to remove
-     * @param key   the Questable, either Room or Context
+     * @param key   the HasQuest, either Room or Context
      */
     public void removeQuest(QuestPort value,
-                            Questable key);
+                            HasQuest key);
 
     /**
-     * Return the Set of Quests assigned to the Questable
-     * @param questable
+     * Return the Set of Quests assigned to the HasQuest
+     * @param hasQuest
      * @return
      */
     public Set<QuestPort> accessQuests(
-            Questable questable);
+            HasQuest hasQuest);
 
 }

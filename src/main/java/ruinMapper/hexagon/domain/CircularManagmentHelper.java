@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class CircularManagmentHelper {
-    public static <T, D> void removeFromMap(
-            Map<T, Set<D>> map,
-            T key, D value) {
+    public static <D> void removeFromMap(
+            Map<String, Set<D>> map,
+            String key, D value) {
         if (map.containsKey(key)) {
             map.get(key).remove(
                     value);
@@ -17,15 +17,15 @@ public class CircularManagmentHelper {
     }
 
     public static <T, D> void linkedRemove(
-            Map<T, Set<D>> tMap,
-            Map<D, Set<T>> dMap,
+            Map<String, Set<D>> tMap,
+            Map<String, Set<T>> dMap,
             T key, D value) {
-        removeFromMap(tMap, key, value);
-        removeFromMap(dMap, value, key);
+        removeFromMap(tMap, key.toString(), value);
+        removeFromMap(dMap, value.toString(), key);
     }
 
-    public static <T, D> void addToSetMap(
-            Map<T, Set<D>> map, T key, D value) {
+    public static <D> void addToSetMap(
+            Map<String, Set<D>> map, String key, D value) {
         if (map.containsKey(key)) {
             map.get(key).add(
                     value);
@@ -36,16 +36,17 @@ public class CircularManagmentHelper {
         }
     }
 
-    public static <T, D> void linkedAdd(Map<T, Set<D>> tMap,
-                                        Map<D, Set<T>> dMap,
-                                        T key, D value) {
-        addToSetMap(tMap, key, value);
-        addToSetMap(dMap, value, key);
+    public static <T, D> void linkedAdd(
+            Map<String, Set<D>> tMap,
+            Map<String, Set<T>> dMap,
+            T key, D value) {
+        addToSetMap(tMap, key.toString(), value);
+        addToSetMap(dMap, value.toString(), key);
     }
 
     // deletes recordToDelete from every Set in dSetMap
-    public static <T, D> void deleteRecord(
-            Map<D, Set<T>> dSetMap,
+    public static <T> void deleteRecord(
+            Map<String, Set<T>> dSetMap,
             T recordToDelete) {
         for (Set<T> tSet : dSetMap.values()) {
             tSet.remove(recordToDelete);
@@ -53,12 +54,14 @@ public class CircularManagmentHelper {
     }
 
     public static <T, D> void deleteLinkedRecord(
-            Map<T, Set<D>> tSetMap,
-            Map<D, Set<T>> dSetMap,
+            Map<String, Set<D>> tSetMap,
+            Map<String, Set<T>> dSetMap,
             T recordToDelete) {
-        if (tSetMap.containsKey(recordToDelete)) {
-            tSetMap.remove(recordToDelete)
-                    .forEach(d -> removeFromMap(dSetMap, d,
+        if (tSetMap
+                .containsKey(recordToDelete.toString())) {
+            tSetMap.remove(recordToDelete.toString())
+                    .forEach(d -> removeFromMap(dSetMap,
+                            d.toString(),
                             recordToDelete));
         }
     }

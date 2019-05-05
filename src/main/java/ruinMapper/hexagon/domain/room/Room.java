@@ -2,11 +2,13 @@ package ruinMapper.hexagon.domain.room;
 
 import ruinMapper.hexagon.ComponentFactory;
 import ruinMapper.hexagon.domain.QuestManager;
-import ruinMapper.hexagon.domain.Questable;
 import ruinMapper.hexagon.domain.TagManager;
-import ruinMapper.hexagon.domain.Taggable;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.marker.ComponentType;
+import ruinMapper.hexagon.domain.marker.HasHint;
+import ruinMapper.hexagon.domain.marker.HasQuest;
+import ruinMapper.hexagon.domain.marker.HasTag;
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
@@ -16,8 +18,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Room implements RoomPort, Taggable,
-        Questable {
+public class Room implements RoomPort, HasQuest, HasTag,
+        HasHint {
     private String title;
     private String notes;
     private Set<HintPort> hintSet;
@@ -147,8 +149,9 @@ public class Room implements RoomPort, Taggable,
         roomRepository.update(this);
     }
 
+
     @Override
-    public boolean isContext() {
-        return false;
+    public ComponentType getType() {
+        return ComponentType.ROOM;
     }
 }

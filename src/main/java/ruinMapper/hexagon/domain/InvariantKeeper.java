@@ -1,11 +1,13 @@
 package ruinMapper.hexagon.domain;
 
+import ruinMapper.hexagon.domain.marker.HasQuest;
+import ruinMapper.hexagon.domain.marker.HasRoom;
+import ruinMapper.hexagon.domain.marker.HasTag;
 import ruinMapper.hexagon.domain.quest.QuestPort;
-import ruinMapper.hexagon.domain.quest.RoomManager;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.tag.HasTagManager;
 import ruinMapper.hexagon.domain.tag.TagPort;
-import ruinMapper.hexagon.domain.tag.TaggableManager;
 
 import java.util.Set;
 import java.util.UUID;
@@ -17,20 +19,20 @@ import java.util.UUID;
  */
 public class InvariantKeeper implements
         QuestManager, RoomManager, TagManager,
-        TaggableManager {
+        HasTagManager {
     //TODO implement the IDs of component in a pre/postfix way so the maps can save strings instead of whole objects
-    private RoomAndQuestableDelegate roomAndQuestableDelegate;
-    private TagAndTaggableDelegate tagAndTaggableDelegate;
+    private RoomAndQuestDelegate roomAndQuestDelegate;
+    private TagAndHasTagDelegate tagAndTaggableDelegate;
 
     private CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository;
     private UUID stateKeeperID;
 
     public InvariantKeeper(
-            RoomAndQuestableDelegate roomAndQuestableDelegate,
-            TagAndTaggableDelegate tagAndTaggableDelegate,
+            RoomAndQuestDelegate roomAndQuestDelegate,
+            TagAndHasTagDelegate tagAndTaggableDelegate,
             CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository,
             UUID stateKeeperID) {
-        this.roomAndQuestableDelegate = roomAndQuestableDelegate;
+        this.roomAndQuestDelegate = roomAndQuestDelegate;
         this.tagAndTaggableDelegate = tagAndTaggableDelegate;
         this.invariantKeeperRepository = invariantKeeperRepository;
         this.stateKeeperID = stateKeeperID;
@@ -48,75 +50,75 @@ public class InvariantKeeper implements
     // QuestManager
     @Override
     public void addQuest(QuestPort value,
-                         Questable key) {
-        roomAndQuestableDelegate.addQuest(value, key);
+                         HasQuest key) {
+        roomAndQuestDelegate.addQuest(value, key);
         saveState();
     }
 
     @Override
     public void removeQuest(QuestPort value,
-                            Questable key) {
-        roomAndQuestableDelegate.removeQuest(value, key);
+                            HasQuest key) {
+        roomAndQuestDelegate.removeQuest(value, key);
         saveState();
 
     }
 
     @Override
     public Set<QuestPort> accessQuests(
-            Questable questable) {
-        return roomAndQuestableDelegate
-                .accessQuests(questable);
+            HasQuest hasQuest) {
+        return roomAndQuestDelegate
+                .accessQuests(hasQuest);
     }
 
     /**********************************************************/
 // RoomManager
     @Override
     public void addRoom(RoomPort value,
-                        QuestPort key) {
-        roomAndQuestableDelegate.addRoom(value, key);
+                        HasRoom key) {
+        roomAndQuestDelegate.addRoom(value, key);
         saveState();
     }
 
     @Override
     public void removeRoom(RoomPort value,
-                           QuestPort key) {
-        roomAndQuestableDelegate.removeRoom(value, key);
+                           HasRoom key) {
+        roomAndQuestDelegate.removeRoom(value, key);
         saveState();
     }
 
     @Override
-    public Set<RoomPort> accessRooms(QuestPort questPort) {
-        return roomAndQuestableDelegate
-                .accessRooms(questPort);
+    public Set<RoomPort> accessRooms(HasRoom hasRoom) {
+        return roomAndQuestDelegate
+                .accessRooms(hasRoom);
     }
 
     @Override
     public void deleteQuest(QuestPort questPort) {
-        roomAndQuestableDelegate.deleteQuest(questPort);
+        roomAndQuestDelegate.deleteQuest(questPort);
         saveState();
     }
 
     /**********************************************************/
 // TagManager
     @Override
-    public void addTag(TagPort value, Taggable key) {
+    public void addTag(TagPort value, HasTag key) {
         tagAndTaggableDelegate.addTag(value, key);
         saveState();
     }
 
     @Override
-    public void removeTag(TagPort value, Taggable key) {
+    public void removeTag(TagPort value, HasTag key) {
         tagAndTaggableDelegate.removeTag(value, key);
         saveState();
     }
 
     @Override
-    public Set<TagPort> accessTags(Taggable taggable) {
-        return tagAndTaggableDelegate.accessTags(taggable);
+    public Set<TagPort> accessTags(HasTag hasTag) {
+        return tagAndTaggableDelegate.accessTags(hasTag);
     }
 
     /**********************************************************/
-    //TaggableManager
+    //HasTagManager
     @Override
     public void deleteTag(TagPort tagPort) {
         tagAndTaggableDelegate.deleteTag(tagPort);

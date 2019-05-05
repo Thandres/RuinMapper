@@ -8,17 +8,17 @@ import java.util.UUID;
 public class Tag implements TagPort {
     private String tagType;
     private CRUDRepositoryPort<Tag> tagRepository;
-    private TaggableManager taggableManager;
+    private HasTagManager hasTagManager;
 
     private UUID tagID;
 
     public Tag(String tagType,
                CRUDRepositoryPort<Tag> tagRepository,
-               TaggableManager taggableManager,
+               HasTagManager hasTagManager,
                UUID tagID) {
         this.tagType = tagType;
         this.tagRepository = tagRepository;
-        this.taggableManager = taggableManager;
+        this.hasTagManager = hasTagManager;
 
         this.tagID = tagID;
     }
@@ -38,7 +38,7 @@ public class Tag implements TagPort {
 
     @Override
     public void deleteTag() {
-        taggableManager.deleteTag(this);
+        hasTagManager.deleteTag(this);
         tagRepository.delete(tagID.toString());
     }
 

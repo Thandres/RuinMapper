@@ -2,11 +2,12 @@ package ruinMapper.hexagon.domain.context;
 
 import ruinMapper.hexagon.ComponentFactory;
 import ruinMapper.hexagon.domain.QuestManager;
-import ruinMapper.hexagon.domain.Questable;
 import ruinMapper.hexagon.domain.TagManager;
-import ruinMapper.hexagon.domain.Taggable;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.marker.ComponentType;
+import ruinMapper.hexagon.domain.marker.HasQuest;
+import ruinMapper.hexagon.domain.marker.HasTag;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
@@ -16,8 +17,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Context implements ContextPort, Taggable,
-        Questable {
+public class Context implements ContextPort, HasTag,
+        HasQuest {
 
     private Set<AreaPort> areaSet;
     private TagManager tagManager;
@@ -95,14 +96,13 @@ public class Context implements ContextPort, Taggable,
                 .collect(Collectors.toSet());
     }
 
-
-    private void saveState() {
-        contextRepository.update(this);
+    @Override
+    public ComponentType getType() {
+        return ComponentType.CONTEXT;
     }
 
 
-    @Override
-    public boolean isContext() {
-        return true;
+    private void saveState() {
+        contextRepository.update(this);
     }
 }

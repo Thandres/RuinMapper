@@ -1,8 +1,8 @@
 package ruinMapper.hexagon;
 
 import ruinMapper.hexagon.domain.InvariantKeeper;
-import ruinMapper.hexagon.domain.RoomAndQuestableDelegate;
-import ruinMapper.hexagon.domain.TagAndTaggableDelegate;
+import ruinMapper.hexagon.domain.RoomAndQuestDelegate;
+import ruinMapper.hexagon.domain.TagAndHasTagDelegate;
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.hint.Hint;
@@ -91,14 +91,14 @@ public class ComponentFactory {
         return stateKeeper;
     }
 
-    public static RoomAndQuestableDelegate createRQDelegate() {
-        return new RoomAndQuestableDelegate(
+    public static RoomAndQuestDelegate createRQDelegate() {
+        return new RoomAndQuestDelegate(
                 new HashMap<>(), new HashMap<>(),
                 new HashSet<>());
     }
 
-    public static TagAndTaggableDelegate createTTDelegate() {
-        return new TagAndTaggableDelegate(new HashMap<>(),
+    public static TagAndHasTagDelegate createTTDelegate() {
+        return new TagAndHasTagDelegate(new HashMap<>(),
                 new HashSet<>());
     }
 

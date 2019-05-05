@@ -1,11 +1,13 @@
 package ruinMapper.hexagon.domain.hint;
 
+import ruinMapper.hexagon.domain.marker.ComponentType;
+import ruinMapper.hexagon.domain.marker.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import java.util.UUID;
 
-public class Hint implements HintPort {
+public class Hint implements HintPort, HasRoom {
 
     private String content;
     private String notes;
@@ -97,4 +99,8 @@ public class Hint implements HintPort {
         hintRepository.update(this);
     }
 
+    @Override
+    public ComponentType getType() {
+        return ComponentType.HINT;
+    }
 }
