@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.room;
 
-import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.invariant.HintManager;
 import ruinMapper.hexagon.domain.invariant.QuestManager;
 import ruinMapper.hexagon.domain.invariant.TagManager;
 import ruinMapper.hexagon.domain.model.*;
@@ -20,7 +20,7 @@ Room extends ComponentSuper implements
         HasHint {
     private String title;
     private String notes;
-    private Set<HintPort> hintSet;
+    private HintManager hintManager;
     private QuestManager questManager;
     private TagManager tagManager;
     private CRUDRepositoryPort<Room> roomRepository;
@@ -28,14 +28,15 @@ Room extends ComponentSuper implements
 
 
     public Room(String title, String notes,
-                Set<HintPort> hintSet,
+                HintManager hintManager,
                 QuestManager questManager,
                 TagManager tagManager,
                 CRUDRepositoryPort<Room> roomRepository,
                 UUID roomID) {
         this.title = title;
         this.notes = notes;
-        this.hintSet = hintSet;
+        this.hintManager = hintManager;
+
         this.questManager = questManager;
         this.tagManager = tagManager;
         this.roomRepository = roomRepository;
@@ -72,30 +73,28 @@ Room extends ComponentSuper implements
 
     @Override
     public HintPort createHint(String content) {
-        Hint newHint = ComponentFactory
+        HintPort newHint = ComponentFactory
                 .createHint(content, this);
-        hintSet.add(newHint);
+        hintManager.addHint(newHint, this);
         saveState();
         return newHint;
     }
 
     @Override
     public void addHint(HintPort hint) {
-        if (hintSet.add(hint)) {
-            saveState();
-        }
+        hintManager.addHint(hint, this);
+        saveState();
     }
 
     @Override
     public void removeHint(HintPort hint) {
-        if (hintSet.remove(hint)) {
-            saveState();
-        }
+        hintManager.removeHint(hint, this);
+        saveState();
     }
 
     @Override
     public Set<HintPort> accessHints() {
-        return new HashSet<>(hintSet);
+        return new HashSet<>(hintManager.accessHints(this));
     }
 
     @Override
