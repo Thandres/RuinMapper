@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.*;
 import ruinMapper.hexagon.ComponentFactory;
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -38,7 +39,9 @@ public class InvariantKeeperTest {
     @Test
     public void QuestRoomInvarianttest() {
         RoomPort room = ComponentFactory.createRoom();
-        QuestPort quest = ComponentFactory.createQuest("");
+        ContextPort context = ComponentFactory
+                .createContext();
+        QuestPort quest = context.createQuest("");
 
         room.addQuest(quest);
         assertTrue(room.accessQuests().contains(quest));
@@ -66,8 +69,13 @@ public class InvariantKeeperTest {
         quest.addRoom(room);
         quest.deleteQuest();
         assertFalse(room.accessQuests().contains(quest));
-        assertFalse(
-                quest.accessQuestRooms().contains(room));
+        assertFalse(context.accessQuests().contains(quest));
+
+        quest = context.createQuest("");
+        quest.addRoom(room);
+        context.deleteQuest(quest);
+        assertFalse(room.accessQuests().contains(quest));
+        assertFalse(context.accessQuests().contains(quest));
     }
 
 }

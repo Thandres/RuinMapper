@@ -1,6 +1,8 @@
 package ruinMapper.hexagon;
 
 import ruinMapper.hexagon.domain.InvariantKeeper;
+import ruinMapper.hexagon.domain.RoomAndQuestableDelegate;
+import ruinMapper.hexagon.domain.TagAndTaggableDelegate;
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.hint.Hint;
@@ -82,13 +84,23 @@ public class ComponentFactory {
 
     public static InvariantKeeper createStateKeeper() {
         InvariantKeeper stateKeeper = new InvariantKeeper(
-                new HashMap<>(), new HashMap<>(),
-                new HashSet<>(), stateKeeperRepository,
+                createRQDelegate(), createTTDelegate(),
+                stateKeeperRepository,
                 UUID.randomUUID());
         stateKeeperRepository.create(stateKeeper);
         return stateKeeper;
     }
 
+    public static RoomAndQuestableDelegate createRQDelegate() {
+        return new RoomAndQuestableDelegate(
+                new HashMap<>(), new HashMap<>(),
+                new HashSet<>());
+    }
+
+    public static TagAndTaggableDelegate createTTDelegate() {
+        return new TagAndTaggableDelegate(new HashMap<>(),
+                new HashSet<>());
+    }
 
     public static void setQuestRepository(
             CRUDRepositoryPort<Quest> questRepository) {
