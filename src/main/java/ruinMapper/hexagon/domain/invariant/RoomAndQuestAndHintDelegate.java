@@ -12,7 +12,7 @@ import java.util.Set;
 import static ruinMapper.hexagon.domain.invariant.CircularManagmentHelper.*;
 
 // Handles the HasQuest and HasRoom Invariants
-public class RoomAndQuestDelegate implements
+public class RoomAndQuestAndHintDelegate implements
         QuestManager,
         RoomManager, HintManager {
     private Map<String, Set<QuestPort>> roomToQuestsMap;
@@ -21,7 +21,7 @@ public class RoomAndQuestDelegate implements
     private Map<String, RoomPort> hintToRoomMap;
     private Set<QuestPort> contextQuests;
 
-    public RoomAndQuestDelegate(
+    public RoomAndQuestAndHintDelegate(
             Map<String, Set<QuestPort>> roomToQuestsMap,
             Map<String, Set<RoomPort>> questToRoomsMap,
             Map<String, Set<HintPort>> roomToHintsMap,
