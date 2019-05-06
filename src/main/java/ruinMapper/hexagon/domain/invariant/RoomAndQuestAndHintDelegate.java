@@ -34,6 +34,14 @@ public class RoomAndQuestAndHintDelegate implements
         this.contextQuests = contextQuests;
     }
 
+    private void deleteRoomImpl(RoomPort roomToDelete) {
+        deleteLinkedRecord(roomToQuestsMap, questToRoomsMap,
+                roomToDelete);
+        roomToHintsMap.remove(roomToDelete.toString())
+                .forEach(hintPort -> hintToRoomMap
+                        .remove(hintPort.toString()));
+    }
+
     private void deleteQuestImpl(QuestPort questToDelete) {
         contextQuests.remove(questToDelete);
         deleteLinkedRecord(questToRoomsMap,
@@ -41,6 +49,7 @@ public class RoomAndQuestAndHintDelegate implements
     }
 
     private void deleteHintImpl(HintPort hintPort) {
+        // Own implementation because of
         hintToRoomMap.remove(hintPort.toString());
         deleteRecord(roomToHintsMap, hintPort);
     }
@@ -82,6 +91,7 @@ public class RoomAndQuestAndHintDelegate implements
             return new HashSet<>(contextQuests);
         }
     }
+
     //#############ROOMMANAGER####################
 
     @Override
@@ -166,6 +176,8 @@ public class RoomAndQuestAndHintDelegate implements
             case HINT:
                 deleteHintImpl((HintPort) managedObject);
                 break;
+            case ROOM:
+                deleteRoomImpl((RoomPort) managedObject);
         }
     }
 }

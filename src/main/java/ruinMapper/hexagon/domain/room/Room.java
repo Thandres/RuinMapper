@@ -168,6 +168,15 @@ Room extends ComponentSuper implements
     }
 
     @Override
+    public void deleteRoom() {
+        // only one Manager needs to deregister the object
+        // as deleteManagedObject marks it for removal from every
+        // reference
+        hintManager.deleteManagedObject(this);
+        roomRepository.delete(toString());
+    }
+
+    @Override
     public Point accessCoordinates() {
         return coordinates;
     }

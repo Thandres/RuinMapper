@@ -3,45 +3,52 @@ package ruinMapper.hexagon.domain;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.*;
+import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
-import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
 import ruinMapper.hexagon.domain.model.ComponentFactory;
+import ruinMapper.hexagon.domain.model.DomainLifecyclePort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class InvariantKeeperTest {
 
-    private InvariantKeeper stateKeeper;
+    private ContextPort context;
+    private DomainLifecyclePort lifecyclePort;
+    private static final String NEW_AREA_NAME = "New Area";
 
     @Before
     public void setup() {
-        ComponentFactory
-                .setAreaRepository(new AreaRepoDummy());
-        ComponentFactory.setContextRepository(
-                new ContextRepoDummy());
-        ComponentFactory
-                .setQuestRepository(new QuestRepoDummy());
-        ComponentFactory
-                .setTagRepository(new TagRepoDummy());
-        ComponentFactory
-                .setHintRepository(new HintRepoDummy());
-        ComponentFactory
-                .setRoomRepository(new RoomRepoDummy());
-        ComponentFactory.setStateKeeperRepository(
+        lifecyclePort = new ComponentFactory(
+                new QuestRepoDummy(), new RoomRepoDummy(),
+                new HintRepoDummy(), new TagRepoDummy(),
+                new AreaRepoDummy(), new ContextRepoDummy(),
                 new StateKeeperRepoDummy());
-        stateKeeper = ComponentFactory.createStateKeeper();
-        ComponentFactory.setStateKeeper(stateKeeper);
+        context = lifecyclePort.createNewContext("");
+    }
+
+    @Test
+    public void DomainLifecycleInvariantTest() {
+        // createNewContext
+        context = lifecyclePort.createNewContext("");
+        AreaPort area = context.accessArea(NEW_AREA_NAME);
+        assertNotNull(area);
+        assertNotNull(area.accessRoom(0, 0));
+
+        // deleteContext
+        //TODO
+
+        // loadContextByID
+        // TODO
 
     }
 
     @Test
+    //TODO split test into different tests and check for right asserts
     public void QuestRoomInvarianttest() {
-        RoomPort room = ComponentFactory.createRoom();
-        ContextPort context = ComponentFactory
-                .createContext("");
+        RoomPort room = context.accessArea(NEW_AREA_NAME)
+                .accessRoom(0, 0);
         QuestPort quest = context.createQuest("");
 
         room.addQuest(quest);

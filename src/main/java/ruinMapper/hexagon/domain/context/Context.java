@@ -59,6 +59,14 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
+    public AreaPort accessArea(String title) {
+        return areaManager.accessAreas(this).stream()
+                .filter(areaPort -> areaPort.accessTitle()
+                        .equals(title)).findFirst()
+                .orElseGet(null);//TODO error object
+    }
+
+    @Override
     public Set<AreaPort> accessAreas() {
         return areaManager.accessAreas(this);
     }
@@ -72,7 +80,7 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public Set<TagPort> accessTags() {
+    public Set<TagPort> accessPossibleTags() {
         return tagManager.accessTags(this);
     }
 

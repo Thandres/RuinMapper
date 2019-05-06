@@ -16,11 +16,14 @@ public interface ContextPort {
     public String accessName();
     public AreaPort createArea(String title);
 
+    public AreaPort accessArea(String title);
+
     public Set<AreaPort> accessAreas();
+
 
     public TagPort createTag(String name);
 
-    public Set<TagPort> accessTags();
+    public Set<TagPort> accessPossibleTags();
 
     public QuestPort createQuest(String title);
 

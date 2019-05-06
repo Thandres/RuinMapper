@@ -36,7 +36,8 @@ public interface AreaPort {
 
     /**
      * Deletes the Room from the Area.
-     * A deleted Room is also removed from any Quest and Hint.
+     * A deleted Room is also removed from any Quest and Hints
+     * are deleted as well.
      *
      * @param x
      * @param y

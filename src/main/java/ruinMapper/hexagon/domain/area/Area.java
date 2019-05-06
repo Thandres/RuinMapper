@@ -63,7 +63,8 @@ public class Area extends ComponentSuper implements
     @Override
     public void deleteRoom(int x, int y) {
         Point point = new Point(x, y);
-        roomManager.removeRoom(areaMap.get(point), this);
+        RoomPort roomToDelete = accessRoom(x, y);
+        roomManager.removeRoom(roomToDelete, this);
         saveState();
     }
 
@@ -122,7 +123,8 @@ public class Area extends ComponentSuper implements
 
     @Override
     public void removeRoom(RoomPort value, HasRoom key) {
-        areaMap.remove(value.accessCoordinates());
+        areaMap.remove(value.accessCoordinates())
+                .deleteRoom();
     }
 
     @Override

@@ -34,6 +34,8 @@ public class ComponentFactory implements
 
     private static InvariantKeeper stateKeeper;
 
+    public final static String NEW_AREA_NAME = "New Area";
+
     public ComponentFactory(
             CRUDRepositoryPort<Quest> questRepository,
             CRUDRepositoryPort<Room> roomRepository,
@@ -103,6 +105,8 @@ public class ComponentFactory implements
                 stateKeeper.toString(), contextRepository,
                 UUID.randomUUID());
         contextRepository.create(newContext);
+        newContext.createArea(NEW_AREA_NAME)
+                .createRoom(0, 0);
         return newContext;
     }
 
@@ -130,48 +134,6 @@ public class ComponentFactory implements
 
     public static AreaDelegate createAreaDelegate() {
         return new AreaDelegate(new HashSet<>());
-    }
-
-    public static void setQuestRepository(
-            CRUDRepositoryPort<Quest> questRepository) {
-        ComponentFactory.questRepository = questRepository;
-    }
-
-
-    public static void setHintRepository(
-            CRUDRepositoryPort<Hint> hintRepository) {
-        ComponentFactory.hintRepository = hintRepository;
-    }
-
-    public static void setTagRepository(
-            CRUDRepositoryPort<Tag> tagRepository) {
-        ComponentFactory.tagRepository = tagRepository;
-    }
-
-    public static void setAreaRepository(
-            CRUDRepositoryPort<Area> areaRepository) {
-        ComponentFactory.areaRepository = areaRepository;
-    }
-
-    public static void setRoomRepository(
-            CRUDRepositoryPort<Room> roomRepository) {
-        ComponentFactory.roomRepository = roomRepository;
-    }
-
-    public static void setContextRepository(
-            CRUDRepositoryPort<Context> contextRepository) {
-        ComponentFactory.contextRepository = contextRepository;
-    }
-
-    public static void setStateKeeperRepository(
-            CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository) {
-        ComponentFactory.stateKeeperRepository = stateKeeperRepository;
-    }
-
-    // TODO replace this Setter with repository.read
-    public static void setStateKeeper(
-            InvariantKeeper stateKeeper) {
-        ComponentFactory.stateKeeper = stateKeeper;
     }
 
     @Override
