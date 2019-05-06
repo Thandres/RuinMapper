@@ -2,6 +2,7 @@ package ruinMapper.hexagon.domain.context;
 
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.invariant.AreaManager;
 import ruinMapper.hexagon.domain.invariant.QuestManager;
 import ruinMapper.hexagon.domain.invariant.TagManager;
 import ruinMapper.hexagon.domain.model.*;
@@ -9,17 +10,17 @@ import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Context extends ComponentSuper implements
         ContextPort, HasTag,
-        HasQuest {
+        HasQuest, HasArea {
 
     private String name;
-    private Set<AreaPort> areaSet;
+    private AreaManager areaManager;
+
     private TagManager tagManager;
     private QuestManager questManager;
     private String stateKeeperID;
@@ -27,14 +28,14 @@ public class Context extends ComponentSuper implements
     private UUID contextID;
 
     public Context(
-            String name, Set<AreaPort> areaSet,
+            String name, AreaManager areaManager,
             TagManager tagManager,
             QuestManager questManager,
             String stateKeeperID,
             CRUDRepositoryPort<Context> contextRepository,
             UUID contextID) {
         this.name = name;
-        this.areaSet = areaSet;
+        this.areaManager = areaManager;
         this.tagManager = tagManager;
         this.questManager = questManager;
         this.stateKeeperID = stateKeeperID;
@@ -52,14 +53,14 @@ public class Context extends ComponentSuper implements
     public AreaPort createArea(String title) {
         AreaPort newArea = ComponentFactory
                 .createArea(title);
-        areaSet.add(newArea);
+        areaManager.addArea(newArea, this);
         saveState();
         return newArea;
     }
 
     @Override
     public Set<AreaPort> accessAreas() {
-        return new HashSet<>(areaSet);
+        return areaManager.accessAreas(this);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public Set<TagPort> accessTags() {
-        return new HashSet<>(tagManager.accessTags(this));
+        return tagManager.accessTags(this);
     }
 
     @Override
@@ -97,8 +98,10 @@ public class Context extends ComponentSuper implements
 
     @Override
     public Set<HintPort> accessHints() {
-        return areaSet.stream().flatMap(
-                area -> area.accessHintsOnArea().stream())
+        return areaManager.accessAreas(this).stream()
+                .flatMap(
+                        area -> area.accessHintsOnArea()
+                                .stream())
                 .collect(Collectors.toSet());
     }
 

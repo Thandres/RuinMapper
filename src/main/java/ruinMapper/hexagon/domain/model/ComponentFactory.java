@@ -6,7 +6,7 @@ import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintStatus;
 import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
-import ruinMapper.hexagon.domain.invariant.RoomAndQuestDelegate;
+import ruinMapper.hexagon.domain.invariant.RoomAndQuestAndHintDelegate;
 import ruinMapper.hexagon.domain.invariant.TagAndHasTagDelegate;
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestStatus;
@@ -97,7 +97,7 @@ public class ComponentFactory implements
 
     public static Context createContext(String name) {
         Context newContext = new Context(name,
-                new HashSet<>(),
+                stateKeeper,
                 stateKeeper, stateKeeper,
                 stateKeeper.toString(), contextRepository,
                 UUID.randomUUID());
@@ -108,14 +108,14 @@ public class ComponentFactory implements
     public static InvariantKeeper createStateKeeper() {
         InvariantKeeper stateKeeper = new InvariantKeeper(
                 createRQDelegate(), createTTDelegate(),
-                stateKeeperRepository,
+                areaDelegate, stateKeeperRepository,
                 UUID.randomUUID());
         stateKeeperRepository.create(stateKeeper);
         return stateKeeper;
     }
 
-    public static RoomAndQuestDelegate createRQDelegate() {
-        return new RoomAndQuestDelegate(
+    public static RoomAndQuestAndHintDelegate createRQDelegate() {
+        return new RoomAndQuestAndHintDelegate(
                 new HashMap<>(), new HashMap<>(),
                 new HashMap<>(), new HashMap<>(),
                 new HashSet<>());

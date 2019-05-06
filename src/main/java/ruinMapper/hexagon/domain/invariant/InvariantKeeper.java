@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.model.*;
 import ruinMapper.hexagon.domain.quest.QuestPort;
@@ -18,20 +19,23 @@ import java.util.UUID;
 public class InvariantKeeper extends
         ComponentSuper implements
         QuestManager, RoomManager, TagManager,
-        HasTagManager, HintManager {
+        HasTagManager, HintManager, AreaManager {
 
-    private RoomAndQuestDelegate roomAndQuestDelegate;
+    private RoomAndQuestAndHintDelegate roomAndQuestAndHintDelegate;
     private TagAndHasTagDelegate tagAndTaggableDelegate;
+    private AreaDelegate areaDelegate;
     private CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository;
     private UUID stateKeeperID;
 
     public InvariantKeeper(
-            RoomAndQuestDelegate roomAndQuestDelegate,
+            RoomAndQuestAndHintDelegate roomAndQuestAndHintDelegate,
             TagAndHasTagDelegate tagAndTaggableDelegate,
+            AreaDelegate areaDelegate,
             CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository,
             UUID stateKeeperID) {
-        this.roomAndQuestDelegate = roomAndQuestDelegate;
+        this.roomAndQuestAndHintDelegate = roomAndQuestAndHintDelegate;
         this.tagAndTaggableDelegate = tagAndTaggableDelegate;
+        this.areaDelegate = areaDelegate;
         this.invariantKeeperRepository = invariantKeeperRepository;
         this.stateKeeperID = stateKeeperID;
     }
@@ -47,14 +51,14 @@ public class InvariantKeeper extends
     @Override
     public void addQuest(QuestPort value,
                          HasQuest key) {
-        roomAndQuestDelegate.addQuest(value, key);
+        roomAndQuestAndHintDelegate.addQuest(value, key);
         saveState();
     }
 
     @Override
     public void removeQuest(QuestPort value,
                             HasQuest key) {
-        roomAndQuestDelegate.removeQuest(value, key);
+        roomAndQuestAndHintDelegate.removeQuest(value, key);
         saveState();
 
     }
@@ -62,7 +66,7 @@ public class InvariantKeeper extends
     @Override
     public Set<QuestPort> accessQuests(
             HasQuest hasQuest) {
-        return roomAndQuestDelegate
+        return roomAndQuestAndHintDelegate
                 .accessQuests(hasQuest);
     }
 
@@ -71,20 +75,20 @@ public class InvariantKeeper extends
     @Override
     public void addRoom(RoomPort value,
                         HasRoom key) {
-        roomAndQuestDelegate.addRoom(value, key);
+        roomAndQuestAndHintDelegate.addRoom(value, key);
         saveState();
     }
 
     @Override
     public void removeRoom(RoomPort value,
                            HasRoom key) {
-        roomAndQuestDelegate.removeRoom(value, key);
+        roomAndQuestAndHintDelegate.removeRoom(value, key);
         saveState();
     }
 
     @Override
     public Set<RoomPort> accessRooms(HasRoom hasRoom) {
-        return roomAndQuestDelegate
+        return roomAndQuestAndHintDelegate
                 .accessRooms(hasRoom);
     }
 
@@ -110,8 +114,6 @@ public class InvariantKeeper extends
 
     /**********************************************************/
     // ComponentSuper
-
-
     @Override
     public String toString() {
         return stateKeeperID.toString();
@@ -121,19 +123,39 @@ public class InvariantKeeper extends
     //HintManager
     @Override
     public void addHint(HintPort value, HasHint key) {
-        roomAndQuestDelegate.addHint(value, key);
+        roomAndQuestAndHintDelegate.addHint(value, key);
         saveState();
     }
 
     @Override
     public void removeHint(HintPort value, HasHint key) {
-        roomAndQuestDelegate.removeHint(value, key);
+        roomAndQuestAndHintDelegate.removeHint(value, key);
         saveState();
     }
 
     @Override
     public Set<HintPort> accessHints(HasHint hasHint) {
-        return roomAndQuestDelegate.accessHints(hasHint);
+        return roomAndQuestAndHintDelegate
+                .accessHints(hasHint);
+    }
+
+    /**********************************************************/
+    // AreaManager
+    @Override
+    public void addArea(AreaPort value, HasArea key) {
+        areaDelegate.addArea(value, key);
+        saveState();
+    }
+
+    @Override
+    public void removeArea(AreaPort value, HasArea key) {
+        areaDelegate.removeArea(value, key);
+        saveState();
+    }
+
+    @Override
+    public Set<AreaPort> accessAreas(HasArea hasArea) {
+        return areaDelegate.accessAreas(hasArea);
     }
 
     /**********************************************************/
@@ -143,11 +165,11 @@ public class InvariantKeeper extends
         switch (managedObject.getType()) {
             case QUEST:// Same as Hint
             case HINT:
-                roomAndQuestDelegate
+                roomAndQuestAndHintDelegate
                         .deleteManagedObject(managedObject);
                 break;
             case ROOM:
-                roomAndQuestDelegate
+                roomAndQuestAndHintDelegate
                         .deleteManagedObject(managedObject);
                 tagAndTaggableDelegate
                         .deleteManagedObject(managedObject);
@@ -158,7 +180,7 @@ public class InvariantKeeper extends
                 break;
             case AREA://TODO
             case CONTEXT://TODO, also necessary? Special case or just ignore, because when the context gets deleted the main entry point just references another context
-                roomAndQuestDelegate
+                roomAndQuestAndHintDelegate
                         .deleteManagedObject(managedObject);
         }
         saveState();
