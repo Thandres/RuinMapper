@@ -47,4 +47,6 @@ public interface RoomPort {
 
     public void changeCoordinates(Point newCoordinates);
 
+    public void deleteRoom();
+
 }

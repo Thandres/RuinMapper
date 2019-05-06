@@ -17,6 +17,7 @@ public class Area extends ComponentSuper implements
     private String title;
     private String notes;
     private Map<Point, RoomPort> areaMap;
+    private RoomManager roomManager;
     private CRUDRepositoryPort<Area> areaRepository;
     private UUID areaID;
 
@@ -30,6 +31,8 @@ public class Area extends ComponentSuper implements
         this.areaMap = areaMap;
         this.areaRepository = areaRepository;
         this.areaID = areaID;
+
+        roomManager = this;
     }
 
 
@@ -37,25 +40,30 @@ public class Area extends ComponentSuper implements
     public RoomPort createRoom(int x, int y) {
         RoomPort newRoom = ComponentFactory
                 .createRoom(x, y);
-        addRoom(newRoom, this);
+        roomManager.addRoom(newRoom, this);
         saveState();
         return newRoom;
     }
 
     @Override
     public RoomPort accessRoom(int x, int y) {
-        return areaMap.get(new Point(x, y));
+        Point point = new Point(x, y);
+        return roomManager.accessRooms(this).stream()
+                .filter(roomPort -> roomPort
+                        .accessCoordinates().equals(point))
+                .findFirst()
+                .orElseGet(null);// TODO error object
     }
 
     @Override
     public Set<RoomPort> accessRooms() {
-        return new HashSet<>(areaMap.values());
+        return roomManager.accessRooms(this);
     }
 
     @Override
     public void deleteRoom(int x, int y) {
         Point point = new Point(x, y);
-        removeRoom(areaMap.get(point), this);
+        roomManager.removeRoom(areaMap.get(point), this);
         saveState();
     }
 
@@ -91,6 +99,12 @@ public class Area extends ComponentSuper implements
     }
 
     @Override
+    public void deleteArea() {
+        roomManager.deleteManagedObject(this);
+        areaRepository.delete(toString());
+    }
+
+    @Override
     public void saveState() {
         areaRepository.update(this);
     }
@@ -119,7 +133,7 @@ public class Area extends ComponentSuper implements
     @Override
     public <T extends ComponentTag> void deleteManagedObject(
             T managedObject) {
-
+        areaMap.values().forEach(RoomPort::deleteRoom);
     }
 
     @Override
