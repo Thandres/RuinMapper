@@ -18,8 +18,8 @@ public interface ContextSupplierPort {
     /**
      * Loads the Context with the specified name from the repository.
      *
-     * @param name
-     * @return
+     * @param name unique name of the Context
+     * @return The specified Context
      */
     public ContextPort loadContextByName(String name);
 
