@@ -1,5 +1,7 @@
 package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.model.ComponentTag;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -64,5 +66,10 @@ public class CircularManagmentHelper {
                             d.toString(),
                             recordToDelete));
         }
+    }
+
+    public static <T extends ComponentTag, D> boolean containsKey(
+            Map<String, Set<D>> map, T objWithStringKey) {
+        return map.containsKey(objWithStringKey.toString());
     }
 }

@@ -27,6 +27,7 @@ public class InvariantKeeper extends
     private CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository;
     private UUID stateKeeperID;
 
+    //TODO a MesseageQueue implementation of this mess to make usage of managers cleaner
     public InvariantKeeper(
             RoomAndQuestAndHintDelegate roomAndQuestAndHintDelegate,
             TagAndHasTagDelegate tagAndTaggableDelegate,

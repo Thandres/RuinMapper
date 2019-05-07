@@ -17,7 +17,6 @@ public interface HintPort {
 
     public String accessNotes();
 
-    //TODO what happens when Room gets deleted?
     public RoomPort accessRoom();
 
     public void deleteHint();

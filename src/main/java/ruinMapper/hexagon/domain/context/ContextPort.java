@@ -20,7 +20,6 @@ public interface ContextPort {
 
     public Set<AreaPort> accessAreas();
 
-
     public TagPort createTag(String name);
 
     public Set<TagPort> accessPossibleTags();

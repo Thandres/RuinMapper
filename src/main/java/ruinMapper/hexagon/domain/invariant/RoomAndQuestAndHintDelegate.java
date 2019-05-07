@@ -214,8 +214,5 @@ public class RoomAndQuestAndHintDelegate implements
         }
     }
 
-    private <T extends ComponentTag, D> boolean containsKey(
-            Map<String, Set<D>> map, T objWithStringKey) {
-        return map.containsKey(objWithStringKey.toString());
-    }
+
 }

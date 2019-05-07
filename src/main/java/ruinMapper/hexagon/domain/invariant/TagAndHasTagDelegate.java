@@ -63,6 +63,10 @@ public class TagAndHasTagDelegate implements TagManager,
                 .equals(hasTag.getType())) {
             return new HashSet<>(contextTags);
         } else {
+            if (!containsKey(roomToTagsMap, hasTag)) {
+                roomToTagsMap.put(hasTag.toString(),
+                        new HashSet<>());
+            }
             return new HashSet<>(
                     roomToTagsMap.get(hasTag.toString()));
         }
