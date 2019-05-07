@@ -149,9 +149,9 @@ public class RoomAndQuestAndHintDelegate implements
             return new HashSet<>(
                     questToRoomsMap
                             .get(hasRoom.toString()));
-        } else if (ComponentType.QUEST
+        } else if (ComponentType.HINT
                 .equals(hasRoom.getType())) {
-            if (hintToRoomMap
+            if (!hintToRoomMap
                     .containsKey(hasRoom.toString())) {
                 hintToRoomMap.put(hasRoom.toString(), null);
             }
