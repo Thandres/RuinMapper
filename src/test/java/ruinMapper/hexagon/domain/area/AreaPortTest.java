@@ -23,14 +23,21 @@ public class AreaPortTest {
 
     @Before
     public void setup() {
-        lifecyclePort = new ComponentFactory(
+        lifecyclePort = implementationOne();
+        context = lifecyclePort.createNewContext("");
+        areaToTest = context
+                .accessArea(ComponentFactory.NEW_AREA_NAME);
+    }
+
+    // notes the type of Implementation of the test uses.
+    // for testing your own implementation just write another method that returns
+    // a a different DomainLifecyclePort implementation and switch out the setup() method
+    private DomainLifecyclePort implementationOne() {
+        return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
                 new AreaRepoDummy(), new ContextRepoDummy(),
                 new StateKeeperRepoDummy());
-        context = lifecyclePort.createNewContext("");
-        areaToTest = context
-                .accessArea(ComponentFactory.NEW_AREA_NAME);
     }
 
     @Test
