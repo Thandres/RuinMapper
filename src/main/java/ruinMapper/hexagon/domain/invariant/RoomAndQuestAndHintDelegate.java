@@ -84,11 +84,16 @@ public class RoomAndQuestAndHintDelegate implements
     @Override
     public Set<QuestPort> accessQuests(
             HasQuest hasQuest) {
-        if (ComponentType.ROOM.equals(hasQuest.getType())) {
+        if (ComponentType.ROOM
+                .equals(hasQuest.getType()) && containsKey(
+                roomToQuestsMap, hasQuest)) {
             return new HashSet<>(roomToQuestsMap
                     .get(hasQuest.toString()));
-        } else {
+        } else if (ComponentType.CONTEXT
+                .equals(hasQuest.getType())) {
             return new HashSet<>(contextQuests);
+        } else {
+            return new HashSet<>();
         }
     }
 
@@ -124,17 +129,24 @@ public class RoomAndQuestAndHintDelegate implements
 
     @Override
     public Set<RoomPort> accessRooms(HasRoom hasRoom) {
-        if (ComponentType.QUEST.equals(hasRoom.getType())) {
+        if (ComponentType.QUEST.equals(hasRoom
+                .getType()) && containsKey(questToRoomsMap,
+                hasRoom)) {
             return new HashSet<>(
                     questToRoomsMap
                             .get(hasRoom.toString()));
-        } else {//TODO maybe explicit type check?
+        } else if (ComponentType.QUEST
+                .equals(hasRoom.getType()) && hintToRoomMap
+                .containsKey(hasRoom.toString())) {
             RoomPort room = hintToRoomMap
                     .get(hasRoom.toString());
             Set<RoomPort> temp = new HashSet<>();
             temp.add(room);
             return temp;
+        } else {
+            return new HashSet<>();
         }
+
     }
 
     //#############HINTMANAGER####################
@@ -150,7 +162,6 @@ public class RoomAndQuestAndHintDelegate implements
 
     @Override
     public void removeHint(HintPort value, HasHint key) {
-
         if (ComponentType.ROOM.equals(key.getType())) {
             deleteHintImpl(value);
         } else {
@@ -161,8 +172,12 @@ public class RoomAndQuestAndHintDelegate implements
 
     @Override
     public Set<HintPort> accessHints(HasHint hasHint) {
-        return new HashSet<>(
-                roomToHintsMap.get(hasHint.toString()));
+        if (containsKey(roomToHintsMap, hasHint)) {
+            return new HashSet<>(
+                    roomToHintsMap.get(hasHint.toString()));
+        } else {
+            return new HashSet<>();
+        }
     }
 
 
@@ -179,5 +194,10 @@ public class RoomAndQuestAndHintDelegate implements
             case ROOM:
                 deleteRoomImpl((RoomPort) managedObject);
         }
+    }
+
+    private <T extends ComponentTag, D> boolean containsKey(
+            Map<String, Set<D>> map, T objWithStringKey) {
+        return map.containsKey(objWithStringKey.toString());
     }
 }
