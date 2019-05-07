@@ -74,8 +74,8 @@ public class Hint extends ComponentSuper implements
     }
 
     @Override
-    public void setHintStatus(HintStatus status) {
-        this.status = status;
+    public void setHintStatus(HintStatus newStatus) {
+        this.status = newStatus;
         saveState();
     }
 
