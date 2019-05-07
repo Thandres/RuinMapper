@@ -64,6 +64,5 @@ public class TagPortTest {
                 .contains(tagToTest));
         assertFalse(r1.accessTags().contains(tagToTest));
         assertFalse(r2.accessTags().contains(tagToTest));
-
     }
 }
