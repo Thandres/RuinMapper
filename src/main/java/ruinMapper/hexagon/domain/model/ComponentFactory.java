@@ -143,10 +143,9 @@ public class ComponentFactory implements
         return createContext(name);
     }
 
-
     @Override
-    public ContextPort loadContextById(String id) {
-        Context loaded = contextRepository.read(id);
+    public ContextPort loadContextByName(String name) {
+        Context loaded = contextRepository.read(name);
         ComponentFactory.stateKeeper = stateKeeperRepository
                 .read(loaded.getStateKeeperID());
         return loaded;

@@ -8,7 +8,11 @@ import ruinMapper.hexagon.domain.context.ContextPort;
 public interface ContextSupplierPort {
     /**
      * Creates a new Context with the specified name and returns it for convenience.
-     * The name is a unique specifier within the domain.
+     *
+     * The name is a unique specifier because one user only needs one map for any Context.
+     * For example Person A only creates one Map for Metroid and takes notes about secrets and hints
+     * on it. Person A does not need two different Maps for Metroid so the name of the Context
+     * being unique is fine
      *
      * @param name Unique name of the Context
      * @return the created Context
