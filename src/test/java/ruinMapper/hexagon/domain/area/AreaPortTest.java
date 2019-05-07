@@ -10,6 +10,9 @@ import ruinMapper.hexagon.domain.model.DomainLifecyclePort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.*;
 
 public class AreaPortTest {
@@ -67,25 +70,63 @@ public class AreaPortTest {
 
     @Test
     public void changeTitle() {
+        String nTitle = "Sunken Valley";
+        areaToTest.changeTitle(nTitle);
+
+        assertEquals(nTitle, areaToTest.accessTitle());
     }
 
     @Test
     public void accessTitle() {
+        // basically getter, needs no testing
     }
 
     @Test
     public void changeNotes() {
+        String nNotes = "Boss has item for last area?";
+        areaToTest.changeNotes(nNotes);
+
+        assertEquals(nNotes, areaToTest.accessNotes());
     }
 
     @Test
     public void accessNotes() {
+        // basically getter, needs no testing
     }
 
     @Test
     public void accessHintsOnArea() {
+        RoomPort roomWithHints1 = areaToTest
+                .createRoom(1, 2);
+        Set<HintPort> check = new HashSet<>();
+        for (int i = 0; i < 4; i++) {
+            check.add(roomWithHints1.createHint("one" + i));
+        }
+        RoomPort roomWithHints2 = areaToTest
+                .createRoom(1, 3);
+        for (int i = 0; i < 4; i++) {
+            check.add(roomWithHints2.createHint("two" + i));
+        }
+
+        Set<HintPort> hintSet = areaToTest
+                .accessHintsOnArea();
+
+        assertTrue(hintSet.containsAll(check));
     }
 
     @Test
     public void deleteArea() {
+        RoomPort room1 = areaToTest.createRoom(1, 2);
+        HintPort hint1 = room1.createHint("");
+        RoomPort room2 = areaToTest.createRoom(2, 2);
+        HintPort hint2 = room2.createHint("");
+
+        areaToTest.deleteArea();
+
+        assertFalse(
+                context.accessAreas().contains(areaToTest));
+        assertFalse(context.accessHints().contains(hint1));
+        assertFalse(context.accessHints().contains(hint2));
+
     }
 }

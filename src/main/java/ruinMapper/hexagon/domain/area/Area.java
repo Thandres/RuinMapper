@@ -18,17 +18,20 @@ public class Area extends ComponentSuper implements
     private String notes;
     private Map<Point, RoomPort> areaMap;
     private RoomManager roomManager;
+    private ComponentManager componentManager;
     private CRUDRepositoryPort<Area> areaRepository;
     private UUID areaID;
 
     public Area(String title,
                 String notes,
                 Map<Point, RoomPort> areaMap,
+                ComponentManager componentManager,
                 CRUDRepositoryPort<Area> areaRepository,
                 UUID areaID) {
         this.title = title;
         this.notes = notes;
         this.areaMap = areaMap;
+        this.componentManager = componentManager;
         this.areaRepository = areaRepository;
         this.areaID = areaID;
 
@@ -93,7 +96,9 @@ public class Area extends ComponentSuper implements
     @Override
     public Set<HintPort> accessHintsOnArea() {
         Set<HintPort> hintSet = new HashSet<>();
-        for (RoomPort room : areaMap.values()) {
+        for (RoomPort room : roomManager
+                .accessRooms(this)) {
+            //TODO an object that has never added an object with a manager is not in the managers system, fix that
             hintSet.addAll(room.accessHints());
         }
         return hintSet;
@@ -136,6 +141,8 @@ public class Area extends ComponentSuper implements
     public <T extends ComponentTag> void deleteManagedObject(
             T managedObject) {
         areaMap.values().forEach(RoomPort::deleteRoom);
+        componentManager.deleteManagedObject(this);
+
     }
 
     @Override

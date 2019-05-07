@@ -178,7 +178,12 @@ public class InvariantKeeper extends
                 tagAndTaggableDelegate
                         .deleteManagedObject(managedObject);
                 break;
-            case AREA://TODO
+            case AREA:
+                areaDelegate
+                        .deleteManagedObject(managedObject);
+                roomAndQuestAndHintDelegate
+                        .deleteManagedObject(managedObject);
+                break;
             case CONTEXT://TODO, also necessary? Special case or just ignore, because when the context gets deleted the main entry point just references another context
                 roomAndQuestAndHintDelegate
                         .deleteManagedObject(managedObject);

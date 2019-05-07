@@ -35,6 +35,13 @@ public class AreaDelegate implements AreaManager {
     @Override
     public <T extends ComponentTag> void deleteManagedObject(
             T managedObject) {
-        // at the moment only context uses an areamanager, and without context every other class should get dereferenced by default
+        switch (managedObject.getType()) {
+            case AREA:
+                deleteAreaImpl((AreaPort) managedObject);
+        }
+    }
+
+    private void deleteAreaImpl(AreaPort areaToDelete) {
+        areaSet.remove(areaToDelete);
     }
 }

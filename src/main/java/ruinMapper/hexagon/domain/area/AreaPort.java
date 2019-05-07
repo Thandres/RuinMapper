@@ -80,8 +80,9 @@ public interface AreaPort {
     public Set<HintPort> accessHintsOnArea();
 
     /**
-     * Deletes the Area.
-     * Any Room assigned to the deleted Area is deleted as well.
+     * Deletes the Area from the context. No reference should be kept
+     * Any Room assigned to the deleted Area is also deleted, which deletes
+     * all hints assigned to those rooms as well
      */
     public void deleteArea();
 }

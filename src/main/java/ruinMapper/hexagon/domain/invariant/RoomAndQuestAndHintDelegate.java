@@ -37,9 +37,15 @@ public class RoomAndQuestAndHintDelegate implements
     private void deleteRoomImpl(RoomPort roomToDelete) {
         deleteLinkedRecord(roomToQuestsMap, questToRoomsMap,
                 roomToDelete);
-        roomToHintsMap.remove(roomToDelete.toString())
-                .forEach(hintPort -> hintToRoomMap
-                        .remove(hintPort.toString()));
+        Set<HintPort> set = roomToHintsMap
+                .remove(roomToDelete.toString());
+        if (set != null) {
+            for (HintPort hint : set) {
+
+                hintToRoomMap.remove(hint.toString());
+            }
+        }
+
     }
 
     private void deleteQuestImpl(QuestPort questToDelete) {
@@ -85,8 +91,12 @@ public class RoomAndQuestAndHintDelegate implements
     public Set<QuestPort> accessQuests(
             HasQuest hasQuest) {
         if (ComponentType.ROOM
-                .equals(hasQuest.getType()) && containsKey(
-                roomToQuestsMap, hasQuest)) {
+                .equals(hasQuest.getType())) {
+            if (!containsKey(
+                    roomToQuestsMap, hasQuest)) {
+                roomToQuestsMap.put(hasQuest.toString(),
+                        new HashSet<>());
+            }
             return new HashSet<>(roomToQuestsMap
                     .get(hasQuest.toString()));
         } else if (ComponentType.CONTEXT
@@ -130,14 +140,21 @@ public class RoomAndQuestAndHintDelegate implements
     @Override
     public Set<RoomPort> accessRooms(HasRoom hasRoom) {
         if (ComponentType.QUEST.equals(hasRoom
-                .getType()) && containsKey(questToRoomsMap,
-                hasRoom)) {
+                .getType())) {
+            if (!containsKey(questToRoomsMap,
+                    hasRoom)) {
+                questToRoomsMap.put(hasRoom.toString(),
+                        new HashSet<>());
+            }
             return new HashSet<>(
                     questToRoomsMap
                             .get(hasRoom.toString()));
         } else if (ComponentType.QUEST
-                .equals(hasRoom.getType()) && hintToRoomMap
-                .containsKey(hasRoom.toString())) {
+                .equals(hasRoom.getType())) {
+            if (hintToRoomMap
+                    .containsKey(hasRoom.toString())) {
+                hintToRoomMap.put(hasRoom.toString(), null);
+            }
             RoomPort room = hintToRoomMap
                     .get(hasRoom.toString());
             Set<RoomPort> temp = new HashSet<>();
@@ -172,12 +189,13 @@ public class RoomAndQuestAndHintDelegate implements
 
     @Override
     public Set<HintPort> accessHints(HasHint hasHint) {
-        if (containsKey(roomToHintsMap, hasHint)) {
-            return new HashSet<>(
-                    roomToHintsMap.get(hasHint.toString()));
-        } else {
-            return new HashSet<>();
+        if (!containsKey(roomToHintsMap, hasHint)) {
+            roomToHintsMap.put(hasHint.toString(),
+                    new HashSet<>());
         }
+        return new HashSet<>(
+                roomToHintsMap.get(hasHint.toString()));
+
     }
 
 

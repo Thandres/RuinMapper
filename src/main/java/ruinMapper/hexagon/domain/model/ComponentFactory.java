@@ -84,7 +84,8 @@ public class ComponentFactory implements
 
     public static Area createArea(String title) {
         Area newArea = new Area(title, "", new HashMap<>(),
-                areaRepository, UUID.randomUUID());
+                stateKeeper, areaRepository,
+                UUID.randomUUID());
         areaRepository.create(newArea);
         return newArea;
     }
