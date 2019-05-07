@@ -6,7 +6,7 @@ import ruinMapper.fixtures.*;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.model.ComponentFactory;
-import ruinMapper.hexagon.domain.model.DomainLifecyclePort;
+import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 public class AreaPortTest {
     private ContextPort context;
-    private DomainLifecyclePort lifecyclePort;
+    private ContextSupplierPort lifecyclePort;
 
     private AreaPort areaToTest;
 
@@ -31,8 +31,8 @@ public class AreaPortTest {
 
     // notes the type of Implementation of the test uses.
     // for testing your own implementation just write another method that returns
-    // a a different DomainLifecyclePort implementation and switch out the setup() method
-    private DomainLifecyclePort implementationOne() {
+    // a a different ContextSupplierPort implementation and switch out the setup() method
+    private ContextSupplierPort implementationOne() {
         return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
@@ -131,9 +131,12 @@ public class AreaPortTest {
         areaToTest.deleteArea();
 
         assertFalse(
-                context.accessAreas().contains(areaToTest));
-        assertFalse(context.accessHints().contains(hint1));
-        assertFalse(context.accessHints().contains(hint2));
+                context.accessEveryArea()
+                        .contains(areaToTest));
+        assertFalse(
+                context.accessEveryHint().contains(hint1));
+        assertFalse(
+                context.accessEveryHint().contains(hint2));
 
     }
 }

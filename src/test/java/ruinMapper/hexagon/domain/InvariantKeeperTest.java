@@ -6,7 +6,7 @@ import ruinMapper.fixtures.*;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.model.ComponentFactory;
-import ruinMapper.hexagon.domain.model.DomainLifecyclePort;
+import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class InvariantKeeperTest {
 
     private ContextPort context;
-    private DomainLifecyclePort lifecyclePort;
+    private ContextSupplierPort lifecyclePort;
     private static final String NEW_AREA_NAME = "New Area";
 
     @Before
@@ -77,13 +77,15 @@ public class InvariantKeeperTest {
         quest.addRoom(room);
         quest.deleteQuest();
         assertFalse(room.accessQuests().contains(quest));
-        assertFalse(context.accessQuests().contains(quest));
+        assertFalse(
+                context.accessEveryQuest().contains(quest));
 
         quest = context.createQuest("");
         quest.addRoom(room);
         context.deleteQuest(quest);
         assertFalse(room.accessQuests().contains(quest));
-        assertFalse(context.accessQuests().contains(quest));
+        assertFalse(
+                context.accessEveryQuest().contains(quest));
     }
 
 }

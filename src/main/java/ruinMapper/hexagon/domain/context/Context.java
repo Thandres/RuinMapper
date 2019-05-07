@@ -59,20 +59,20 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public AreaPort accessArea(String title) {
+    public AreaPort accessArea(String titleOfArea) {
         return areaManager.accessAreas(this).stream()
                 .filter(areaPort -> areaPort.accessTitle()
-                        .equals(title)).findFirst()
+                        .equals(titleOfArea)).findFirst()
                 .orElseGet(null);//TODO error object
     }
 
     @Override
-    public Set<AreaPort> accessAreas() {
+    public Set<AreaPort> accessEveryArea() {
         return areaManager.accessAreas(this);
     }
 
     @Override
-    public TagPort createTag(String name) {
+    public TagPort createValidTag(String name) {
         TagPort tag = ComponentFactory.createTag(name);
         tagManager.addTag(tag, this);
         saveState();
@@ -80,7 +80,7 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public Set<TagPort> accessPossibleTags() {
+    public Set<TagPort> accessValidTags() {
         return tagManager.accessTags(this);
     }
 
@@ -100,12 +100,12 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public Set<QuestPort> accessQuests() {
+    public Set<QuestPort> accessEveryQuest() {
         return questManager.accessQuests(this);
     }
 
     @Override
-    public Set<HintPort> accessHints() {
+    public Set<HintPort> accessEveryHint() {
         return areaManager.accessAreas(this).stream()
                 .flatMap(
                         area -> area.accessHintsOnArea()
@@ -114,9 +114,10 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public String getID() {
-        return toString();
+    public void deleteContext() {
+        contextRepository.delete(toString());
     }
+
 
     @Override
     public ComponentType getType() {

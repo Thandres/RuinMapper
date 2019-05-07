@@ -6,7 +6,7 @@ import ruinMapper.fixtures.*;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.model.ComponentFactory;
-import ruinMapper.hexagon.domain.model.DomainLifecyclePort;
+import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 public class TagPortTest {
 
     private ContextPort context;
-    private DomainLifecyclePort lifecyclePort;
+    private ContextSupplierPort lifecyclePort;
 
     private TagPort tagToTest;
 
@@ -23,13 +23,13 @@ public class TagPortTest {
     public void setup() {
         lifecyclePort = implementationOne();
         context = lifecyclePort.createNewContext("");
-        tagToTest = context.createTag("Shop");
+        tagToTest = context.createValidTag("Shop");
     }
 
     // notes the type of Implementation of the test uses.
     // for testing your own implementation just write another method that returns
-    // a a different DomainLifecyclePort implementation and switch out the setup() method
-    private DomainLifecyclePort implementationOne() {
+    // a a different ContextSupplierPort implementation and switch out the setup() method
+    private ContextSupplierPort implementationOne() {
         return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
@@ -60,7 +60,7 @@ public class TagPortTest {
 
         tagToTest.deleteTag();
 
-        assertFalse(context.accessPossibleTags()
+        assertFalse(context.accessValidTags()
                 .contains(tagToTest));
         assertFalse(r1.accessTags().contains(tagToTest));
         assertFalse(r2.accessTags().contains(tagToTest));

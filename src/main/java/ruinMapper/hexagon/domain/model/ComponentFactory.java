@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class ComponentFactory implements
-        DomainLifecyclePort {
+        ContextSupplierPort {
 
     private static CRUDRepositoryPort<Quest> questRepository;
     private static CRUDRepositoryPort<Room> roomRepository;
@@ -143,10 +143,6 @@ public class ComponentFactory implements
         return createContext(name);
     }
 
-    @Override
-    public void deleteContext(ContextPort contextPort) {
-        contextRepository.delete(contextPort.getID());
-    }
 
     @Override
     public ContextPort loadContextById(String id) {

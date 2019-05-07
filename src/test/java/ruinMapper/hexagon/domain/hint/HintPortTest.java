@@ -5,14 +5,14 @@ import org.junit.Test;
 import ruinMapper.fixtures.*;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.model.ComponentFactory;
-import ruinMapper.hexagon.domain.model.DomainLifecyclePort;
+import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import static org.junit.Assert.*;
 
 public class HintPortTest {
     private ContextPort context;
-    private DomainLifecyclePort lifecyclePort;
+    private ContextSupplierPort lifecyclePort;
 
     private HintPort hintToTest;
 
@@ -29,8 +29,8 @@ public class HintPortTest {
 
     // notes the type of Implementation of the test uses.
     // for testing your own implementation just write another method that returns
-    // a a different DomainLifecyclePort implementation and switch out the setup() method
-    private DomainLifecyclePort implementationOne() {
+    // a a different ContextSupplierPort implementation and switch out the setup() method
+    private ContextSupplierPort implementationOne() {
         return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
@@ -80,7 +80,8 @@ public class HintPortTest {
         assertFalse(roomWithHint.accessHints()
                 .contains(hintToTest));
         assertFalse(
-                context.accessHints().contains(hintToTest));
+                context.accessEveryHint()
+                        .contains(hintToTest));
     }
 
     @Test
