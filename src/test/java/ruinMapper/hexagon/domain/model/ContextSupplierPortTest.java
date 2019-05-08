@@ -3,6 +3,7 @@ package ruinMapper.hexagon.domain.model;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.*;
+import ruinMapper.hexagon.domain.context.ContextPort;
 
 public class ContextSupplierPortTest {
 
@@ -29,7 +30,8 @@ public class ContextSupplierPortTest {
     @Test
     public void createNewContext() {
         //TODO Integrationtest with working Repository?
-        supplierToTest.createNewContext("Test");
+        ContextPort contextPort = supplierToTest
+                .createNewContext("Test");
 
         // assertNotNull(
         //       supplierToTest.loadContextByName("Test"));

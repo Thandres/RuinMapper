@@ -132,7 +132,9 @@ public class ComponentFactory implements
     @Override
     public ContextPort createNewContext(String name) {
         ComponentFactory.stateKeeper = createStateKeeper();
-        return createContext(name);
+        Context context = createContext(name);
+        contextRepository.create(context);
+        return context;
     }
 
     @Override
