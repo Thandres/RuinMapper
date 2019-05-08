@@ -106,7 +106,7 @@ Room extends ComponentSuper implements
         Quest newQuest = ComponentFactory
                 .createQuest(title);
         questManager.addQuest(newQuest, this);
-        newQuest.addRoom(this);
+        newQuest.addQuestRoom(this);
         saveState();
         return newQuest;
     }

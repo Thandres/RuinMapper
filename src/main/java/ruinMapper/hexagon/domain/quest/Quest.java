@@ -89,14 +89,14 @@ public class Quest extends ComponentSuper implements
     }
 
     @Override
-    public void addRoom(RoomPort room) {
-        roomManager.addRoom(room, this);
+    public void addQuestRoom(RoomPort roomToAdd) {
+        roomManager.addRoom(roomToAdd, this);
         saveState();
     }
 
     @Override
-    public void removeRoom(RoomPort room) {
-        roomManager.removeRoom(room, this);
+    public void removeQuestRoom(RoomPort roomToRemove) {
+        roomManager.removeRoom(roomToRemove, this);
         saveState();
     }
 

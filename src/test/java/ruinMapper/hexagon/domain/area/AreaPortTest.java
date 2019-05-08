@@ -26,7 +26,7 @@ public class AreaPortTest {
         lifecyclePort = implementationOne();
         context = lifecyclePort.createNewContext("");
         areaToTest = context
-                .accessArea(ComponentFactory.NEW_AREA_NAME);
+                .createArea("A1");
     }
 
     // notes the type of Implementation of the test uses.
@@ -58,7 +58,7 @@ public class AreaPortTest {
 
     @Test
     public void accessRooms() {
-        // basically getter, needs no testing
+        assertNotNull(areaToTest.accessRooms());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class AreaPortTest {
 
     @Test
     public void accessTitle() {
-        // basically getter, needs no testing
+        assertNotNull(areaToTest.accessTitle());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AreaPortTest {
 
     @Test
     public void accessNotes() {
-        // basically getter, needs no testing
+        assertNotNull(areaToTest.accessNotes());
     }
 
     @Test

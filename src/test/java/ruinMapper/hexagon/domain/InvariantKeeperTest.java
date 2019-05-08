@@ -65,23 +65,23 @@ public class InvariantKeeperTest {
         assertTrue(
                 newQuest.accessQuestRooms().contains(room));
 
-        quest.addRoom(room);
+        quest.addQuestRoom(room);
         assertTrue(room.accessQuests().contains(quest));
         assertTrue(quest.accessQuestRooms().contains(room));
 
-        quest.removeRoom(room);
+        quest.removeQuestRoom(room);
         assertFalse(room.accessQuests().contains(quest));
         assertFalse(
                 quest.accessQuestRooms().contains(room));
 
-        quest.addRoom(room);
+        quest.addQuestRoom(room);
         quest.deleteQuest();
         assertFalse(room.accessQuests().contains(quest));
         assertFalse(
                 context.accessEveryQuest().contains(quest));
 
         quest = context.createQuest("");
-        quest.addRoom(room);
+        quest.addQuestRoom(room);
         context.deleteQuest(quest);
         assertFalse(room.accessQuests().contains(quest));
         assertFalse(

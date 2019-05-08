@@ -22,7 +22,7 @@ public class HintPortTest {
         context = lifecyclePort.createNewContext("");
 
         hintToTest = context
-                .accessArea(ComponentFactory.NEW_AREA_NAME)
+                .createArea("")
                 .accessRoom(0, 0).createHint(
                         "The sacred points to the entry of the underworld");
     }
@@ -48,7 +48,7 @@ public class HintPortTest {
 
     @Test
     public void accessContent() {
-        // Basically getter, needs no testing
+        assertNotNull(hintToTest.accessContent());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class HintPortTest {
 
     @Test
     public void accessNotes() {
-        // Basically getter, needs no testing
+        assertNotNull(hintToTest.accessNotes());
     }
 
     @Test
@@ -72,11 +72,12 @@ public class HintPortTest {
     @Test
     public void deleteHint() {
         RoomPort roomWithHint = context
-                .accessArea(ComponentFactory.NEW_AREA_NAME)
+                .createArea("A1")
                 .accessRoom(0, 0);
-        assertTrue(roomWithHint.accessHints()
-                .contains(hintToTest));
+        roomWithHint.addHint(hintToTest);
+
         hintToTest.deleteHint();
+
         assertFalse(roomWithHint.accessHints()
                 .contains(hintToTest));
         assertFalse(
@@ -86,7 +87,7 @@ public class HintPortTest {
 
     @Test
     public void getHintStatus() {
-        // Basically getter, needs no testing
+        assertNotNull(hintToTest.getHintStatus());
     }
 
     @Test

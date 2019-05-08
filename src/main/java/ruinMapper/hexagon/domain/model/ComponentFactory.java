@@ -34,7 +34,6 @@ public class ComponentFactory implements
 
     private static InvariantKeeper stateKeeper;
 
-    public final static String NEW_AREA_NAME = "New Area";
 
     public ComponentFactory(
             CRUDRepositoryPort<Quest> questRepository,

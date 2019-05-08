@@ -110,7 +110,7 @@ public class ContextPortTest {
         QuestPort quest = contextToTest.createQuest("Q1");
         RoomPort room = contextToTest.createArea("A1")
                 .accessRoom(0, 0);
-        quest.addRoom(room);
+        quest.addQuestRoom(room);
 
         quest.deleteQuest();
 
