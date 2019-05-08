@@ -2,7 +2,7 @@ package ruinMapper.hexagon.domain.context;
 
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.fixtures.*;
+import ruinMapper.fixtures.repository.*;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.model.ComponentFactory;

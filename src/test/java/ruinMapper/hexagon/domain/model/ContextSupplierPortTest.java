@@ -2,7 +2,7 @@ package ruinMapper.hexagon.domain.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.fixtures.*;
+import ruinMapper.fixtures.repository.*;
 import ruinMapper.hexagon.domain.context.ContextPort;
 
 public class ContextSupplierPortTest {

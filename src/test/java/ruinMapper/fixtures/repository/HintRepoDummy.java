@@ -1,4 +1,4 @@
-package ruinMapper.fixtures;
+package ruinMapper.fixtures.repository;
 
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;

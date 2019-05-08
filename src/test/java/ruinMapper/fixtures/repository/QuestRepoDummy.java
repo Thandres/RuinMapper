@@ -1,4 +1,4 @@
-package ruinMapper.fixtures;
+package ruinMapper.fixtures.repository;
 
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
