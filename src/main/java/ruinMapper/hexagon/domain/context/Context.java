@@ -42,6 +42,8 @@ public class Context extends ComponentSuper implements
 
         this.contextRepository = contextRepository;
         this.contextID = contextID;
+
+        createArea("New Area");
     }
 
     @Override
@@ -115,6 +117,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public void deleteContext() {
+        areaManager.deleteManagedObject(this);
         contextRepository.delete(toString());
     }
 

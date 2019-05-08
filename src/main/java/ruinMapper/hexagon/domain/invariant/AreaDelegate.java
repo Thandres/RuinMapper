@@ -38,7 +38,14 @@ public class AreaDelegate implements AreaManager {
         switch (managedObject.getType()) {
             case AREA:
                 deleteAreaImpl((AreaPort) managedObject);
+                break;
+            case CONTEXT:
+                deleteAll();
         }
+    }
+
+    private void deleteAll() {
+        areaSet.clear();
     }
 
     private void deleteAreaImpl(AreaPort areaToDelete) {

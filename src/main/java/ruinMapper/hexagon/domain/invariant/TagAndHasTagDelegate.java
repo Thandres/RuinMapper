@@ -80,6 +80,13 @@ public class TagAndHasTagDelegate implements TagManager,
             case TAG:
                 deleteTagImpl((TagPort) managedObject);
                 break;
+            case CONTEXT:
+                deleteAll();
         }
+    }
+
+    private void deleteAll() {
+        contextTags.clear();
+        roomToTagsMap.clear();
     }
 }

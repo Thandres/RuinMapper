@@ -106,8 +106,6 @@ public class ComponentFactory implements
                 stateKeeper.toString(), contextRepository,
                 UUID.randomUUID());
         contextRepository.create(newContext);
-        newContext.createArea(NEW_AREA_NAME)
-                .createRoom(0, 0);
         return newContext;
     }
 

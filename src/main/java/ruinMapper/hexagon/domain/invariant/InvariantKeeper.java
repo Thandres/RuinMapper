@@ -188,7 +188,17 @@ public class InvariantKeeper extends
             case CONTEXT://TODO, also necessary? Special case or just ignore, because when the context gets deleted the main entry point just references another context
                 roomAndQuestAndHintDelegate
                         .deleteManagedObject(managedObject);
+                areaDelegate
+                        .deleteManagedObject(managedObject);
+                tagAndTaggableDelegate
+                        .deleteManagedObject(managedObject);
         }
-        saveState();
+        if (managedObject.getType()
+                .equals(ComponentType.CONTEXT)) {
+            invariantKeeperRepository
+                    .delete(stateKeeperID.toString());
+        } else {
+            saveState();
+        }
     }
 }

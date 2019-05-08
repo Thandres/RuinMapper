@@ -211,7 +211,18 @@ public class RoomAndQuestAndHintDelegate implements
                 break;
             case ROOM:
                 deleteRoomImpl((RoomPort) managedObject);
+                break;
+            case CONTEXT:
+                deleteAll();
         }
+    }
+
+    private void deleteAll() {
+        roomToQuestsMap.clear();
+        roomToHintsMap.clear();
+        questToRoomsMap.clear();
+        contextQuests.clear();
+        hintToRoomMap.clear();
     }
 
 

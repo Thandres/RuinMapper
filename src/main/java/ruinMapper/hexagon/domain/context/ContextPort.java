@@ -76,7 +76,7 @@ public interface ContextPort {
     public void deleteQuest(QuestPort quest);
 
     /**
-     * Returns all Quest in Context
+     * Returns all Quest in Context, also ones created in Rooms.
      *
      * @return All existing Quests
      */

@@ -36,6 +36,7 @@ public class Area extends ComponentSuper implements
         this.areaID = areaID;
 
         roomManager = this;
+        createRoom(0, 0);
     }
 
 
@@ -50,12 +51,15 @@ public class Area extends ComponentSuper implements
 
     @Override
     public RoomPort accessRoom(int x, int y) {
-        Point point = new Point(x, y);
-        return roomManager.accessRooms(this).stream()
-                .filter(roomPort -> roomPort
-                        .accessCoordinates().equals(point))
-                .findFirst()
-                .orElseGet(null);// TODO error object
+        Point pointToRetrieve = new Point(x, y);
+        for (RoomPort room : roomManager
+                .accessRooms(this)) {
+            if (room.accessCoordinates()
+                    .equals(pointToRetrieve)) {
+                return room;
+            }
+        }
+        return null; //TODO Exceptions
     }
 
     @Override
