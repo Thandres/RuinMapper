@@ -54,9 +54,9 @@ public class TagPortTest {
     public void deleteTag() {
         AreaPort area = context.createArea("");
         RoomPort r1 = area.createRoom(1, 2);
-        r1.addTag(tagToTest);
+        r1.tagRoom(tagToTest);
         RoomPort r2 = area.createRoom(2, 2);
-        r1.addTag(tagToTest);
+        r1.tagRoom(tagToTest);
 
         tagToTest.deleteTag();
 

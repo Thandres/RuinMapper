@@ -85,14 +85,8 @@ Room extends ComponentSuper implements
     }
 
     @Override
-    public void addHint(HintPort hint) {
-        hintManager.addHint(hint, this);
-        saveState();
-    }
-
-    @Override
-    public void removeHint(HintPort hint) {
-        hintManager.removeHint(hint, this);
+    public void deleteHint(HintPort hintToDelete) {
+        hintManager.removeHint(hintToDelete, this);
         saveState();
     }
 
@@ -112,15 +106,15 @@ Room extends ComponentSuper implements
     }
 
     @Override
-    public void addQuest(QuestPort quest) {
-        questManager.addQuest(quest, this);
+    public void addQuest(QuestPort questToAdd) {
+        questManager.addQuest(questToAdd, this);
         saveState();
 
     }
 
     @Override
-    public void removeQuest(QuestPort quest) {
-        questManager.removeQuest(quest, this);
+    public void removeQuest(QuestPort questToRemove) {
+        questManager.removeQuest(questToRemove, this);
         saveState();
     }
 
@@ -130,14 +124,14 @@ Room extends ComponentSuper implements
     }
 
     @Override
-    public void addTag(TagPort tagPort) {
-        tagManager.addTag(tagPort, this);
+    public void tagRoom(TagPort validTag) {
+        tagManager.addTag(validTag, this);
         saveState();
     }
 
     @Override
-    public void removeTag(TagPort tagPort) {
-        tagManager.removeTag(tagPort, this);
+    public void removeTag(TagPort tagToRemove) {
+        tagManager.removeTag(tagToRemove, this);
         saveState();
     }
 
