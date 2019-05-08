@@ -5,9 +5,8 @@ import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintStatus;
-import ruinMapper.hexagon.domain.invariant.AreaDelegate;
 import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
-import ruinMapper.hexagon.domain.invariant.RoomAndQuestAndHintDelegate;
+import ruinMapper.hexagon.domain.invariant.RoomAndQuestAndHintAndAreaDelegate;
 import ruinMapper.hexagon.domain.invariant.TagAndHasTagDelegate;
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestStatus;
@@ -110,19 +109,18 @@ public class ComponentFactory implements
 
     public static InvariantKeeper createStateKeeper() {
         InvariantKeeper stateKeeper = new InvariantKeeper(
-                createRQDelegate(), createTTDelegate(),
-                createAreaDelegate()
+                createRQDelegate(), createTTDelegate()
                 , stateKeeperRepository,
                 UUID.randomUUID());
         stateKeeperRepository.create(stateKeeper);
         return stateKeeper;
     }
 
-    public static RoomAndQuestAndHintDelegate createRQDelegate() {
-        return new RoomAndQuestAndHintDelegate(
+    public static RoomAndQuestAndHintAndAreaDelegate createRQDelegate() {
+        return new RoomAndQuestAndHintAndAreaDelegate(
                 new HashMap<>(), new HashMap<>(),
                 new HashMap<>(), new HashMap<>(),
-                new HashSet<>());
+                new HashSet<>(), new HashSet<>());
     }
 
     public static TagAndHasTagDelegate createTTDelegate() {
@@ -130,9 +128,6 @@ public class ComponentFactory implements
                 new HashSet<>());
     }
 
-    public static AreaDelegate createAreaDelegate() {
-        return new AreaDelegate(new HashSet<>());
-    }
 
     @Override
     public ContextPort createNewContext(String name) {

@@ -58,8 +58,13 @@ public class Hint extends ComponentSuper implements
 
     @Override
     public RoomPort accessRoom() {
-        return roomManager.accessRooms(this).iterator()
-                .next();
+        RoomPort assignedRoom = null;// For testability initialize with null
+        for (RoomPort room : roomManager
+                .accessRooms(this)) {
+            assignedRoom = room;
+            break;
+        }
+        return assignedRoom;
     }
 
     @Override

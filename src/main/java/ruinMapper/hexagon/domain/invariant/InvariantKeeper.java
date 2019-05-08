@@ -21,22 +21,20 @@ public class InvariantKeeper extends
         QuestManager, RoomManager, TagManager,
         HasTagManager, HintManager, AreaManager {
 
-    private RoomAndQuestAndHintDelegate roomAndQuestAndHintDelegate;
+    private RoomAndQuestAndHintAndAreaDelegate roomAndQuestAndHintAndAreaDelegate;
     private TagAndHasTagDelegate tagAndTaggableDelegate;
-    private AreaDelegate areaDelegate;
+
     private CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository;
     private UUID stateKeeperID;
 
     //TODO a MesseageQueue implementation of this mess to make usage of managers cleaner
     public InvariantKeeper(
-            RoomAndQuestAndHintDelegate roomAndQuestAndHintDelegate,
+            RoomAndQuestAndHintAndAreaDelegate roomAndQuestAndHintAndAreaDelegate,
             TagAndHasTagDelegate tagAndTaggableDelegate,
-            AreaDelegate areaDelegate,
             CRUDRepositoryPort<InvariantKeeper> invariantKeeperRepository,
             UUID stateKeeperID) {
-        this.roomAndQuestAndHintDelegate = roomAndQuestAndHintDelegate;
+        this.roomAndQuestAndHintAndAreaDelegate = roomAndQuestAndHintAndAreaDelegate;
         this.tagAndTaggableDelegate = tagAndTaggableDelegate;
-        this.areaDelegate = areaDelegate;
         this.invariantKeeperRepository = invariantKeeperRepository;
         this.stateKeeperID = stateKeeperID;
     }
@@ -52,14 +50,16 @@ public class InvariantKeeper extends
     @Override
     public void addQuest(QuestPort value,
                          HasQuest key) {
-        roomAndQuestAndHintDelegate.addQuest(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .addQuest(value, key);
         saveState();
     }
 
     @Override
     public void removeQuest(QuestPort value,
                             HasQuest key) {
-        roomAndQuestAndHintDelegate.removeQuest(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .removeQuest(value, key);
         saveState();
 
     }
@@ -67,7 +67,7 @@ public class InvariantKeeper extends
     @Override
     public Set<QuestPort> accessQuests(
             HasQuest hasQuest) {
-        return roomAndQuestAndHintDelegate
+        return roomAndQuestAndHintAndAreaDelegate
                 .accessQuests(hasQuest);
     }
 
@@ -76,20 +76,22 @@ public class InvariantKeeper extends
     @Override
     public void addRoom(RoomPort value,
                         HasRoom key) {
-        roomAndQuestAndHintDelegate.addRoom(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .addRoom(value, key);
         saveState();
     }
 
     @Override
     public void removeRoom(RoomPort value,
                            HasRoom key) {
-        roomAndQuestAndHintDelegate.removeRoom(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .removeRoom(value, key);
         saveState();
     }
 
     @Override
     public Set<RoomPort> accessRooms(HasRoom hasRoom) {
-        return roomAndQuestAndHintDelegate
+        return roomAndQuestAndHintAndAreaDelegate
                 .accessRooms(hasRoom);
     }
 
@@ -124,19 +126,21 @@ public class InvariantKeeper extends
     //HintManager
     @Override
     public void addHint(HintPort value, HasHint key) {
-        roomAndQuestAndHintDelegate.addHint(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .addHint(value, key);
         saveState();
     }
 
     @Override
     public void removeHint(HintPort value, HasHint key) {
-        roomAndQuestAndHintDelegate.removeHint(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .removeHint(value, key);
         saveState();
     }
 
     @Override
     public Set<HintPort> accessHints(HasHint hasHint) {
-        return roomAndQuestAndHintDelegate
+        return roomAndQuestAndHintAndAreaDelegate
                 .accessHints(hasHint);
     }
 
@@ -144,19 +148,22 @@ public class InvariantKeeper extends
     // AreaManager
     @Override
     public void addArea(AreaPort value, HasArea key) {
-        areaDelegate.addArea(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .addArea(value, key);
         saveState();
     }
 
     @Override
     public void removeArea(AreaPort value, HasArea key) {
-        areaDelegate.removeArea(value, key);
+        roomAndQuestAndHintAndAreaDelegate
+                .removeArea(value, key);
         saveState();
     }
 
     @Override
     public Set<AreaPort> accessAreas(HasArea hasArea) {
-        return areaDelegate.accessAreas(hasArea);
+        return roomAndQuestAndHintAndAreaDelegate
+                .accessAreas(hasArea);
     }
 
     /**********************************************************/
@@ -166,30 +173,29 @@ public class InvariantKeeper extends
         switch (managedObject.getType()) {
             case QUEST:// Same as Hint
             case HINT:
-                roomAndQuestAndHintDelegate
+                roomAndQuestAndHintAndAreaDelegate
                         .deleteManagedObject(managedObject);
                 break;
             case ROOM:
-                roomAndQuestAndHintDelegate
+                roomAndQuestAndHintAndAreaDelegate
                         .deleteManagedObject(managedObject);
                 tagAndTaggableDelegate
                         .deleteManagedObject(managedObject);
+
                 break;
             case TAG:
                 tagAndTaggableDelegate
                         .deleteManagedObject(managedObject);
                 break;
             case AREA:
-                areaDelegate
-                        .deleteManagedObject(managedObject);
-                roomAndQuestAndHintDelegate
+
+                roomAndQuestAndHintAndAreaDelegate
                         .deleteManagedObject(managedObject);
                 break;
             case CONTEXT://TODO, also necessary? Special case or just ignore, because when the context gets deleted the main entry point just references another context
-                roomAndQuestAndHintDelegate
+                roomAndQuestAndHintAndAreaDelegate
                         .deleteManagedObject(managedObject);
-                areaDelegate
-                        .deleteManagedObject(managedObject);
+
                 tagAndTaggableDelegate
                         .deleteManagedObject(managedObject);
         }

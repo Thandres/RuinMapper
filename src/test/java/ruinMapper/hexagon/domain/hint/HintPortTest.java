@@ -74,7 +74,7 @@ public class HintPortTest {
         RoomPort roomWithHint = context
                 .createArea("A1")
                 .accessRoom(0, 0);
-        roomWithHint.addHint(hintToTest);
+        hintToTest = roomWithHint.createHint("asdf");
 
         hintToTest.deleteHint();
 

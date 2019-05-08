@@ -1,37 +1,43 @@
 package ruinMapper.hexagon.domain.invariant;
 
+import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.model.*;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ruinMapper.hexagon.domain.invariant.CircularManagmentHelper.*;
 
-// Handles the HasQuest and HasRoom Invariants
-public class RoomAndQuestAndHintDelegate implements
+//TODO this mess has to go, does its job for now, but definite refactor later
+public class RoomAndQuestAndHintAndAreaDelegate implements
         QuestManager,
-        RoomManager, HintManager {
+        RoomManager, HintManager, AreaManager {
     private Map<String, Set<QuestPort>> roomToQuestsMap;
     private Map<String, Set<RoomPort>> questToRoomsMap;
     private Map<String, Set<HintPort>> roomToHintsMap;
     private Map<String, RoomPort> hintToRoomMap;
     private Set<QuestPort> contextQuests;
+    private Set<AreaPort> areaSet;
 
-    public RoomAndQuestAndHintDelegate(
+    public RoomAndQuestAndHintAndAreaDelegate(
             Map<String, Set<QuestPort>> roomToQuestsMap,
             Map<String, Set<RoomPort>> questToRoomsMap,
             Map<String, Set<HintPort>> roomToHintsMap,
             Map<String, RoomPort> hintToRoomMap,
-            Set<QuestPort> contextQuests) {
+            Set<QuestPort> contextQuests,
+            Set<AreaPort> areaSet) {
         this.roomToQuestsMap = roomToQuestsMap;
         this.questToRoomsMap = questToRoomsMap;
         this.roomToHintsMap = roomToHintsMap;
         this.hintToRoomMap = hintToRoomMap;
         this.contextQuests = contextQuests;
+        this.areaSet = areaSet;
     }
 
     private void deleteRoomImpl(RoomPort roomToDelete) {
@@ -41,9 +47,16 @@ public class RoomAndQuestAndHintDelegate implements
                 .remove(roomToDelete.toString());
         if (set != null) {
             for (HintPort hint : set) {
-
                 hintToRoomMap.remove(hint.toString());
             }
+        }
+        Point point = roomToDelete.accessCoordinates();
+        Set<AreaPort> areaPortSet = areaSet.stream()
+                .filter(areaPort -> areaPort.accessRooms()
+                        .contains(roomToDelete))
+                .collect(Collectors.toSet());
+        for (AreaPort area : areaPortSet) {
+            area.deleteRoom(point.x, point.y);
         }
 
     }
@@ -198,6 +211,27 @@ public class RoomAndQuestAndHintDelegate implements
 
     }
 
+    //TODO create HasAreaDelegate
+    @Override
+    public void addArea(AreaPort value, HasArea key) {
+        areaSet.add(value);
+    }
+
+    @Override // TODO never used, worth implementing?
+    public void removeArea(AreaPort value, HasArea key) {
+        areaSet.remove(value);
+        // TODO remove all rooms referenced in value
+    }
+
+    @Override
+    public Set<AreaPort> accessAreas(HasArea hasArea) {
+        return new HashSet<>(areaSet);
+    }
+
+    private void deleteAreaImpl(AreaPort areaToDelete) {
+        areaSet.remove(areaToDelete);
+    }
+
 
     @Override
     public <T extends ComponentTag> void deleteManagedObject(
@@ -212,6 +246,9 @@ public class RoomAndQuestAndHintDelegate implements
             case ROOM:
                 deleteRoomImpl((RoomPort) managedObject);
                 break;
+            case AREA:
+                deleteAreaImpl((AreaPort) managedObject);
+                break;
             case CONTEXT:
                 deleteAll();
         }
@@ -223,6 +260,7 @@ public class RoomAndQuestAndHintDelegate implements
         questToRoomsMap.clear();
         contextQuests.clear();
         hintToRoomMap.clear();
+        areaSet.clear();
     }
 
 

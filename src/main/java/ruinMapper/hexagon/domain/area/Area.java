@@ -144,7 +144,6 @@ public class Area extends ComponentSuper implements
     @Override
     public <T extends ComponentTag> void deleteManagedObject(
             T managedObject) {
-        areaMap.values().forEach(RoomPort::deleteRoom);
         componentManager.deleteManagedObject(this);
 
     }
