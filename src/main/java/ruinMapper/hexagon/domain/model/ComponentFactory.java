@@ -6,8 +6,6 @@ import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintStatus;
 import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
-import ruinMapper.hexagon.domain.invariant.RoomAndQuestAndHintAndAreaDelegate;
-import ruinMapper.hexagon.domain.invariant.TagAndHasTagDelegate;
 import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestStatus;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
@@ -109,23 +107,14 @@ public class ComponentFactory implements
 
     public static InvariantKeeper createStateKeeper() {
         InvariantKeeper stateKeeper = new InvariantKeeper(
-                createRQDelegate(), createTTDelegate()
-                , stateKeeperRepository,
+                new HashMap<>(), new HashMap<>(),
+                new HashMap<>(), new HashMap<>(),
+                new HashSet<>(), new HashSet<>(),
+                new HashMap<>(), new HashSet<>(),
+                stateKeeperRepository,
                 UUID.randomUUID());
         stateKeeperRepository.create(stateKeeper);
         return stateKeeper;
-    }
-
-    public static RoomAndQuestAndHintAndAreaDelegate createRQDelegate() {
-        return new RoomAndQuestAndHintAndAreaDelegate(
-                new HashMap<>(), new HashMap<>(),
-                new HashMap<>(), new HashMap<>(),
-                new HashSet<>(), new HashSet<>());
-    }
-
-    public static TagAndHasTagDelegate createTTDelegate() {
-        return new TagAndHasTagDelegate(new HashMap<>(),
-                new HashSet<>());
     }
 
 

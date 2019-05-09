@@ -13,6 +13,11 @@ public class RoomMapper implements
 
     @Override
     public RoomDto toDto(Room domain) {
-        return null;
+        RoomDto roomDto = new RoomDto();
+        roomDto.setTitle(domain.accessTitle());
+        roomDto.setNotes(domain.accessNotes());
+        roomDto.setCooridnates(domain.accessCoordinates());
+        roomDto.setRoomID(domain.toString());
+        return roomDto;
     }
 }
