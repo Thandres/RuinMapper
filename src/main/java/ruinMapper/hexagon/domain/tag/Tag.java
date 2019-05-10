@@ -1,6 +1,6 @@
 package ruinMapper.hexagon.domain.tag;
 
-import ruinMapper.hexagon.domain.invariant.HasTagManager;
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.model.ComponentSuper;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasRoom;
@@ -13,18 +13,19 @@ public class Tag extends ComponentSuper implements TagPort,
         HasRoom {
     private String tagType;
     private CRUDRepositoryPort<Tag> tagRepository;
-    private HasTagManager hasTagManager;
+    private ContextPort context;
+
 
     private UUID tagID;
 
     public Tag(String tagType,
+               ContextPort context,
                CRUDRepositoryPort<Tag> tagRepository,
-               HasTagManager hasTagManager,
                UUID tagID) {
         this.tagType = tagType;
         this.tagRepository = tagRepository;
-        this.hasTagManager = hasTagManager;
 
+        this.context = context;
         this.tagID = tagID;
     }
 
@@ -43,8 +44,12 @@ public class Tag extends ComponentSuper implements TagPort,
 
     @Override
     public void deleteTag() {
-        hasTagManager.deleteManagedObject(this);
-        tagRepository.delete(tagID.toString());
+        if (context != null) {
+            ContextPort temp = context;
+            context = null;
+            temp.deleteValidTag(this);
+            tagRepository.delete(tagID.toString());
+        }
     }
 
     public void saveState() {

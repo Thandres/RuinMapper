@@ -23,8 +23,8 @@ public class ContextSupplierPortTest {
         return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
-                new AreaRepoDummy(), new ContextRepoDummy(),
-                new StateKeeperRepoDummy());
+                new AreaRepoDummy(),
+                new ContextRepoDummy());
     }
 
     @Test

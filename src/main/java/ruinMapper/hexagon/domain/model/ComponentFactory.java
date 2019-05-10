@@ -1,13 +1,11 @@
 package ruinMapper.hexagon.domain.model;
 
 import ruinMapper.hexagon.domain.area.Area;
+import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.Hint;
-import ruinMapper.hexagon.domain.hint.HintStatus;
-import ruinMapper.hexagon.domain.invariant.InvariantKeeper;
 import ruinMapper.hexagon.domain.quest.Quest;
-import ruinMapper.hexagon.domain.quest.QuestStatus;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
@@ -15,7 +13,6 @@ import ruinMapper.hexagon.domain.tag.Tag;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 
 public class ComponentFactory implements
@@ -27,10 +24,9 @@ public class ComponentFactory implements
     private static CRUDRepositoryPort<Tag> tagRepository;
     private static CRUDRepositoryPort<Area> areaRepository;
     private static CRUDRepositoryPort<Context> contextRepository;
-    private static CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository;
 
-    private static InvariantKeeper stateKeeper;
 
+    private static ContextPort currentContext;
 
     public ComponentFactory(
             CRUDRepositoryPort<Quest> questRepository,
@@ -38,8 +34,7 @@ public class ComponentFactory implements
             CRUDRepositoryPort<Hint> hintRepository,
             CRUDRepositoryPort<Tag> tagRepository,
             CRUDRepositoryPort<Area> areaRepository,
-            CRUDRepositoryPort<Context> contextRepository,
-            CRUDRepositoryPort<InvariantKeeper> stateKeeperRepository) {
+            CRUDRepositoryPort<Context> contextRepository) {
 
         this.questRepository = questRepository;
         this.roomRepository = roomRepository;
@@ -47,16 +42,13 @@ public class ComponentFactory implements
         this.tagRepository = tagRepository;
         this.areaRepository = areaRepository;
         this.contextRepository = contextRepository;
-        this.stateKeeperRepository = stateKeeperRepository;
+
     }
 
     public static Quest createQuest(String title) {
         Quest newQuest = new Quest(title,
-                "",
-                "", stateKeeper, QuestStatus.ACTIVE,
-                questRepository,
-                UUID.randomUUID()
-        );
+                currentContext,
+                questRepository);
         questRepository.create(newQuest);
         return newQuest;
     }
@@ -64,15 +56,15 @@ public class ComponentFactory implements
     public static Hint createHint(String content,
                                   RoomPort room) {
         Hint newHint = new Hint(content,
-                "", stateKeeper, HintStatus.NO_IDEA,
-                hintRepository, UUID.randomUUID());
+                room,
+                hintRepository);
         hintRepository.create(newHint);
         return newHint;
     }
 
     public static Tag createTag(String type) {
         Tag newTag = new Tag(type,
-                tagRepository, stateKeeper,
+                currentContext, tagRepository,
                 UUID.randomUUID());
         tagRepository.create(newTag);
         return newTag;
@@ -80,48 +72,33 @@ public class ComponentFactory implements
 
     public static Area createArea(String title) {
         Area newArea = new Area(title, "", new HashMap<>(),
-                stateKeeper, areaRepository,
+                currentContext, areaRepository,
                 UUID.randomUUID());
         areaRepository.create(newArea);
         return newArea;
     }
 
-    public static Room createRoom(int x, int y) {
-        Room newRoom = new Room("", "",
-                new Point(x, y), stateKeeper, stateKeeper,
-                stateKeeper, roomRepository,
-                UUID.randomUUID());
+    public static Room createRoom(Point point,
+                                  AreaPort area) {
+        Room newRoom = new Room(point,
+                currentContext, area, roomRepository);
         roomRepository.create(newRoom);
         return newRoom;
     }
 
     public static Context createContext(String name) {
         Context newContext = new Context(name,
-                stateKeeper,
-                stateKeeper, stateKeeper,
-                stateKeeper.toString(), contextRepository,
+                contextRepository,
                 UUID.randomUUID());
         contextRepository.create(newContext);
         return newContext;
     }
 
-    public static InvariantKeeper createStateKeeper() {
-        InvariantKeeper stateKeeper = new InvariantKeeper(
-                new HashMap<>(), new HashMap<>(),
-                new HashMap<>(), new HashMap<>(),
-                new HashSet<>(), new HashSet<>(),
-                new HashMap<>(), new HashSet<>(),
-                stateKeeperRepository,
-                UUID.randomUUID());
-        stateKeeperRepository.create(stateKeeper);
-        return stateKeeper;
-    }
-
 
     @Override
     public ContextPort createNewContext(String name) {
-        ComponentFactory.stateKeeper = createStateKeeper();
         Context context = createContext(name);
+        ComponentFactory.currentContext = context;
         contextRepository.create(context);
         return context;
     }
@@ -129,8 +106,7 @@ public class ComponentFactory implements
     @Override
     public ContextPort loadContextByName(String name) {
         Context loaded = contextRepository.read(name);
-        ComponentFactory.stateKeeper = stateKeeperRepository
-                .read(loaded.getStateKeeperID());
+
         return loaded;
     }
 }

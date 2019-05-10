@@ -29,6 +29,15 @@ public interface ContextPort {
     public AreaPort createArea(String title);
 
     /**
+     * Deletes the Area from context.
+     * Deletes every Room and by extension every Hint assigned to that area
+     *
+     * @param areaToDelete The area to delete
+     */
+    public void deleteArea(AreaPort areaToDelete);
+
+
+    /**
      * Returns the Area with the specified title
      *
      * @param titleOfArea Title of the Area that should be returned
@@ -51,6 +60,14 @@ public interface ContextPort {
      * @return The created Tag
      */
     public TagPort createValidTag(String name);
+
+    /**
+     * Deletes the specified valid Tag from the Context.
+     * Removes the Tag from all Rooms tagged with it.
+     *
+     * @param tagToDelete
+     */
+    public void deleteValidTag(TagPort tagToDelete);
 
     /**
      * Returns all Tags that are valid in the Context.

@@ -1,6 +1,5 @@
 package ruinMapper.hexagon.domain.hint;
 
-import ruinMapper.hexagon.domain.invariant.RoomManager;
 import ruinMapper.hexagon.domain.model.ComponentSuper;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasRoom;
@@ -14,24 +13,22 @@ public class Hint extends ComponentSuper implements
 
     private String content;
     private String notes;
-    private RoomManager roomManager;
+    private RoomPort room;
     private HintStatus status;
     private CRUDRepositoryPort<Hint> hintRepository;
     private UUID hintID;
 
 
-    public Hint(String content, String notes,
-                RoomManager roomManager,
-                HintStatus status,
-                CRUDRepositoryPort<Hint> hintRepository,
-                UUID hintID) {
+    public Hint(String content, RoomPort room,
+                CRUDRepositoryPort<Hint> hintRepository) {
 
         this.content = content;
-        this.notes = notes;
-        this.roomManager = roomManager;
-        this.status = status;
+        this.notes = "";
+        this.room = room;
+
+        this.status = HintStatus.NO_IDEA;
         this.hintRepository = hintRepository;
-        this.hintID = hintID;
+        this.hintID = UUID.randomUUID();
     }
 
     @Override
@@ -58,19 +55,18 @@ public class Hint extends ComponentSuper implements
 
     @Override
     public RoomPort accessRoom() {
-        RoomPort assignedRoom = null;// For testability initialize with null
-        for (RoomPort room : roomManager
-                .accessRooms(this)) {
-            assignedRoom = room;
-            break;
-        }
-        return assignedRoom;
+        return room;
     }
 
     @Override
     public void deleteHint() {
-        roomManager.deleteManagedObject(this);
-        hintRepository.delete(hintID.toString());
+        if (room != null) {
+            RoomPort roomToDelete = room;
+            room = null;
+            roomToDelete.deleteHint(this);
+            hintRepository.delete(hintID.toString());
+        }
+
     }
 
     @Override

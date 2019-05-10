@@ -1,11 +1,9 @@
 package ruinMapper.hexagon.domain.room;
 
+import ruinMapper.hexagon.domain.area.AreaPort;
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.invariant.HintManager;
-import ruinMapper.hexagon.domain.invariant.QuestManager;
-import ruinMapper.hexagon.domain.invariant.TagManager;
 import ruinMapper.hexagon.domain.model.*;
-import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
@@ -22,29 +20,31 @@ Room extends ComponentSuper implements
     private String title;
     private String notes;
     private Point coordinates;
-    private HintManager hintManager;
-    private QuestManager questManager;
-    private TagManager tagManager;
+    private Set<HintPort> hints;
+    private Set<QuestPort> quests;
+    private Set<TagPort> tags;
+    private ContextPort context;
+    private AreaPort area;
     private CRUDRepositoryPort<Room> roomRepository;
     private UUID roomID;
 
 
-    public Room(String title, String notes,
-                Point coordinates,
-                HintManager hintManager,
-                QuestManager questManager,
-                TagManager tagManager,
-                CRUDRepositoryPort<Room> roomRepository,
-                UUID roomID) {
-        this.title = title;
-        this.notes = notes;
+    public Room(Point coordinates,
+                ContextPort context,
+                AreaPort area,
+                CRUDRepositoryPort<Room> roomRepository) {
+        this.context = context;
+        this.area = area;
+        this.title = "";
+        this.notes = "";
         this.coordinates = coordinates;
-        this.hintManager = hintManager;
 
-        this.questManager = questManager;
-        this.tagManager = tagManager;
+        quests = new HashSet<>();
+        tags = new HashSet<>();
         this.roomRepository = roomRepository;
-        this.roomID = roomID;
+        this.roomID = UUID.randomUUID();
+
+        hints = new HashSet<>();
     }
 
 
@@ -79,65 +79,75 @@ Room extends ComponentSuper implements
     public HintPort createHint(String content) {
         HintPort newHint = ComponentFactory
                 .createHint(content, this);
-        hintManager.addHint(newHint, this);
+        hints.add(newHint);
         saveState();
         return newHint;
     }
 
     @Override
     public void deleteHint(HintPort hintToDelete) {
-        hintManager.removeHint(hintToDelete, this);
-        saveState();
+        if (hints.remove(hintToDelete)) {
+            hintToDelete.deleteHint();
+            saveState();
+        }
     }
 
     @Override
     public Set<HintPort> accessHints() {
-        return new HashSet<>(hintManager.accessHints(this));
+        return new HashSet<>(hints);
     }
 
     @Override
     public QuestPort createQuest(String title) {
-        Quest newQuest = ComponentFactory
+        QuestPort newQuest = context
                 .createQuest(title);
-        questManager.addQuest(newQuest, this);
+        quests.add(newQuest);
         newQuest.addQuestRoom(this);
+
         saveState();
         return newQuest;
     }
 
     @Override
     public void addQuest(QuestPort questToAdd) {
-        questManager.addQuest(questToAdd, this);
-        saveState();
+        if (quests.add(questToAdd)) {
+            questToAdd.addQuestRoom(this);
+            saveState();
+        }
 
     }
 
     @Override
     public void removeQuest(QuestPort questToRemove) {
-        questManager.removeQuest(questToRemove, this);
-        saveState();
+        if (quests.remove(questToRemove)) {
+            questToRemove.removeQuestRoom(this);
+            saveState();
+        }
     }
 
     @Override
     public Set<QuestPort> accessQuests() {
-        return questManager.accessQuests(this);
+        return new HashSet<>(quests);
     }
 
     @Override
     public void tagRoom(TagPort validTag) {
-        tagManager.addTag(validTag, this);
-        saveState();
+        if (context.accessValidTags().contains(validTag)) {
+            tags.add(validTag);
+            saveState();
+        }
     }
 
     @Override
     public void removeTag(TagPort tagToRemove) {
-        tagManager.removeTag(tagToRemove, this);
-        saveState();
+        if (tags.remove(tagToRemove)) {
+            saveState();
+        }
     }
 
     @Override
     public Set<TagPort> accessTags() {
-        return new HashSet<>(tagManager.accessTags(this));
+        return new HashSet<>(tags);
     }
 
     @Override
@@ -163,11 +173,25 @@ Room extends ComponentSuper implements
 
     @Override
     public void deleteRoom() {
-        // only one Manager needs to deregister the object
-        // as deleteManagedObject marks it for removal from every
-        // reference
-        hintManager.deleteManagedObject(this);
-        roomRepository.delete(toString());
+        if (area != null) {
+            Set<HintPort> temp = new HashSet<>(hints);
+            hints.clear();
+            temp.forEach(HintPort::deleteHint);
+
+            Set<QuestPort> tempQ = new HashSet<>(quests);
+            quests.clear();
+            tempQ.forEach(questPort -> questPort
+                    .removeQuestRoom(this));
+
+            tags.clear();
+
+            AreaPort tempC = area;
+            area = null;
+            tempC.deleteRoom(coordinates.x, coordinates.y);
+
+            context = null;
+            roomRepository.delete(toString());
+        }
     }
 
     @Override

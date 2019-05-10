@@ -32,8 +32,8 @@ public class QuestPortTest {
         return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
-                new AreaRepoDummy(), new ContextRepoDummy(),
-                new StateKeeperRepoDummy());
+                new AreaRepoDummy(),
+                new ContextRepoDummy());
     }
 
     @Test
@@ -94,6 +94,7 @@ public class QuestPortTest {
     public void accessQuestRooms() {
         RoomPort r1 = context.createArea("A1")
                 .accessRoom(0, 0);
+
         RoomPort r2 = context.createArea("A2")
                 .accessRoom(0, 0);
         r1.addQuest(questToTest);

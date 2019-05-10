@@ -1,12 +1,13 @@
 package ruinMapper.hexagon.domain.quest;
 
-import ruinMapper.hexagon.domain.invariant.RoomManager;
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.model.ComponentSuper;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,26 +17,24 @@ public class Quest extends ComponentSuper implements
     private String title;
     private String description;
     private String notes;
-    private RoomManager roomManager;
+    private Set<RoomPort> rooms;
+    private ContextPort context;
     private QuestStatus status;
     private CRUDRepositoryPort<Quest> questRepository;
     private UUID questID;
 
 
-    public Quest(String title, String description,
-                 String notes,
-                 RoomManager roomManager,
-                 QuestStatus status,
-                 CRUDRepositoryPort<Quest> questRepository,
-                 UUID questID) {
+    public Quest(String title,
+                 ContextPort context,
+                 CRUDRepositoryPort<Quest> questRepository) {
         this.title = title;
-        this.description = description;
-        this.notes = notes;
-        this.roomManager = roomManager;
-        this.status = status;
-
+        this.context = context;
+        this.description = "";
+        this.notes = "";
+        this.status = QuestStatus.ACTIVE;
+        rooms = new HashSet<>();
         this.questRepository = questRepository;
-        this.questID = questID;
+        this.questID = UUID.randomUUID();
     }
 
 
@@ -85,25 +84,37 @@ public class Quest extends ComponentSuper implements
 
     @Override
     public Set<RoomPort> accessQuestRooms() {
-        return roomManager.accessRooms(this);
+        return new HashSet<>(rooms);
     }
 
     @Override
     public void addQuestRoom(RoomPort roomToAdd) {
-        roomManager.addRoom(roomToAdd, this);
-        saveState();
+        if (rooms.add(roomToAdd)) {
+            roomToAdd.addQuest(this);
+            saveState();
+        }
     }
 
     @Override
     public void removeQuestRoom(RoomPort roomToRemove) {
-        roomManager.removeRoom(roomToRemove, this);
-        saveState();
+        if (rooms.remove(roomToRemove)) {
+            roomToRemove.removeQuest(this);
+            saveState();
+        }
     }
 
     @Override
     public void deleteQuest() {
-        roomManager.deleteManagedObject(this);
-        questRepository.delete(questID.toString());
+        if (context != null) {
+            Set<RoomPort> temp = new HashSet<>(rooms);
+            rooms.clear();
+            temp.forEach(
+                    roomPort -> roomPort.removeQuest(this));
+            ContextPort tempC = context;
+            context = null;
+            tempC.deleteQuest(this);
+            questRepository.delete(questID.toString());
+        }
     }
 
     @Override

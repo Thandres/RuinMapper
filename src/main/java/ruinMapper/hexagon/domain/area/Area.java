@@ -1,8 +1,11 @@
 package ruinMapper.hexagon.domain.area;
 
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.invariant.RoomManager;
-import ruinMapper.hexagon.domain.model.*;
+import ruinMapper.hexagon.domain.model.ComponentFactory;
+import ruinMapper.hexagon.domain.model.ComponentSuper;
+import ruinMapper.hexagon.domain.model.ComponentType;
+import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -13,29 +16,30 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Area extends ComponentSuper implements
-        AreaPort, RoomManager, HasRoom {
+        AreaPort, HasRoom {
     private String title;
     private String notes;
     private Map<Point, RoomPort> areaMap;
-    private RoomManager roomManager;
-    private ComponentManager componentManager;
+
+    private ContextPort contextPort;
+
     private CRUDRepositoryPort<Area> areaRepository;
     private UUID areaID;
 
     public Area(String title,
                 String notes,
                 Map<Point, RoomPort> areaMap,
-                ComponentManager componentManager,
+                ContextPort contextPort,
                 CRUDRepositoryPort<Area> areaRepository,
                 UUID areaID) {
         this.title = title;
         this.notes = notes;
         this.areaMap = areaMap;
-        this.componentManager = componentManager;
+        this.contextPort = contextPort;
+
         this.areaRepository = areaRepository;
         this.areaID = areaID;
 
-        roomManager = this;
         createRoom(0, 0);
     }
 
@@ -43,8 +47,8 @@ public class Area extends ComponentSuper implements
     @Override
     public RoomPort createRoom(int x, int y) {
         RoomPort newRoom = ComponentFactory
-                .createRoom(x, y);
-        roomManager.addRoom(newRoom, this);
+                .createRoom(new Point(x, y), this);
+        areaMap.put(newRoom.accessCoordinates(), newRoom);
         saveState();
         return newRoom;
     }
@@ -52,27 +56,22 @@ public class Area extends ComponentSuper implements
     @Override
     public RoomPort accessRoom(int x, int y) {
         Point pointToRetrieve = new Point(x, y);
-        for (RoomPort room : roomManager
-                .accessRooms(this)) {
-            if (room.accessCoordinates()
-                    .equals(pointToRetrieve)) {
-                return room;
-            }
-        }
-        return null; //TODO Exceptions
+        return areaMap.get(pointToRetrieve);
     }
 
     @Override
     public Set<RoomPort> accessRooms() {
-        return roomManager.accessRooms(this);
+        return new HashSet<>(areaMap.values());
     }
 
     @Override
     public void deleteRoom(int x, int y) {
         Point point = new Point(x, y);
-        RoomPort roomToDelete = accessRoom(x, y);
-        roomManager.removeRoom(roomToDelete, this);
-        saveState();
+        if (areaMap.containsKey(point)) {
+            RoomPort roomToDelete = areaMap.remove(point);
+            roomToDelete.deleteRoom();
+            saveState();
+        }
     }
 
     @Override
@@ -100,9 +99,7 @@ public class Area extends ComponentSuper implements
     @Override
     public Set<HintPort> accessHintsOnArea() {
         Set<HintPort> hintSet = new HashSet<>();
-        for (RoomPort room : roomManager
-                .accessRooms(this)) {
-            //TODO an object that has never added an object with a manager is not in the managers system, fix that
+        for (RoomPort room : areaMap.values()) {
             hintSet.addAll(room.accessHints());
         }
         return hintSet;
@@ -110,8 +107,19 @@ public class Area extends ComponentSuper implements
 
     @Override
     public void deleteArea() {
-        roomManager.deleteManagedObject(this);
-        areaRepository.delete(toString());
+        if (contextPort != null) {
+            ContextPort temp = contextPort;
+            contextPort = null;
+            Set<RoomPort> entries = new HashSet<>(
+                    areaMap.values());
+            for (RoomPort room : entries) {
+                Point coordinates = room
+                        .accessCoordinates();
+                deleteRoom(coordinates.x, coordinates.y);
+            }
+            temp.deleteArea(this);
+            areaRepository.delete(toString());
+        }
     }
 
     @Override
@@ -123,29 +131,6 @@ public class Area extends ComponentSuper implements
     @Override
     public String toString() {
         return areaID.toString();
-    }
-
-    @Override
-    public void addRoom(RoomPort value, HasRoom key) {
-        areaMap.put(value.accessCoordinates(), value);
-    }
-
-    @Override
-    public void removeRoom(RoomPort value, HasRoom key) {
-        areaMap.remove(value.accessCoordinates())
-                .deleteRoom();
-    }
-
-    @Override
-    public Set<RoomPort> accessRooms(HasRoom hasRoom) {
-        return new HashSet<>(areaMap.values());
-    }
-
-    @Override
-    public <T extends ComponentTag> void deleteManagedObject(
-            T managedObject) {
-        componentManager.deleteManagedObject(this);
-
     }
 
     @Override

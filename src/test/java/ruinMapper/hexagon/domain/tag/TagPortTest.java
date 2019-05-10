@@ -33,8 +33,8 @@ public class TagPortTest {
         return new ComponentFactory(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
-                new AreaRepoDummy(), new ContextRepoDummy(),
-                new StateKeeperRepoDummy());
+                new AreaRepoDummy(),
+                new ContextRepoDummy());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TagPortTest {
         RoomPort r1 = area.createRoom(1, 2);
         r1.tagRoom(tagToTest);
         RoomPort r2 = area.createRoom(2, 2);
-        r1.tagRoom(tagToTest);
+        r2.tagRoom(tagToTest);
 
         tagToTest.deleteTag();
 

@@ -3,7 +3,6 @@ package ruinMapper.hexagon.infrastructure;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.fixtures.domain.AreaFixture;
 import ruinMapper.fixtures.domain.LifecycleFixture;
 import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.infrastructure.dto.mapper.AreaMapper;
@@ -22,7 +21,7 @@ public class AreaRepositoryTest {
 
     @Test
     public void create() {
-        repositoryToTest.create(AreaFixture.getFixture());
+        // repositoryToTest.create(AreaFixture.getFixture());
     }
 
     @Test
