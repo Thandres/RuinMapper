@@ -132,4 +132,63 @@ public class Quest extends ComponentSuper implements
     public String toString() {
         return questID.toString();
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Set<RoomPort> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(
+            Set<RoomPort> rooms) {
+        this.rooms = rooms;
+    }
+
+    public ContextPort getContext() {
+        return context;
+    }
+
+    public void setContext(
+            ContextPort context) {
+        this.context = context;
+    }
+
+    public QuestStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(
+            QuestStatus status) {
+        this.status = status;
+    }
+
+    public UUID getQuestID() {
+        return questID;
+    }
+
+    public void setQuestID(UUID questID) {
+        this.questID = questID;
+    }
 }

@@ -65,4 +65,29 @@ public class Tag extends ComponentSuper implements TagPort,
     public ComponentType getType() {
         return ComponentType.TAG;
     }
+
+    public String getTagType() {
+        return tagType;
+    }
+
+    public void setTagType(String tagType) {
+        this.tagType = tagType;
+    }
+
+    public ContextPort getContext() {
+        return context;
+    }
+
+    public void setContext(
+            ContextPort context) {
+        this.context = context;
+    }
+
+    public UUID getTagID() {
+        return tagID;
+    }
+
+    public void setTagID(UUID tagID) {
+        this.tagID = tagID;
+    }
 }

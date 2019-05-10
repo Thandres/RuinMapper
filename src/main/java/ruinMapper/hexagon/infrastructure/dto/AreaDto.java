@@ -7,6 +7,7 @@ public class AreaDto {
     private String title;
     private String notes;
     private Map<Point, String> roomMap;
+    private String contextID;
     private String areaID;
 
     public String getTitle() {
@@ -40,5 +41,13 @@ public class AreaDto {
     public void setRoomMap(
             Map<Point, String> roomMap) {
         this.roomMap = roomMap;
+    }
+
+    public String getContextID() {
+        return contextID;
+    }
+
+    public void setContextID(String contextID) {
+        this.contextID = contextID;
     }
 }

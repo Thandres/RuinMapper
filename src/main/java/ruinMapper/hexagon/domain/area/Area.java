@@ -10,10 +10,7 @@ import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import java.awt.*;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class Area extends ComponentSuper implements
         AreaPort, HasRoom {
@@ -27,18 +24,15 @@ public class Area extends ComponentSuper implements
     private UUID areaID;
 
     public Area(String title,
-                String notes,
-                Map<Point, RoomPort> areaMap,
                 ContextPort contextPort,
-                CRUDRepositoryPort<Area> areaRepository,
-                UUID areaID) {
+                CRUDRepositoryPort<Area> areaRepository) {
         this.title = title;
-        this.notes = notes;
-        this.areaMap = areaMap;
+        this.notes = "";
+        this.areaMap = new HashMap<>();
         this.contextPort = contextPort;
 
         this.areaRepository = areaRepository;
-        this.areaID = areaID;
+        this.areaID = UUID.randomUUID();
 
         createRoom(0, 0);
     }
@@ -137,4 +131,47 @@ public class Area extends ComponentSuper implements
     public ComponentType getType() {
         return ComponentType.AREA;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Map<Point, RoomPort> getAreaMap() {
+        return areaMap;
+    }
+
+    public void setAreaMap(
+            Map<Point, RoomPort> areaMap) {
+        this.areaMap = areaMap;
+    }
+
+    public ContextPort getContextPort() {
+        return contextPort;
+    }
+
+    public void setContextPort(
+            ContextPort contextPort) {
+        this.contextPort = contextPort;
+    }
+
+    public UUID getAreaID() {
+        return areaID;
+    }
+
+    public void setAreaID(UUID areaID) {
+        this.areaID = areaID;
+    }
+
 }

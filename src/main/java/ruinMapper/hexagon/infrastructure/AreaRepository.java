@@ -16,11 +16,10 @@ public class AreaRepository implements
     private AreaMapper areaMapper;
     private String fileLocation;
 
-    public AreaRepository(
-            ObjectMapper jacksonMapper,
-            AreaMapper areaMapper,
+
+    public AreaRepository(AreaMapper areaMapper,
             String fileLocation) {
-        this.jacksonMapper = jacksonMapper;
+        this.jacksonMapper = new ObjectMapper();
         this.areaMapper = areaMapper;
         this.fileLocation = fileLocation;
     }

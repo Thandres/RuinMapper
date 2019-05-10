@@ -162,4 +162,47 @@ public class Context extends ComponentSuper implements
     public String toString() {
         return contextID.toString();
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<AreaPort> getAreas() {
+        return areas;
+    }
+
+    public void setAreas(
+            Set<AreaPort> areas) {
+        this.areas = areas;
+    }
+
+    public Set<TagPort> getValidTags() {
+        return validTags;
+    }
+
+    public void setValidTags(
+            Set<TagPort> validTags) {
+        this.validTags = validTags;
+    }
+
+    public Set<QuestPort> getQuests() {
+        return quests;
+    }
+
+    public void setQuests(
+            Set<QuestPort> quests) {
+        this.quests = quests;
+    }
+
+    public UUID getContextID() {
+        return contextID;
+    }
+
+    public void setContextID(UUID contextID) {
+        this.contextID = contextID;
+    }
 }

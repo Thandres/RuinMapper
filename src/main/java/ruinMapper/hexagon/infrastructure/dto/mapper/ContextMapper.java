@@ -15,8 +15,7 @@ public class ContextMapper implements
     public ContextDto toDto(Context domain) {
         ContextDto contextDto = new ContextDto();
         contextDto.setName(domain.accessName());
-        contextDto.setStateKeeperId(
-                domain.getStateKeeperID());
+
         return contextDto;
     }
 }

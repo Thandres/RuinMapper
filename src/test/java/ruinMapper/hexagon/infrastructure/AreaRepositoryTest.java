@@ -1,6 +1,5 @@
 package ruinMapper.hexagon.infrastructure;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.domain.LifecycleFixture;
@@ -15,13 +14,15 @@ public class AreaRepositoryTest {
         ContextSupplierPort contextSupplierPort = LifecycleFixture
                 .implementationOne();
         repositoryToTest = new AreaRepository(
-                new ObjectMapper(),
-                new AreaMapper(), "D:\\Repos\\save.json");
+                new AreaMapper(currentContext,
+                        contextRepository, roomRepository,
+                        areaRepository),
+                "D:\\Repos\\save.json");
     }
 
     @Test
     public void create() {
-        // repositoryToTest.create(AreaFixture.getFixture());
+        //repositoryToTest.create(AreaFixture.getFixture());
     }
 
     @Test

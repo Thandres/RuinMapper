@@ -94,4 +94,45 @@ public class Hint extends ComponentSuper implements
     public String toString() {
         return hintID.toString();
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public RoomPort getRoom() {
+        return room;
+    }
+
+    public void setRoom(RoomPort room) {
+        this.room = room;
+    }
+
+    public HintStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(
+            HintStatus status) {
+        this.status = status;
+    }
+
+    public UUID getHintID() {
+        return hintID;
+    }
+
+    public void setHintID(UUID hintID) {
+        this.hintID = hintID;
+    }
 }

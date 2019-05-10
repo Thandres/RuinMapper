@@ -198,4 +198,80 @@ Room extends ComponentSuper implements
     public Point accessCoordinates() {
         return coordinates;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Point getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Point coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public Set<HintPort> getHints() {
+        return hints;
+    }
+
+    public void setHints(
+            Set<HintPort> hints) {
+        this.hints = hints;
+    }
+
+    public Set<QuestPort> getQuests() {
+        return quests;
+    }
+
+    public void setQuests(
+            Set<QuestPort> quests) {
+        this.quests = quests;
+    }
+
+    public Set<TagPort> getTags() {
+        return tags;
+    }
+
+    public void setTags(
+            Set<TagPort> tags) {
+        this.tags = tags;
+    }
+
+    public ContextPort getContext() {
+        return context;
+    }
+
+    public void setContext(
+            ContextPort context) {
+        this.context = context;
+    }
+
+    public AreaPort getArea() {
+        return area;
+    }
+
+    public void setArea(AreaPort area) {
+        this.area = area;
+    }
+
+    public UUID getRoomID() {
+        return roomID;
+    }
+
+    public void setRoomID(UUID roomID) {
+        this.roomID = roomID;
+    }
 }

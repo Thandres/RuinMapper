@@ -1,22 +1,22 @@
 package ruinMapper.hexagon.infrastructure;
 
-import ruinMapper.hexagon.domain.context.Context;
+import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
-public class ContextCRUDRepository implements
-        CRUDRepositoryPort<Context> {
+public class QuestRepository implements
+        CRUDRepositoryPort<Quest> {
     @Override
-    public void create(Context object) {
+    public void create(Quest object) {
 
     }
 
     @Override
-    public Context read(String ID) {
+    public Quest read(String ID) {
         return null;
     }
 
     @Override
-    public void update(Context object) {
+    public void update(Quest object) {
 
     }
 
