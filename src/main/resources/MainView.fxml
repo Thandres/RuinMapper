@@ -1,0 +1,17 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:controller="ruinMapper.hexagon.application.MainView"
+      xmlns:fx="http://javafx.com/fxml" fx:id="mainWindow">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Change savelocation"></MenuItem>
+            <MenuItem text="Load..."></MenuItem>
+        </Menu>
+    </MenuBar>
+    <HBox fx:id="startupOptions">
+        <Button text="Create a map" onMouseClicked="#loadMap"></Button>
+        <Button text="Load a map" onMouseClicked="#loadMap"></Button>
+    </HBox>
+
+</VBox>

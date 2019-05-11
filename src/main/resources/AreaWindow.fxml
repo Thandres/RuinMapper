@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import ruinMapper.hexagon.application.AreaRow?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ruinMapper.hexagon.application.AreaWindow">
+    <TabPane tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Area">
+            <VBox>
+                <AreaRow spacing="5">
+                </AreaRow>
+                <VBox fx:id="selectedRoom">
+                    <HBox prefHeight="50">
+                        <Label text="Roomname" fx:id="roomTitle"></Label>
+                        <ComboBox fx:id="validTagList"></ComboBox>
+                        <TabPane HBox.hgrow="ALWAYS">
+                            <Tab text="Tag1"></Tab>
+                        </TabPane>
+                    </HBox>
+                    <HBox>
+                        <TextArea fx:id="Notes" prefHeight="200"></TextArea>
+                        <TabPane tabClosingPolicy="UNAVAILABLE" prefWidth="200" HBox.hgrow="ALWAYS">
+                            <Tab text="Hints">
+                                <VBox fx:id="hints">
+                                    <Label text="hint1"></Label>
+                                </VBox>
+                            </Tab>
+                            <Tab text="Quests">
+                                <VBox fx:id="quests">
+                                    <Label text="Quest1"></Label>
+                                </VBox>
+                            </Tab>
+                        </TabPane>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+        </Tab>
+        <Tab text="Quests">
+            <VBox fx:id="questList"></VBox>
+        </Tab>
+        <Tab text="Hints">
+            <VBox fx:id="hintList"></VBox>
+        </Tab>
+    </TabPane>
+
+</VBox>
