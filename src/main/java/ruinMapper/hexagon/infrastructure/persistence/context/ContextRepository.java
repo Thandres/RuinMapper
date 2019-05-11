@@ -11,6 +11,7 @@ public class ContextRepository extends
         CRUDRepositoryPort<Context> {
 
     private DtoMapper<Context, ContextDto> contextMapper;
+    private Context currentContext;
 
     public ContextRepository(
             String directoryPath,
@@ -21,6 +22,7 @@ public class ContextRepository extends
 
     @Override
     public void create(Context object) {
+        currentContext = object;
         ContextDto contextDto = contextMapper.toDto(object);
         FileHelper.writeToFile(
                 createFilelocation(object.toString()),
@@ -29,14 +31,19 @@ public class ContextRepository extends
 
     @Override
     public Context read(String ID) {
-        ContextDto areaDto = FileHelper
-                .readFromFile(createFilelocation(ID),
-                        ContextDto.class);
-        return contextMapper.toDomain(areaDto, this);
+        if (currentContext.getName().equals(ID)) {
+            return currentContext;
+        } else {
+            ContextDto areaDto = FileHelper
+                    .readFromFile(createFilelocation(ID),
+                            ContextDto.class);
+            return contextMapper.toDomain(areaDto, this);
+        }
     }
 
     @Override
     public void update(Context object) {
+        currentContext = object;
         ContextDto contextDto = contextMapper.toDto(object);
         FileHelper.writeToFile(
                 createFilelocation(object.toString()),
@@ -45,6 +52,9 @@ public class ContextRepository extends
 
     @Override
     public void delete(String ID) {
-        FileHelper.deleteFile(createFilelocation(ID));
+        if (currentContext.getName().equals(ID)) {
+            currentContext.setName("INVALID");
+            FileHelper.deleteFile(createFilelocation(ID));
+        }
     }
 }

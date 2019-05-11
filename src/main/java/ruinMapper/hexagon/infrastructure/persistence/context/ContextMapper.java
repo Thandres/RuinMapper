@@ -11,7 +11,9 @@ import ruinMapper.hexagon.domain.tag.TagPort;
 import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static ruinMapper.hexagon.infrastructure.persistence.MappingHelper.toDomainSet;
+import static ruinMapper.hexagon.infrastructure.persistence.MappingHelper.toStringSet;
 
 public class ContextMapper implements
         DtoMapper<Context, ContextDto> {
@@ -22,9 +24,11 @@ public class ContextMapper implements
 
     public ContextMapper(
             CRUDRepositoryPort<Area> areaRepository,
-            CRUDRepositoryPort<Tag> tagRepository) {
+            CRUDRepositoryPort<Tag> tagRepository,
+            CRUDRepositoryPort<Quest> questRepository) {
         this.areaRepository = areaRepository;
         this.tagRepository = tagRepository;
+        this.questRepository = questRepository;
     }
 
     @Override
@@ -57,19 +61,5 @@ public class ContextMapper implements
         contextDto.setValidTags(
                 toStringSet(domain.getValidTags()));
         return contextDto;
-    }
-
-    private <T> Set<String> toStringSet(Set<T> tSet) {
-        return tSet.stream().map(Object::toString)
-                .collect(Collectors.toSet());
-    }
-
-    private <T extends D, D> Set<D> toDomainSet(
-            Set<String> stringSet,
-            CRUDRepositoryPort<T> repository) {
-        return stringSet.stream()
-                .map(repository::read)
-                .collect(Collectors.toSet());
-
     }
 }
