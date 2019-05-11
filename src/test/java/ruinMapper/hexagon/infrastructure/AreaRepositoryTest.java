@@ -17,10 +17,8 @@ public class AreaRepositoryTest {
         ContextSupplierPort contextSupplierPort = LifecycleFixture
                 .implementationOne();
         repositoryToTest = new AreaRepository(
-                new AreaMapper("adsf",
-                        new ContextRepoDummy(),
-                        new RoomRepoDummy(),
-                        repositoryToTest),
+                new AreaMapper(new ContextRepoDummy(),
+                        new RoomRepoDummy()),
                 "D:\\Repos\\");
     }
 

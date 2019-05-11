@@ -1,11 +1,17 @@
-package ruinMapper.hexagon.infrastructure.persistence;
+package ruinMapper.hexagon.infrastructure.persistence.quest;
 
 import ruinMapper.hexagon.domain.quest.QuestStatus;
+
+import java.util.Set;
 
 public class QuestDto {
     private String title;
     private String description;
     private String notes;
+
+
+    private Set<String> rooms;
+    private String contextID;
     private QuestStatus status;
     private String questID;
 
@@ -48,5 +54,21 @@ public class QuestDto {
 
     public void setQuestID(String questID) {
         this.questID = questID;
+    }
+
+    public Set<String> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Set<String> rooms) {
+        this.rooms = rooms;
+    }
+
+    public String getContextID() {
+        return contextID;
+    }
+
+    public void setContextID(String contextID) {
+        this.contextID = contextID;
     }
 }
