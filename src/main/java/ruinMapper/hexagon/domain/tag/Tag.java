@@ -14,8 +14,6 @@ public class Tag extends ComponentSuper implements TagPort,
     private String tagType;
     private CRUDRepositoryPort<Tag> tagRepository;
     private ContextPort context;
-
-
     private UUID tagID;
 
     public Tag(String tagType,
