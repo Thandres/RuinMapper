@@ -6,24 +6,27 @@ import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 import ruinMapper.hexagon.infrastructure.persistence.FileHelper;
 import ruinMapper.hexagon.infrastructure.persistence.RepositoryAdapter;
 
-import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AreaRepository extends
         RepositoryAdapter implements
         CRUDRepositoryPort<Area> {
 
     private DtoMapper<Area, AreaDto> areaMapper;
+    private Map<String, Area> loadedAreas;
 
     public AreaRepository(
             DtoMapper<Area, AreaDto> areaMapper,
             String directoryPath) {
         super(directoryPath);
         this.areaMapper = areaMapper;
-
+        loadedAreas = new HashMap<>();
     }
 
     @Override
     public void create(Area object) {
+        loadedAreas.put(object.toString(), object);
         AreaDto areaDto = areaMapper.toDto(object);
         FileHelper.writeToFile(
                 createFilelocation(object.toString()),
@@ -33,10 +36,14 @@ public class AreaRepository extends
 
     @Override
     public Area read(String ID) {
-        AreaDto areaDto = FileHelper
-                .readFromFile(createFilelocation(ID),
-                        AreaDto.class);
-        return areaMapper.toDomain(areaDto, this);
+        if (loadedAreas.containsKey(ID)) {
+            return loadedAreas.get(ID);
+        } else {
+            AreaDto areaDto = FileHelper
+                    .readFromFile(createFilelocation(ID),
+                            AreaDto.class);
+            return areaMapper.toDomain(areaDto, this);
+        }
     }
 
     @Override
@@ -49,11 +56,10 @@ public class AreaRepository extends
 
     @Override
     public void delete(String ID) {
-        File fileToDelete = new File(
-                createFilelocation(ID));
-        if (fileToDelete.exists()) {
-            fileToDelete.delete();
+        if (loadedAreas.containsKey(ID)) {
+            loadedAreas.remove(ID);
         }
+        FileHelper.deleteFile(createFilelocation(ID));
     }
 
 

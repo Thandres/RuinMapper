@@ -6,32 +6,47 @@ import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 import ruinMapper.hexagon.infrastructure.persistence.FileHelper;
 import ruinMapper.hexagon.infrastructure.persistence.RepositoryAdapter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RoomRepository extends
         RepositoryAdapter implements
         CRUDRepositoryPort<Room> {
 
     private DtoMapper<Room, RoomDto> roomMapper;
+    private Map<String, Room> loadedRooms;
 
     public RoomRepository(String directoryPath,
                           DtoMapper<Room, RoomDto> roomMapper) {
         super(directoryPath);
         this.roomMapper = roomMapper;
+        loadedRooms = new HashMap<>();
     }
 
     @Override
     public void create(Room object) {
+        loadedRooms.put(object.toString(), object);
         RoomDto roomDto = roomMapper.toDto(object);
         FileHelper.writeToFile(
-                createFilelocation(roomDto.getRoomID()),
+                createFilelocation(roomDto.toString()),
                 roomDto);
     }
 
     @Override
     public Room read(String ID) {
-        RoomDto roomDto = FileHelper
-                .readFromFile(createFilelocation(ID),
-                        RoomDto.class);
-        return roomMapper.toDomain(roomDto, this);
+        if (loadedRooms.containsKey(ID)) {
+            return loadedRooms.get(ID);
+        } else {
+
+            RoomDto roomDto = FileHelper
+                    .readFromFile(createFilelocation(ID),
+                            RoomDto.class);
+            Room loadedRoom = roomMapper
+                    .toDomain(roomDto, this);
+            loadedRooms
+                    .put(loadedRoom.toString(), loadedRoom);
+            return loadedRoom;
+        }
     }
 
     @Override
@@ -44,6 +59,9 @@ public class RoomRepository extends
 
     @Override
     public void delete(String ID) {
+        if (loadedRooms.containsKey(ID)) {
+            loadedRooms.remove(ID);
+        }
         FileHelper.deleteFile(createFilelocation(ID));
     }
 }

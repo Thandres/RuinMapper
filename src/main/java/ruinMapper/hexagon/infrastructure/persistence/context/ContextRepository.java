@@ -37,13 +37,15 @@ public class ContextRepository extends
             ContextDto areaDto = FileHelper
                     .readFromFile(createFilelocation(ID),
                             ContextDto.class);
-            return contextMapper.toDomain(areaDto, this);
+
+            currentContext = contextMapper
+                    .toDomain(areaDto, this);
+            return currentContext;
         }
     }
 
     @Override
     public void update(Context object) {
-        currentContext = object;
         ContextDto contextDto = contextMapper.toDto(object);
         FileHelper.writeToFile(
                 createFilelocation(object.toString()),

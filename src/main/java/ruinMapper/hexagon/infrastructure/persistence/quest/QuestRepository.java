@@ -6,20 +6,26 @@ import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 import ruinMapper.hexagon.infrastructure.persistence.FileHelper;
 import ruinMapper.hexagon.infrastructure.persistence.RepositoryAdapter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class QuestRepository extends
         RepositoryAdapter implements
         CRUDRepositoryPort<Quest> {
 
     private DtoMapper<Quest, QuestDto> questMapper;
+    private Map<String, Quest> loadedQuests;
 
     public QuestRepository(String directoryPath,
                            DtoMapper<Quest, QuestDto> questMapper) {
         super(directoryPath);
         this.questMapper = questMapper;
+        loadedQuests = new HashMap<>();
     }
 
     @Override
     public void create(Quest object) {
+        loadedQuests.put(object.toString(), object);
         QuestDto questDto = questMapper.toDto(object);
         FileHelper.writeToFile(
                 createFilelocation(questDto.getQuestID()),
@@ -28,10 +34,18 @@ public class QuestRepository extends
 
     @Override
     public Quest read(String ID) {
-        QuestDto questDto = FileHelper
-                .readFromFile(createFilelocation(ID),
-                        QuestDto.class);
-        return questMapper.toDomain(questDto, this);
+        if (loadedQuests.containsKey(ID)) {
+            return loadedQuests.get(ID);
+        } else {
+            QuestDto questDto = FileHelper
+                    .readFromFile(createFilelocation(ID),
+                            QuestDto.class);
+            Quest loadedQuest = questMapper
+                    .toDomain(questDto, this);
+            loadedQuests.put(loadedQuest.toString(),
+                    loadedQuest);
+            return loadedQuest;
+        }
     }
 
     @Override
@@ -44,6 +58,9 @@ public class QuestRepository extends
 
     @Override
     public void delete(String ID) {
+        if (loadedQuests.containsKey(ID)) {
+            loadedQuests.remove(ID);
+        }
         FileHelper.deleteFile(createFilelocation(ID));
     }
 }
