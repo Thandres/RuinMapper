@@ -1,7 +1,6 @@
 package ruinMapper.hexagon.infrastructure.dto.mapper;
 
 import ruinMapper.hexagon.domain.hint.Hint;
-import ruinMapper.hexagon.infrastructure.DtoMapper;
 import ruinMapper.hexagon.infrastructure.dto.HintDto;
 
 public class HintMapper implements

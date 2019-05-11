@@ -12,7 +12,6 @@ import ruinMapper.hexagon.domain.room.RoomPort;
 import ruinMapper.hexagon.domain.tag.Tag;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class ComponentFactory implements
@@ -71,9 +70,8 @@ public class ComponentFactory implements
     }
 
     public static Area createArea(String title) {
-        Area newArea = new Area(title, "", new HashMap<>(),
-                currentContext, areaRepository,
-                UUID.randomUUID());
+        Area newArea = new Area(title,
+                currentContext, areaRepository);
         areaRepository.create(newArea);
         return newArea;
     }

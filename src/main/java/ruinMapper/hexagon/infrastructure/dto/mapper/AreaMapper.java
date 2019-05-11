@@ -1,12 +1,11 @@
 package ruinMapper.hexagon.infrastructure.dto.mapper;
 
 import ruinMapper.hexagon.domain.area.Area;
+import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.context.ContextPort;
+import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
+import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
-import ruinMapper.hexagon.infrastructure.AreaRepository;
-import ruinMapper.hexagon.infrastructure.ContextRepository;
-import ruinMapper.hexagon.infrastructure.DtoMapper;
-import ruinMapper.hexagon.infrastructure.RoomRepository;
 import ruinMapper.hexagon.infrastructure.dto.AreaDto;
 
 import java.awt.*;
@@ -17,16 +16,16 @@ import java.util.UUID;
 public class AreaMapper implements
         DtoMapper<Area, AreaDto> {
 
-    private String currentContext;
-    private ContextRepository contextRepository;
-    private RoomRepository roomRepository;
-    private AreaRepository areaRepository;
 
-    public AreaMapper(String currentContext,
-                      ContextRepository contextRepository,
-                      RoomRepository roomRepository,
-                      AreaRepository areaRepository) {
-        this.currentContext = currentContext;
+    private CRUDRepositoryPort<Context> contextRepository;
+    private CRUDRepositoryPort<Room> roomRepository;
+    private CRUDRepositoryPort<Area> areaRepository;
+
+    public AreaMapper(
+            CRUDRepositoryPort<Context> contextRepository,
+            CRUDRepositoryPort<Room> roomRepository,
+            CRUDRepositoryPort<Area> areaRepository) {
+
 
         this.contextRepository = contextRepository;
         this.roomRepository = roomRepository;
@@ -47,6 +46,7 @@ public class AreaMapper implements
                 areaRepository);
         domain.setAreaID(UUID.fromString(dto.getAreaID()));
         domain.setAreaMap(roomMap);
+
         domain.setNotes(dto.getNotes());
 
         return domain;
