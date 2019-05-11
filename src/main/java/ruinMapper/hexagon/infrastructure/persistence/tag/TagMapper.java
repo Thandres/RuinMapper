@@ -11,6 +11,11 @@ public class TagMapper implements DtoMapper<Tag, TagDto> {
 
     private CRUDRepositoryPort<Context> contextRepository;
 
+    public TagMapper(
+            CRUDRepositoryPort<Context> contextRepository) {
+        this.contextRepository = contextRepository;
+    }
+
     @Override
     public Tag toDomain(TagDto dto,
                         CRUDRepositoryPort<Tag> repository) {

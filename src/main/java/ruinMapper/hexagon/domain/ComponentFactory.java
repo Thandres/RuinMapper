@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain.model;
+package ruinMapper.hexagon.domain;
 
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.area.AreaPort;
@@ -23,8 +23,6 @@ public class ComponentFactory implements
     private static CRUDRepositoryPort<Tag> tagRepository;
     private static CRUDRepositoryPort<Area> areaRepository;
     private static CRUDRepositoryPort<Context> contextRepository;
-
-
     private static ContextPort currentContext;
 
     public ComponentFactory(
@@ -86,8 +84,8 @@ public class ComponentFactory implements
 
     public static Context createContext(String name) {
         Context newContext = new Context(name,
-                contextRepository,
-                UUID.randomUUID());
+                contextRepository);
+        currentContext = newContext;
         contextRepository.create(newContext);
         return newContext;
     }
@@ -104,7 +102,7 @@ public class ComponentFactory implements
     @Override
     public ContextPort loadContextByName(String name) {
         Context loaded = contextRepository.read(name);
-
+        currentContext = loaded;
         return loaded;
     }
 }

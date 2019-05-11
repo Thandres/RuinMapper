@@ -16,10 +16,8 @@ public class RoomRepository extends
     private DtoMapper<Room, RoomDto> roomMapper;
     private Map<String, Room> loadedRooms;
 
-    public RoomRepository(String directoryPath,
-                          DtoMapper<Room, RoomDto> roomMapper) {
+    public RoomRepository(String directoryPath) {
         super(directoryPath);
-        this.roomMapper = roomMapper;
         loadedRooms = new HashMap<>();
     }
 
@@ -63,5 +61,10 @@ public class RoomRepository extends
             loadedRooms.remove(ID);
         }
         FileHelper.deleteFile(createFilelocation(ID));
+    }
+
+    public void setRoomMapper(
+            DtoMapper<Room, RoomDto> roomMapper) {
+        this.roomMapper = roomMapper;
     }
 }

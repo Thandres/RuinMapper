@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.domain.model;
+package ruinMapper.hexagon.domain;
 
 import ruinMapper.hexagon.domain.context.ContextPort;
 

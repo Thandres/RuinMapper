@@ -12,10 +12,9 @@ public class HintRepository extends
     private DtoMapper<Hint, HintDto> hintMapper;
 
     public HintRepository(
-            DtoMapper<Hint, HintDto> hintMapper,
             String directoryPath) {
         super(directoryPath);
-        this.hintMapper = hintMapper;
+
     }
 
     @Override
@@ -45,5 +44,10 @@ public class HintRepository extends
     @Override
     public void delete(String ID) {
         FileHelper.deleteFile(createFilelocation(ID));
+    }
+
+    public void setHintMapper(
+            DtoMapper<Hint, HintDto> hintMapper) {
+        this.hintMapper = hintMapper;
     }
 }

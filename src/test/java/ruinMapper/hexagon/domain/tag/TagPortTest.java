@@ -3,10 +3,10 @@ package ruinMapper.hexagon.domain.tag;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.repository.*;
+import ruinMapper.hexagon.domain.ComponentFactory;
+import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
-import ruinMapper.hexagon.domain.model.ComponentFactory;
-import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import static org.junit.Assert.assertEquals;

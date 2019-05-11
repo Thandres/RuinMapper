@@ -17,10 +17,9 @@ public class AreaRepository extends
     private Map<String, Area> loadedAreas;
 
     public AreaRepository(
-            DtoMapper<Area, AreaDto> areaMapper,
             String directoryPath) {
         super(directoryPath);
-        this.areaMapper = areaMapper;
+
         loadedAreas = new HashMap<>();
     }
 
@@ -63,4 +62,8 @@ public class AreaRepository extends
     }
 
 
+    public void setAreaMapper(
+            DtoMapper<Area, AreaDto> areaMapper) {
+        this.areaMapper = areaMapper;
+    }
 }

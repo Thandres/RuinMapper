@@ -14,12 +14,12 @@ public class QuestRepository extends
         CRUDRepositoryPort<Quest> {
 
     private DtoMapper<Quest, QuestDto> questMapper;
+
     private Map<String, Quest> loadedQuests;
 
-    public QuestRepository(String directoryPath,
-                           DtoMapper<Quest, QuestDto> questMapper) {
+    public QuestRepository(String directoryPath) {
         super(directoryPath);
-        this.questMapper = questMapper;
+
         loadedQuests = new HashMap<>();
     }
 
@@ -62,5 +62,10 @@ public class QuestRepository extends
             loadedQuests.remove(ID);
         }
         FileHelper.deleteFile(createFilelocation(ID));
+    }
+
+    public void setQuestMapper(
+            DtoMapper<Quest, QuestDto> questMapper) {
+        this.questMapper = questMapper;
     }
 }

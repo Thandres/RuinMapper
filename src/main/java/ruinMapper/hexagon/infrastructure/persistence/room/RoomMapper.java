@@ -27,6 +27,19 @@ public class RoomMapper implements
     private CRUDRepositoryPort<Quest> questRepository;
     private CRUDRepositoryPort<Tag> tagRepositroy;
 
+    public RoomMapper(
+            CRUDRepositoryPort<Context> contextRepository,
+            CRUDRepositoryPort<Area> areaRepository,
+            CRUDRepositoryPort<Hint> hintRepository,
+            CRUDRepositoryPort<Quest> questRepository,
+            CRUDRepositoryPort<Tag> tagRepositroy) {
+        this.contextRepository = contextRepository;
+        this.areaRepository = areaRepository;
+        this.hintRepository = hintRepository;
+        this.questRepository = questRepository;
+        this.tagRepositroy = tagRepositroy;
+    }
+
     @Override
     public Room toDomain(RoomDto dto,
                          CRUDRepositoryPort<Room> repository) {

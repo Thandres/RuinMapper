@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.tag;
 
+import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.context.ContextPort;
-import ruinMapper.hexagon.domain.model.ComponentSuper;
 import ruinMapper.hexagon.domain.model.ComponentType;
 import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;

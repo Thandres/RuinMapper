@@ -12,6 +12,11 @@ public class HintMapper implements
 
     private CRUDRepositoryPort<Room> roomRepository;
 
+    public HintMapper(
+            CRUDRepositoryPort<Room> roomRepository) {
+        this.roomRepository = roomRepository;
+    }
+
     @Override
     public Hint toDomain(HintDto dto,
                          CRUDRepositoryPort<Hint> repository) {

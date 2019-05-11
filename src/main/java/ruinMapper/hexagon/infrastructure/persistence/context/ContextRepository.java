@@ -13,11 +13,8 @@ public class ContextRepository extends
     private DtoMapper<Context, ContextDto> contextMapper;
     private Context currentContext;
 
-    public ContextRepository(
-            String directoryPath,
-            DtoMapper<Context, ContextDto> contextMapper) {
+    public ContextRepository(String directoryPath) {
         super(directoryPath);
-        this.contextMapper = contextMapper;
     }
 
     @Override
@@ -58,5 +55,10 @@ public class ContextRepository extends
             currentContext.setName("INVALID");
             FileHelper.deleteFile(createFilelocation(ID));
         }
+    }
+
+    public void setContextMapper(
+            DtoMapper<Context, ContextDto> contextMapper) {
+        this.contextMapper = contextMapper;
     }
 }

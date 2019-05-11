@@ -16,10 +16,8 @@ public class TagRepository extends
     private Map<String, Tag> loadedTags;
     private DtoMapper<Tag, TagDto> tagMapper;
 
-    public TagRepository(String directoryPath,
-                         DtoMapper<Tag, TagDto> tagMapper) {
+    public TagRepository(String directoryPath) {
         super(directoryPath);
-        this.tagMapper = tagMapper;
         loadedTags = new HashMap<>();
     }
 
@@ -61,5 +59,10 @@ public class TagRepository extends
             loadedTags.remove(ID);
         }
         FileHelper.deleteFile(createFilelocation(ID));
+    }
+
+    public void setTagMapper(
+            DtoMapper<Tag, TagDto> tagMapper) {
+        this.tagMapper = tagMapper;
     }
 }
