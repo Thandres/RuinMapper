@@ -4,19 +4,18 @@ import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 import ruinMapper.hexagon.infrastructure.persistence.FileHelper;
+import ruinMapper.hexagon.infrastructure.persistence.RepositoryAdapter;
 
-import java.nio.file.Paths;
-
-public class ContextRepositoryAdapter implements
+public class ContextRepository extends
+        RepositoryAdapter implements
         CRUDRepositoryPort<Context> {
 
-    private String directoryPath;
     private DtoMapper<Context, ContextDto> contextMapper;
 
-    public ContextRepositoryAdapter(
+    public ContextRepository(
             String directoryPath,
             DtoMapper<Context, ContextDto> contextMapper) {
-        this.directoryPath = directoryPath;
+        super(directoryPath);
         this.contextMapper = contextMapper;
     }
 
@@ -33,7 +32,7 @@ public class ContextRepositoryAdapter implements
         ContextDto areaDto = FileHelper
                 .readFromFile(createFilelocation(ID),
                         ContextDto.class);
-        return contextMapper.toDomain(areaDto);
+        return contextMapper.toDomain(areaDto, this);
     }
 
     @Override
@@ -47,10 +46,5 @@ public class ContextRepositoryAdapter implements
     @Override
     public void delete(String ID) {
         FileHelper.deleteFile(createFilelocation(ID));
-    }
-
-    private String createFilelocation(String itemID) {
-        return Paths.get(directoryPath, itemID + ".json")
-                .toString();
     }
 }

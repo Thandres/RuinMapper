@@ -18,21 +18,20 @@ public class ContextMapper implements
     private CRUDRepositoryPort<Area> areaRepository;
     private CRUDRepositoryPort<Tag> tagRepository;
     private CRUDRepositoryPort<Quest> questRepository;
-    private CRUDRepositoryPort<Context> contextRepository; //TODO solve cyclic dependency
+
 
     public ContextMapper(
             CRUDRepositoryPort<Area> areaRepository,
-            CRUDRepositoryPort<Tag> tagRepository,
-            CRUDRepositoryPort<Quest> questRepository) {
+            CRUDRepositoryPort<Tag> tagRepository) {
         this.areaRepository = areaRepository;
         this.tagRepository = tagRepository;
-        this.questRepository = questRepository;
     }
 
     @Override
-    public Context toDomain(ContextDto dto) {
+    public Context toDomain(ContextDto dto,
+                            CRUDRepositoryPort<Context> repository) {
         Context domain = new Context(dto.getName(),
-                contextRepository);
+                repository);
         Set<AreaPort> areas = toDomainSet(dto.getAreas(),
                 areaRepository);
         domain.setAreas(areas);

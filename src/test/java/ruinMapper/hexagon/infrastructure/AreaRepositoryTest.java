@@ -7,16 +7,16 @@ import ruinMapper.fixtures.repository.ContextRepoDummy;
 import ruinMapper.fixtures.repository.RoomRepoDummy;
 import ruinMapper.hexagon.domain.model.ContextSupplierPort;
 import ruinMapper.hexagon.infrastructure.persistence.area.AreaMapper;
-import ruinMapper.hexagon.infrastructure.persistence.area.AreaRepositoryAdapter;
+import ruinMapper.hexagon.infrastructure.persistence.area.AreaRepository;
 
-public class AreaRepositoryAdapterTest {
-    private AreaRepositoryAdapter repositoryToTest;
+public class AreaRepositoryTest {
+    private AreaRepository repositoryToTest;
 
     @Before
     public void setup() {
         ContextSupplierPort contextSupplierPort = LifecycleFixture
                 .implementationOne();
-        repositoryToTest = new AreaRepositoryAdapter(
+        repositoryToTest = new AreaRepository(
                 new AreaMapper("adsf",
                         new ContextRepoDummy(),
                         new RoomRepoDummy(),

@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.infrastructure.persistence;
+package ruinMapper.hexagon.infrastructure.persistence.hint;
 
 import ruinMapper.hexagon.domain.hint.HintStatus;
 
@@ -6,14 +6,15 @@ public class HintDto {
     private String content;
     private String notes;
     private HintStatus status;
-    private String hintId;
+    private String roomID;
+    private String hintID;
 
-    public String getHintId() {
-        return hintId;
+    public String getHintID() {
+        return hintID;
     }
 
-    public void setHintId(String hintId) {
-        this.hintId = hintId;
+    public void setHintID(String hintID) {
+        this.hintID = hintID;
     }
 
     public HintStatus getStatus() {
@@ -39,5 +40,13 @@ public class HintDto {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getRoomID() {
+        return roomID;
+    }
+
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
     }
 }

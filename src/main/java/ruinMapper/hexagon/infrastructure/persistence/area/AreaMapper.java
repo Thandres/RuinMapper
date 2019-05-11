@@ -19,19 +19,18 @@ public class AreaMapper implements
 
     private CRUDRepositoryPort<Context> contextRepository;
     private CRUDRepositoryPort<Room> roomRepository;
-    private CRUDRepositoryPort<Area> areaRepository;
+
 
     public AreaMapper(
             CRUDRepositoryPort<Context> contextRepository,
-            CRUDRepositoryPort<Room> roomRepository,
-            CRUDRepositoryPort<Area> areaRepository) {
+            CRUDRepositoryPort<Room> roomRepository) {
         this.contextRepository = contextRepository;
         this.roomRepository = roomRepository;
-        this.areaRepository = areaRepository;
     }
 
     @Override
-    public Area toDomain(AreaDto dto) {
+    public Area toDomain(AreaDto dto,
+                         CRUDRepositoryPort<Area> repository) {
         ContextPort contextPort = contextRepository
                 .read(dto.getContextID());
         Map<Point, RoomPort> roomMap = new HashMap<>();
@@ -41,7 +40,7 @@ public class AreaMapper implements
         }
 
         Area domain = new Area(dto.getTitle(), contextPort,
-                areaRepository);
+                repository);
         domain.setAreaID(UUID.fromString(dto.getAreaID()));
         domain.setAreaMap(roomMap);
 

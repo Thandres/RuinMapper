@@ -4,23 +4,22 @@ import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 import ruinMapper.hexagon.infrastructure.persistence.FileHelper;
+import ruinMapper.hexagon.infrastructure.persistence.RepositoryAdapter;
 
 import java.io.File;
-import java.nio.file.Paths;
 
-public class AreaRepositoryAdapter implements
+public class AreaRepository extends
+        RepositoryAdapter implements
         CRUDRepositoryPort<Area> {
 
-
     private DtoMapper<Area, AreaDto> areaMapper;
-    private String directoryPath;
 
-
-    public AreaRepositoryAdapter(
+    public AreaRepository(
             DtoMapper<Area, AreaDto> areaMapper,
             String directoryPath) {
+        super(directoryPath);
         this.areaMapper = areaMapper;
-        this.directoryPath = directoryPath;
+
     }
 
     @Override
@@ -37,7 +36,7 @@ public class AreaRepositoryAdapter implements
         AreaDto areaDto = FileHelper
                 .readFromFile(createFilelocation(ID),
                         AreaDto.class);
-        return areaMapper.toDomain(areaDto);
+        return areaMapper.toDomain(areaDto, this);
     }
 
     @Override
@@ -57,8 +56,5 @@ public class AreaRepositoryAdapter implements
         }
     }
 
-    private String createFilelocation(String itemID) {
-        return Paths.get(directoryPath, itemID + ".json")
-                .toString();
-    }
+
 }
