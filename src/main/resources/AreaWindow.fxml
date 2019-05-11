@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import ruinMapper.hexagon.application.AreaRow?>
+<?import ruinMapper.hexagon.application.SelectedRoomRow?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="ruinMapper.hexagon.application.AreaWindow">
@@ -11,14 +12,7 @@
             <VBox>
                 <AreaRow spacing="5">
                 </AreaRow>
-                <VBox fx:id="selectedRoom">
-                    <HBox prefHeight="50">
-                        <Label text="Roomname" fx:id="roomTitle"></Label>
-                        <ComboBox fx:id="validTagList"></ComboBox>
-                        <TabPane HBox.hgrow="ALWAYS">
-                            <Tab text="Tag1"></Tab>
-                        </TabPane>
-                    </HBox>
+                <SelectedRoomRow>
                     <HBox>
                         <TextArea fx:id="Notes" prefHeight="200"></TextArea>
                         <TabPane tabClosingPolicy="UNAVAILABLE" prefWidth="200" HBox.hgrow="ALWAYS">
@@ -34,7 +28,7 @@
                             </Tab>
                         </TabPane>
                     </HBox>
-                </VBox>
+                </SelectedRoomRow>
             </VBox>
 
         </Tab>
