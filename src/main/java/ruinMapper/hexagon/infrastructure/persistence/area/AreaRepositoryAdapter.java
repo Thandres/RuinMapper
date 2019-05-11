@@ -1,9 +1,9 @@
-package ruinMapper.hexagon.infrastructure;
+package ruinMapper.hexagon.infrastructure.persistence.area;
 
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
-import ruinMapper.hexagon.infrastructure.dto.AreaDto;
-import ruinMapper.hexagon.infrastructure.dto.mapper.AreaMapper;
+import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
+import ruinMapper.hexagon.infrastructure.persistence.FileHelper;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -12,12 +12,13 @@ public class AreaRepositoryAdapter implements
         CRUDRepositoryPort<Area> {
 
 
-    private AreaMapper areaMapper;
+    private DtoMapper<Area, AreaDto> areaMapper;
     private String directoryPath;
 
 
-    public AreaRepositoryAdapter(AreaMapper areaMapper,
-                                 String directoryPath) {
+    public AreaRepositoryAdapter(
+            DtoMapper<Area, AreaDto> areaMapper,
+            String directoryPath) {
         this.areaMapper = areaMapper;
         this.directoryPath = directoryPath;
     }
@@ -59,13 +60,5 @@ public class AreaRepositoryAdapter implements
     private String createFilelocation(String itemID) {
         return Paths.get(directoryPath, itemID + ".json")
                 .toString();
-    }
-
-    public String getDirectoryPath() {
-        return directoryPath;
-    }
-
-    public void setDirectoryPath(String directoryPath) {
-        this.directoryPath = directoryPath;
     }
 }

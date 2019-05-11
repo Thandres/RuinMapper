@@ -2,13 +2,12 @@ package ruinMapper.hexagon.infrastructure;
 
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.fixtures.domain.AreaFixture;
 import ruinMapper.fixtures.domain.LifecycleFixture;
 import ruinMapper.fixtures.repository.ContextRepoDummy;
 import ruinMapper.fixtures.repository.RoomRepoDummy;
-import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.model.ContextSupplierPort;
-import ruinMapper.hexagon.infrastructure.dto.mapper.AreaMapper;
+import ruinMapper.hexagon.infrastructure.persistence.area.AreaMapper;
+import ruinMapper.hexagon.infrastructure.persistence.area.AreaRepositoryAdapter;
 
 public class AreaRepositoryAdapterTest {
     private AreaRepositoryAdapter repositoryToTest;
@@ -27,8 +26,8 @@ public class AreaRepositoryAdapterTest {
 
     @Test
     public void create() {
-        Area area = AreaFixture.getFixture();
-        repositoryToTest.create(area);
+//        Area area = AreaFixture.getFixture();
+//        repositoryToTest.create(area);
 //        repositoryToTest.delete(area.toString());
     }
 

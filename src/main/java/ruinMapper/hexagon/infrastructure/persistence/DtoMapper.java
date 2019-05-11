@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.infrastructure.dto.mapper;
+package ruinMapper.hexagon.infrastructure.persistence;
 
 public interface DtoMapper<D, T> {
 

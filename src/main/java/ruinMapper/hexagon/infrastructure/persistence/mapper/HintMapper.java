@@ -1,7 +1,8 @@
-package ruinMapper.hexagon.infrastructure.dto.mapper;
+package ruinMapper.hexagon.infrastructure.persistence.mapper;
 
 import ruinMapper.hexagon.domain.hint.Hint;
-import ruinMapper.hexagon.infrastructure.dto.HintDto;
+import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
+import ruinMapper.hexagon.infrastructure.persistence.HintDto;
 
 public class HintMapper implements
         DtoMapper<Hint, HintDto> {

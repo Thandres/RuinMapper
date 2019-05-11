@@ -1,7 +1,8 @@
-package ruinMapper.hexagon.infrastructure.dto.mapper;
+package ruinMapper.hexagon.infrastructure.persistence.mapper;
 
 import ruinMapper.hexagon.domain.quest.Quest;
-import ruinMapper.hexagon.infrastructure.dto.QuestDto;
+import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
+import ruinMapper.hexagon.infrastructure.persistence.QuestDto;
 
 public class QuestMapper implements
         DtoMapper<Quest, QuestDto> {

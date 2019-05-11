@@ -1,7 +1,8 @@
-package ruinMapper.hexagon.infrastructure.dto.mapper;
+package ruinMapper.hexagon.infrastructure.persistence.mapper;
 
 import ruinMapper.hexagon.domain.room.Room;
-import ruinMapper.hexagon.infrastructure.dto.RoomDto;
+import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
+import ruinMapper.hexagon.infrastructure.persistence.RoomDto;
 
 public class RoomMapper implements
         DtoMapper<Room, RoomDto> {

@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.infrastructure.dto.mapper;
+package ruinMapper.hexagon.infrastructure.persistence.area;
 
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
@@ -6,7 +6,7 @@ import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
-import ruinMapper.hexagon.infrastructure.dto.AreaDto;
+import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -25,8 +25,6 @@ public class AreaMapper implements
             CRUDRepositoryPort<Context> contextRepository,
             CRUDRepositoryPort<Room> roomRepository,
             CRUDRepositoryPort<Area> areaRepository) {
-
-
         this.contextRepository = contextRepository;
         this.roomRepository = roomRepository;
         this.areaRepository = areaRepository;

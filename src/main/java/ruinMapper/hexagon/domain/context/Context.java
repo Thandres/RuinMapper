@@ -9,7 +9,6 @@ import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Context extends ComponentSuper implements
@@ -21,19 +20,18 @@ public class Context extends ComponentSuper implements
     private Set<TagPort> validTags;
     private Set<QuestPort> quests;
     private CRUDRepositoryPort<Context> contextRepository;
-    private UUID contextID;
+
 
     public Context(
             String name,
-            CRUDRepositoryPort<Context> contextRepository,
-            UUID contextID) {
+            CRUDRepositoryPort<Context> contextRepository) {
         this.name = name;
         areas = new HashSet<>();
         validTags = new HashSet<>();
         quests = new HashSet<>();
 
         this.contextRepository = contextRepository;
-        this.contextID = contextID;
+
 
         createArea("New Area");
     }
@@ -160,7 +158,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public String toString() {
-        return contextID.toString();
+        return name;
     }
 
     public String getName() {
@@ -196,13 +194,5 @@ public class Context extends ComponentSuper implements
     public void setQuests(
             Set<QuestPort> quests) {
         this.quests = quests;
-    }
-
-    public UUID getContextID() {
-        return contextID;
-    }
-
-    public void setContextID(UUID contextID) {
-        this.contextID = contextID;
     }
 }

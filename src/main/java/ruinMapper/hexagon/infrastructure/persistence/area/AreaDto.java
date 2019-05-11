@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.infrastructure.dto;
+package ruinMapper.hexagon.infrastructure.persistence.area;
 
 import java.awt.*;
 import java.util.Map;

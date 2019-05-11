@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.infrastructure;
+package ruinMapper.hexagon.infrastructure.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,5 +29,19 @@ public class FileHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void deleteFile(String pathToFile) {
+        File fileToDelete = new File(
+                pathToFile);
+        try {
+            if (fileToDelete.delete()) {
+                // Everything OK
+            } else {
+                throw new IOException();
+            }
+        } catch (IOException e) {//TODO errorhandling
+            e.printStackTrace();
+        }
     }
 }
