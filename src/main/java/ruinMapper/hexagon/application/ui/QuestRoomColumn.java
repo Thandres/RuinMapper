@@ -1,30 +1,30 @@
 package ruinMapper.hexagon.application.ui;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Accordion;
 import javafx.scene.layout.VBox;
+import ruinMapper.hexagon.domain.room.RoomPort;
 
 import java.io.IOException;
+import java.util.List;
 
-public class QuestView extends VBox {
+public class QuestRoomColumn extends VBox {
 
-    @FXML
-    Accordion questAccordion;
+    private List<RoomPort> rooms;
 
-    public QuestView() {
+    public QuestRoomColumn() {
+        // hooking up custom component to FXML
         FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("QuestView.fxml"));
+                getClass().getResource(
+                        "QuestRoomColumn.fxml"));
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         try {
             fxmlLoader.load();
-            questAccordion.getPanes()
-                    .add(new QuestTitledPane("Questtitle"));
+            this.getChildren().add(new RoomRow());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 }

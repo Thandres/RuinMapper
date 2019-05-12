@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TitledPane?>
+<fx:root type="javafx.scene.control.TitledPane"
+         xmlns:fx="http://javafx.com/fxml">
+
+</fx:root>

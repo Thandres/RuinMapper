@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml">
-    <Button text="asdf"></Button>
-    <Button text="asdf"></Button>
-    <Button text="asdf"></Button>
+         xmlns:fx="http://javafx.com/fxml" spacing="5">
+    <HBox spacing="5">
+        <Button text="New Quest"></Button>
+    </HBox>
+    <Accordion fx:id="questAccordion">
+    </Accordion>
 </fx:root>
