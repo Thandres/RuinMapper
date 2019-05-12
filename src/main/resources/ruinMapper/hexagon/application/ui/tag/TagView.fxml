@@ -6,17 +6,20 @@
          xmlns:fx="http://javafx.com/fxml/1">
     <VBox fx:id="roomTags">
         <HBox>
-            <Label text="Create new Roomtag:"/>
+            <Label text="Create new roomtag:"/>
             <TextField promptText="i.e: Shop" fx:id="newTagField"></TextField>
             <Button fx:id="createRoomTagBtn" text="Create"></Button>
+            <Button fx:id="deleteRoomTagBtn" text="Delete" disable="true"></Button>
         </HBox>
         <ListView fx:id="validTags"></ListView>
     </VBox>
     <VBox fx:id="hintTags">
         <HBox>
-            <Label text="Create new Roomtag:"/>
+            <Label text="Create new keyword:"/>
             <TextField promptText="i.e: Shop" fx:id="newKeywordField"></TextField>
             <Button fx:id="createKeywordBtn" text="Create"></Button>
+            <Button fx:id="deleteKeywordBtn" text="Delete" disable="true"></Button>
+
         </HBox>
         <ListView fx:id="keywords"></ListView>
     </VBox>
