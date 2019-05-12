@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import ruinMapper.hexagon.application.ui.QuestRoomColumn?>
+<?import ruinMapper.hexagon.application.ui.quest.QuestRoomColumn?>
 <fx:root spacing="5" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.172-ea"
          xmlns:fx="http://javafx.com/fxml/1">
 

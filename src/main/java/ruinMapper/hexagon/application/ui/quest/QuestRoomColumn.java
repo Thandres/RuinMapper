@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.application.ui;
+package ruinMapper.hexagon.application.ui.quest;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;

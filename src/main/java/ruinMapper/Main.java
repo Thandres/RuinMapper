@@ -1,6 +1,6 @@
 package ruinMapper;
 
-import ruinMapper.hexagon.application.MainView;
+import ruinMapper.hexagon.application.ui.ContextView;
 
 public class Main {
 
@@ -8,7 +8,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        MainView ui = new MainView();
+        ContextView ui = new ContextView();
         ui.loadUI(args);
     }
 }

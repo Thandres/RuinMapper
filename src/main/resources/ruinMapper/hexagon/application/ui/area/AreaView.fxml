@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import ruinMapper.hexagon.application.ui.area.AreaRow?>
+<?import ruinMapper.hexagon.application.ui.area.SelectedRoomRow?>
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml">
+    <AreaRow spacing="5">
+    </AreaRow>
+    <SelectedRoomRow>
+    </SelectedRoomRow>
+</fx:root>

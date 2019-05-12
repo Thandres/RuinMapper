@@ -1,29 +1,30 @@
-package ruinMapper.hexagon.domain;
+package ruinMapper.hexagon.application;
 
+import ruinMapper.hexagon.domain.ComponentFactory;
+import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.infrastructure.persistence.RepositoryFactory;
 
 import static ruinMapper.hexagon.domain.ComponentFactory.createContext;
 
-public class ContextSupplier implements
-        ContextSupplierPort {
+public class DomainAdapter {
 
     private String workingDirectoryPath;
     private ContextSupplierPort factory;
 
-    public ContextSupplier(
+    public DomainAdapter(
             String workingDirectoryPath) {
         this.workingDirectoryPath = workingDirectoryPath;
     }
 
-    @Override
+
     public ContextPort createNewContext(String name) {
         preparePersistence(name);
         return createContext(name);
 
     }
 
-    @Override
+
     public ContextPort loadContextByName(String name) {
         preparePersistence(name);
         return factory.loadContextByName(name);

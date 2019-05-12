@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import ruinMapper.hexagon.application.ui.area.AreaGrid?>
+<fx:root type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.172-ea"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <VBox spacing="5">
+        <HBox spacing="5">
+            <Label text="Areaname" HBox.hgrow="ALWAYS"/>
+            <ChoiceBox fx:id="areaList"/>
+            <Button fx:id="createAreaBtn" text="New Area"/>
+        </HBox>
+        <AreaGrid/>
+    </VBox>
+    <VBox spacing="5">
+        <Label alignment="TOP_CENTER" text="Options:"/>
+        <Button fx:id="createRoomBtn" prefWidth="100" text="New Room"/>
+        <Button fx:id="deleteRoomBtn" prefWidth="100" text="Delete Room"/>
+    </VBox>
+    <VBox spacing="5">
+        <Label alignment="TOP_CENTER" text="Notes of the Area:"/>
+        <TextArea fx:id="notes" prefHeight="250" prefWidth="250"/>
+    </VBox>
+</fx:root>

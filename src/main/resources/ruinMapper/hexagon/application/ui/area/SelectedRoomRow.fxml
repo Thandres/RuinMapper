@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml">
+    <HBox spacing="5" prefHeight="50">
+        <Label text="Roomname"></Label>
+        <ChoiceBox fx:id="validTags"></ChoiceBox>
+        <TabPane fx:id="roomTags" HBox.hgrow="ALWAYS">
+            <Tab text="tag1"></Tab>
+        </TabPane>
+    </HBox>
+    <HBox>
+        <TextArea fx:id="notes" prefHeight="200"></TextArea>
+        <TabPane tabClosingPolicy="UNAVAILABLE" prefWidth="200" HBox.hgrow="ALWAYS">
+            <Tab text="Hints">
+                <VBox fx:id="hints">
+                    <Label text="hint1"></Label>
+                </VBox>
+            </Tab>
+            <Tab text="Quests">
+                <VBox fx:id="quests">
+                    <Label text="Quest1"></Label>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </HBox>
+
+</fx:root>

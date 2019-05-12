@@ -1,15 +1,18 @@
-package ruinMapper.hexagon.application.ui;
+package ruinMapper.hexagon.application.ui.area;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
-public class RoomRow extends HBox {
-    public RoomRow() {
+public class AreaRow extends HBox {
+
+
+    public AreaRow() {
         // hooking up custom component to FXML
         FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("RoomRow.fxml"));
+                getClass().getResource(
+                        "AreaRow.fxml"));
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);

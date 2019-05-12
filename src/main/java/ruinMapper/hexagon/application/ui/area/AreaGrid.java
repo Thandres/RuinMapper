@@ -1,4 +1,4 @@
-package ruinMapper.hexagon.application;
+package ruinMapper.hexagon.application.ui.area;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
