@@ -105,7 +105,7 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public TagPort createKeyWordTag(String keyword) {
+    public TagPort createKeyword(String keyword) {
         TagPort keyTag = ComponentFactory
                 .createTag(keyword);
         keywords.add(keyTag);
@@ -114,7 +114,7 @@ public class Context extends ComponentSuper implements
     }
 
     @Override
-    public void deleteKeyWordTag(TagPort keywordToDelete) {
+    public void deleteKeyword(TagPort keywordToDelete) {
         deleteValidTag(keywordToDelete);
     }
 

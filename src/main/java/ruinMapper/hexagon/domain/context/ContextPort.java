@@ -83,7 +83,7 @@ public interface ContextPort {
      * @param keyword name of the Keyword
      * @return The created Keyword
      */
-    public TagPort createKeyWordTag(String keyword);
+    public TagPort createKeyword(String keyword);
 
     /**
      * Deletes the Keyword from the Context.
@@ -91,7 +91,7 @@ public interface ContextPort {
      *
      * @param keywordToDelete
      */
-    public void deleteKeyWordTag(TagPort keywordToDelete);
+    public void deleteKeyword(TagPort keywordToDelete);
 
     /**
      * Returns all Keywords in the Context

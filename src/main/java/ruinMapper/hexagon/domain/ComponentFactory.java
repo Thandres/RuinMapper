@@ -53,8 +53,8 @@ public class ComponentFactory implements
     public static Hint createHint(String content,
                                   RoomPort room) {
         Hint newHint = new Hint(content,
-                room,
-                hintRepository);
+                room, currentContext,
+                hintRepository, UUID.randomUUID());
         hintRepository.create(newHint);
         return newHint;
     }

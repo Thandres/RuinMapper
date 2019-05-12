@@ -174,4 +174,35 @@ public class ContextPortTest {
         assertTrue(contextToTest.accessValidTags()
                 .isEmpty());
     }
+
+    @Test
+    public void createKeyword() {
+        TagPort keyword = contextToTest
+                .createKeyword("K1");
+
+        assertTrue(contextToTest.accessEveryKeyWord()
+                .contains(keyword));
+    }
+
+    @Test
+    public void deleteKeyWord() {
+        TagPort keywordToDelete = contextToTest
+                .createKeyword("K1");
+        HintPort taggedHint = contextToTest.createArea("A1")
+                .createRoom(0, 2).createHint("H1");
+        taggedHint.addKeyWord(keywordToDelete);
+
+        contextToTest.deleteKeyword(keywordToDelete);
+
+        assertFalse(contextToTest.accessEveryKeyWord()
+                .contains(keywordToDelete));
+        assertFalse(taggedHint.accessKeyWords()
+                .contains(keywordToDelete));
+    }
+
+    @Test
+    public void accessKeywords() {
+        assertNotNull(contextToTest.accessEveryKeyWord());
+    }
+
 }

@@ -7,6 +7,7 @@ import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.tag.TagPort;
 
 import static org.junit.Assert.*;
 
@@ -95,5 +96,36 @@ public class HintPortTest {
         hintToTest.setHintStatus(HintStatus.HUNCH);
         assertEquals(HintStatus.HUNCH,
                 hintToTest.getHintStatus());
+    }
+
+    @Test
+    public void addKeyword() {
+        TagPort validKeyword = context.createKeyword("K1");
+        TagPort invalidKeyword = context
+                .createValidTag("T1");
+
+        hintToTest.addKeyWord(validKeyword);
+        hintToTest.addKeyWord(invalidKeyword);
+
+        assertTrue(hintToTest.accessKeyWords()
+                .contains(validKeyword));
+        assertFalse(hintToTest.accessKeyWords()
+                .contains(invalidKeyword));
+    }
+
+    @Test
+    public void removeKeyword() {
+        TagPort validKeyword = context.createKeyword("K1");
+        hintToTest.addKeyWord(validKeyword);
+
+        hintToTest.removeKeyWord(validKeyword);
+
+        assertFalse(hintToTest.accessKeyWords()
+                .contains(validKeyword));
+    }
+
+    @Test
+    public void accessKeywords() {
+        assertNotNull(hintToTest.accessKeyWords());
     }
 }
