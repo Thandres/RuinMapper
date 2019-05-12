@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import ruinMapper.hexagon.application.ui.area.AreaView;
 import ruinMapper.hexagon.application.ui.hint.HintView;
 import ruinMapper.hexagon.application.ui.quest.QuestView;
+import ruinMapper.hexagon.application.ui.tag.TagView;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 
@@ -64,8 +65,9 @@ public class ContextView extends Application {
         areaTab = new Tab("Areas", new AreaView());
         hintTab = new Tab("Hints", new HintView());
         questTab = new Tab("Quests", new QuestView());
-        //TODO tagView
-        tabs.getTabs().addAll(areaTab, hintTab, questTab);
+        tagTab = new Tab("Tags", new TagView());
+        tabs.getTabs()
+                .addAll(areaTab, hintTab, questTab, tagTab);
         tabs.setVisible(true);
 
     }

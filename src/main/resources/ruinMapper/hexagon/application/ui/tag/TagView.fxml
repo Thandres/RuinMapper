@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.172-ea"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <VBox fx:id="roomTags">
+        <HBox>
+            <Label text="Create new Roomtag:"/>
+            <TextField promptText="i.e: Shop" fx:id="newTagField"></TextField>
+            <Button fx:id="createRoomTagBtn" text="Create"></Button>
+        </HBox>
+        <ListView fx:id="validTags"></ListView>
+    </VBox>
+    <VBox fx:id="hintTags">
+        <HBox>
+            <Label text="Create new Roomtag:"/>
+            <TextField promptText="i.e: Shop" fx:id="newKeywordField"></TextField>
+            <Button fx:id="createKeywordBtn" text="Create"></Button>
+        </HBox>
+        <ListView fx:id="keywords"></ListView>
+    </VBox>
+</fx:root>
