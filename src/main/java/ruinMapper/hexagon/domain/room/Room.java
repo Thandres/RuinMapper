@@ -5,10 +5,6 @@ import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.model.ComponentType;
-import ruinMapper.hexagon.domain.model.HasHint;
-import ruinMapper.hexagon.domain.model.HasQuest;
-import ruinMapper.hexagon.domain.model.HasTag;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
@@ -20,8 +16,7 @@ import java.util.UUID;
 
 public class
 Room extends ComponentSuper implements
-        RoomPort, HasQuest, HasTag,
-        HasHint {
+        RoomPort {
     private String title;
     private String notes;
     private Point coordinates;
@@ -158,12 +153,6 @@ Room extends ComponentSuper implements
     @Override
     public void saveState() {
         roomRepository.update(this);
-    }
-
-
-    @Override
-    public ComponentType getType() {
-        return ComponentType.ROOM;
     }
 
     @Override
