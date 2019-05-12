@@ -71,7 +71,6 @@ public class ComponentFactory implements
         Area newArea = new Area(title,
                 currentContext, areaRepository);
         areaRepository.create(newArea);
-        createRoom(0, 0);
         return newArea;
     }
 
