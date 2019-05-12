@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import ruinMapper.hexagon.application.ui.hint.HintTable?>
+<fx:root type="javafx.scene.layout.VBox"
+         xmlns:fx="http://javafx.com/fxml">
+    <HBox prefHeight="50">
+        <Label text="Filter"></Label>
+        <ChoiceBox fx:id="keywordFilter">
+        </ChoiceBox>
+        <TabPane fx:id="activeFilter">
+        </TabPane>
+    </HBox>
+    <HintTable fx:id="hintTable"></HintTable>
+</fx:root>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableView?>
+<fx:root type="javafx.scene.control.TableView" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml">
+
+</fx:root>
