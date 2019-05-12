@@ -36,7 +36,7 @@ public class MainView extends Application {
         try {
             Parent newRoot = FXMLLoader.load(getClass()
                     .getResource(
-                            "..\\..\\..\\AreaWindow.fxml"));
+                            "AreaWindow.fxml"));
             mainWindow.getChildren().add(newRoot);
             mainWindow.getChildren().remove(startupOptions);
         } catch (IOException e) {
@@ -48,7 +48,7 @@ public class MainView extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader
                 .load(getClass().getResource(
-                        "..\\..\\..\\MainView.fxml"));
+                        "MainView.fxml"));
         primaryStage.setTitle("RuinMapper");
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();

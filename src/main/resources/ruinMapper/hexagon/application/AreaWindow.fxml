@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import ruinMapper.hexagon.application.AreaRow?>
 <?import ruinMapper.hexagon.application.SelectedRoomRow?>
+<?import ruinMapper.hexagon.application.ui.QuestView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="ruinMapper.hexagon.application.AreaWindow">
@@ -33,7 +34,7 @@
 
         </Tab>
         <Tab text="Quests">
-            <VBox fx:id="questList"></VBox>
+            <QuestView></QuestView>
         </Tab>
         <Tab text="Hints">
             <VBox fx:id="hintList"></VBox>
