@@ -1,34 +1,42 @@
 package ruinMapper.hexagon.domain.hint;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
-import ruinMapper.hexagon.domain.model.ComponentType;
-import ruinMapper.hexagon.domain.model.HasRoom;
+import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.tag.TagPort;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class Hint extends ComponentSuper implements
-        HintPort, HasRoom {
+        HintPort {
 
     private String content;
     private String notes;
     private RoomPort room;
+    private Set<TagPort> keywords;
     private HintStatus status;
+    private ContextPort context;
     private CRUDRepositoryPort<Hint> hintRepository;
     private UUID hintID;
 
 
     public Hint(String content, RoomPort room,
-                CRUDRepositoryPort<Hint> hintRepository) {
-
+                ContextPort context,
+                CRUDRepositoryPort<Hint> hintRepository,
+                UUID hintID) {
+        // Injected
         this.content = content;
-        this.notes = "";
+        this.context = context;
         this.room = room;
-
-        this.status = HintStatus.NO_IDEA;
         this.hintRepository = hintRepository;
-        this.hintID = UUID.randomUUID();
+        this.hintID = hintID;
+        // Self
+        this.notes = "";
+        this.keywords = new HashSet<>();
+        this.status = HintStatus.NO_IDEA;
     }
 
     @Override
@@ -59,14 +67,35 @@ public class Hint extends ComponentSuper implements
     }
 
     @Override
+    public void addKeyWord(TagPort keyword) {
+        if (context.accessEveryKeyWord()
+                .contains(keyword)) {
+            keywords.add(keyword);
+            saveState();
+        }
+    }
+
+    @Override
+    public void removeKeyWord(TagPort keywordToRemove) {
+        if (keywords.remove(keywordToRemove)) {
+            saveState();
+        }
+    }
+
+    @Override
+    public Set<TagPort> accessKeyWords() {
+        return new HashSet<>(keywords);
+    }
+
+    @Override
     public void deleteHint() {
         if (room != null) {
             RoomPort roomToDelete = room;
             room = null;
             roomToDelete.deleteHint(this);
+            keywords.clear();
             hintRepository.delete(hintID.toString());
         }
-
     }
 
     @Override
@@ -86,21 +115,8 @@ public class Hint extends ComponentSuper implements
     }
 
     @Override
-    public ComponentType getType() {
-        return ComponentType.HINT;
-    }
-
-    @Override
     public String toString() {
         return hintID.toString();
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getNotes() {
@@ -119,20 +135,26 @@ public class Hint extends ComponentSuper implements
         this.room = room;
     }
 
-    public HintStatus getStatus() {
-        return status;
-    }
-
     public void setStatus(
             HintStatus status) {
         this.status = status;
     }
 
-    public UUID getHintID() {
-        return hintID;
+    public Set<TagPort> getKeywords() {
+        return keywords;
     }
 
-    public void setHintID(UUID hintID) {
-        this.hintID = hintID;
+    public void setKeywords(
+            Set<TagPort> keywords) {
+        this.keywords = keywords;
+    }
+
+    public ContextPort getContext() {
+        return context;
+    }
+
+    public void setContext(
+            ContextPort context) {
+        this.context = context;
     }
 }

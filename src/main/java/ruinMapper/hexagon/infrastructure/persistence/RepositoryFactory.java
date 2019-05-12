@@ -59,7 +59,8 @@ public class RepositoryFactory {
                 tagRepository, questRepository);
         contextRepository.setContextMapper(contextMapper);
 
-        hintMapper = new HintMapper(roomRepository);
+        hintMapper = new HintMapper(roomRepository,
+                contextRepository, tagRepository);
         hintRepository.setHintMapper(hintMapper);
 
         roomMapper = new RoomMapper(contextRepository,

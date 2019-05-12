@@ -4,8 +4,6 @@ import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
-import ruinMapper.hexagon.domain.model.ComponentType;
-import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -13,7 +11,7 @@ import java.awt.*;
 import java.util.*;
 
 public class Area extends ComponentSuper implements
-        AreaPort, HasRoom {
+        AreaPort {
     private String title;
     private String notes;
     private Map<Point, RoomPort> areaMap;
@@ -127,10 +125,6 @@ public class Area extends ComponentSuper implements
         return areaID.toString();
     }
 
-    @Override
-    public ComponentType getType() {
-        return ComponentType.AREA;
-    }
 
     public String getTitle() {
         return title;

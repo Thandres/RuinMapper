@@ -2,15 +2,12 @@ package ruinMapper.hexagon.domain.tag;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.context.ContextPort;
-import ruinMapper.hexagon.domain.model.ComponentType;
-import ruinMapper.hexagon.domain.model.HasRoom;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
 import java.util.UUID;
 
 //TODO Validation
-public class Tag extends ComponentSuper implements TagPort,
-        HasRoom {
+public class Tag extends ComponentSuper implements TagPort {
     private String tagType;
     private CRUDRepositoryPort<Tag> tagRepository;
     private ContextPort context;
@@ -57,11 +54,6 @@ public class Tag extends ComponentSuper implements TagPort,
     @Override
     public String toString() {
         return tagID.toString();
-    }
-
-    @Override
-    public ComponentType getType() {
-        return ComponentType.TAG;
     }
 
     public String getTagType() {

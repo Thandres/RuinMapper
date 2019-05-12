@@ -1,6 +1,9 @@
 package ruinMapper.hexagon.domain.hint;
 
 import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.tag.TagPort;
+
+import java.util.Set;
 
 /**
  * Hints are exactly that: Hints that are found in Rooms
@@ -46,6 +49,28 @@ public interface HintPort {
     public RoomPort accessRoom();
 
     /**
+     * Tags the Hint with the specified Keyword.
+     * Only Keywords defined in the Context are allowed
+     *
+     * @param keyword Keyword to tag with
+     */
+    public void addKeyWord(TagPort keyword);
+
+    /**
+     * Removes the Keyword from this Hint
+     *
+     * @param keywordToRemove
+     */
+    public void removeKeyWord(TagPort keywordToRemove);
+
+    /**
+     * Returns all Keywords the Hint ahs been tagged with
+     *
+     * @return The Hints Keywords.
+     */
+    public Set<TagPort> accessKeyWords();
+
+    /**
      * Deletes the Hint from the Context.
      * The Hint is also removed from its assigned Room.
      */
@@ -53,6 +78,7 @@ public interface HintPort {
 
     /**
      * Returns the current Status of the Hint for easier categorization of Hints
+     *
      * @return Current HintStatus
      */
     public HintStatus getHintStatus();

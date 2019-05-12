@@ -48,6 +48,9 @@ public class ContextMapper implements
                 tagRepository);
         domain.setValidTags(tags);
 
+        Set<TagPort> keywords = toDomainSet(
+                dto.getKeywords(), tagRepository);
+        domain.setKeywords(keywords);
         return domain;
     }
 
@@ -60,6 +63,8 @@ public class ContextMapper implements
                 .setQuests(toStringSet(domain.getQuests()));
         contextDto.setValidTags(
                 toStringSet(domain.getValidTags()));
+        contextDto.setKeywords(
+                toStringSet(domain.getKeywords()));
         return contextDto;
     }
 }
