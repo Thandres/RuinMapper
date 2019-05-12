@@ -7,6 +7,8 @@ public class ContextDto {
     private Set<String> areas;
     private Set<String> validTags;
     private Set<String> quests;
+    private Set<String> keywords;
+
 
     public String getName() {
         return name;
@@ -39,5 +41,13 @@ public class ContextDto {
 
     public void setQuests(Set<String> quests) {
         this.quests = quests;
+    }
+
+    public Set<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(Set<String> keywords) {
+        this.keywords = keywords;
     }
 }

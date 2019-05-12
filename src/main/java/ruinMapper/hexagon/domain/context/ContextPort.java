@@ -77,6 +77,30 @@ public interface ContextPort {
     public Set<TagPort> accessValidTags();
 
     /**
+     * Creates a new Keyword in the Context and returns it for convenience.
+     * Hints can only be tagged by Keywords
+     *
+     * @param keyword name of the Keyword
+     * @return The created Keyword
+     */
+    public TagPort createKeyWordTag(String keyword);
+
+    /**
+     * Deletes the Keyword from the Context.
+     * Removes the Keyword from all Hints that were tagged by it
+     *
+     * @param keywordToDelete
+     */
+    public void deleteKeyWordTag(TagPort keywordToDelete);
+
+    /**
+     * Returns all Keywords in the Context
+     *
+     * @return All Keywords
+     */
+    public Set<TagPort> accessEveryKeyWord();
+
+    /**
      * Creates a new Quest in with the specified title in the Context and returns it for convenience.
      *
      * @param title Title of the new Quest

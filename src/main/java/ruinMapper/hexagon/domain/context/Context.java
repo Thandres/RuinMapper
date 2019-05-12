@@ -19,6 +19,7 @@ public class Context extends ComponentSuper implements
     private Set<AreaPort> areas;
     private Set<TagPort> validTags;
     private Set<QuestPort> quests;
+    private Set<TagPort> keywords;
     private CRUDRepositoryPort<Context> contextRepository;
 
 
@@ -29,7 +30,7 @@ public class Context extends ComponentSuper implements
         areas = new HashSet<>();
         validTags = new HashSet<>();
         quests = new HashSet<>();
-
+        keywords = new HashSet<>();
         this.contextRepository = contextRepository;
 
 
@@ -90,12 +91,36 @@ public class Context extends ComponentSuper implements
                                             tagToDelete)));
             tagToDelete.deleteTag();
             saveState();
+        } else if (keywords.remove(tagToDelete)) {
+            Set<HintPort> allHints = accessEveryHint();
+            allHints.forEach(hintPort -> hintPort
+                    .removeKeyWord(tagToDelete));
+            saveState();
         }
     }
 
     @Override
     public Set<TagPort> accessValidTags() {
         return new HashSet<>(validTags);
+    }
+
+    @Override
+    public TagPort createKeyWordTag(String keyword) {
+        TagPort keyTag = ComponentFactory
+                .createTag(keyword);
+        keywords.add(keyTag);
+        saveState();
+        return keyTag;
+    }
+
+    @Override
+    public void deleteKeyWordTag(TagPort keywordToDelete) {
+        deleteValidTag(keywordToDelete);
+    }
+
+    @Override
+    public Set<TagPort> accessEveryKeyWord() {
+        return new HashSet<>(keywords);
     }
 
     @Override
@@ -188,5 +213,14 @@ public class Context extends ComponentSuper implements
     public void setQuests(
             Set<QuestPort> quests) {
         this.quests = quests;
+    }
+
+    public Set<TagPort> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(
+            Set<TagPort> keywords) {
+        this.keywords = keywords;
     }
 }
