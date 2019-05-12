@@ -71,6 +71,7 @@ public class ComponentFactory implements
         Area newArea = new Area(title,
                 currentContext, areaRepository);
         areaRepository.create(newArea);
+        createRoom(0, 0);
         return newArea;
     }
 
@@ -86,6 +87,8 @@ public class ComponentFactory implements
         Context newContext = new Context(name,
                 contextRepository);
         currentContext = newContext;
+        // only create the area after the factory produced the context
+        createArea("New Area");
         contextRepository.create(newContext);
         return newContext;
     }

@@ -33,8 +33,6 @@ public class Context extends ComponentSuper implements
         keywords = new HashSet<>();
         this.contextRepository = contextRepository;
 
-
-        createArea("New Area");
     }
 
     @Override

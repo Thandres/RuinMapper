@@ -5,7 +5,6 @@ import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.infrastructure.persistence.RepositoryFactory;
 
-import static ruinMapper.hexagon.domain.ComponentFactory.createContext;
 
 public class DomainAdapter {
 
@@ -20,7 +19,7 @@ public class DomainAdapter {
 
     public ContextPort createNewContext(String name) {
         preparePersistence(name);
-        return createContext(name);
+        return factory.createNewContext(name);
 
     }
 
@@ -32,7 +31,7 @@ public class DomainAdapter {
 
     private void preparePersistence(String contextName) {
         RepositoryFactory.prepareRepositories(
-                workingDirectoryPath + contextName);
+                workingDirectoryPath);
         factory = new ComponentFactory(
                 RepositoryFactory.getQuestRepository(),
                 RepositoryFactory.getRoomRepository(),

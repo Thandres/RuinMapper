@@ -12,11 +12,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import ruinMapper.hexagon.application.DomainAdapter;
 import ruinMapper.hexagon.application.ui.area.AreaView;
 import ruinMapper.hexagon.application.ui.hint.HintView;
 import ruinMapper.hexagon.application.ui.quest.QuestView;
 import ruinMapper.hexagon.application.ui.tag.TagView;
-import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 
 
@@ -42,15 +42,17 @@ public class ContextView extends Application {
 
     private ContextPort context;
 
-    private ContextSupplierPort contextSupplierPort;
+    private DomainAdapter domainAdapter;
 
     public void loadMap(MouseEvent mouseEvent) {
         DirectoryChooser fileChooser = new DirectoryChooser();
         Stage window = new Stage();
 
 //        File file = fileChooser.showDialog(window);
-//        ContextSupplierPort contextSupplierPort = new DomainAdapter(file.getAbsolutePath());
-        //contextSupplierPort.createNewContext(file.getName());
+//        domainAdapter = new DomainAdapter(
+//                file.getAbsolutePath());
+//        domainAdapter
+//                .createNewContext(file.getName());
 
         if (mainWindow.getChildren()
                 .contains(startupOptions)) {
@@ -58,14 +60,15 @@ public class ContextView extends Application {
         } else {
             // cleanup of other context without too much fuss
             tabs.getTabs()
-                    .removeAll(areaTab, hintTab, questTab);
+                    .removeAll(areaTab, hintTab, questTab,
+                            tagTab);
         }
         // create new Tabs instead of setting content on predefined Tabs because the first
         // Visible Tab wouldnt have any content before changing the active Tab to another
         areaTab = new Tab("Areas", new AreaView());
         hintTab = new Tab("Hints", new HintView());
         questTab = new Tab("Quests", new QuestView());
-        tagTab = new Tab("Tags", new TagView());
+        tagTab = new Tab("Tags", new TagView(context));
         tabs.getTabs()
                 .addAll(areaTab, hintTab, questTab, tagTab);
         tabs.setVisible(true);

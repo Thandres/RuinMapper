@@ -32,7 +32,8 @@ public class TagView extends HBox {
 
     private ContextPort context;
 
-    public TagView() {
+    public TagView(ContextPort context) {
+        this.context = context;
         // hooking up custom component to FXML
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource(
