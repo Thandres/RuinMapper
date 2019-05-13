@@ -18,18 +18,18 @@ public class DomainAdapter {
 
 
     public ContextPort createNewContext(String name) {
-        preparePersistence(name);
+        preparePersistence();
         return factory.createNewContext(name);
 
     }
 
 
     public ContextPort loadContextByName(String name) {
-        preparePersistence(name);
+        preparePersistence();
         return factory.loadContextByName(name);
     }
 
-    private void preparePersistence(String contextName) {
+    private void preparePersistence() {
         RepositoryFactory.prepareRepositories(
                 workingDirectoryPath);
         factory = new ComponentFactory(
