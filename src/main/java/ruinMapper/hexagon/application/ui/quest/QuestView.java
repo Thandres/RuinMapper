@@ -41,7 +41,8 @@ public class QuestView extends VBox {
             questAccordion.getPanes()
                     .add(new QuestTitledPane(
                             context.createQuest(
-                                    "Questtitle")));
+                                    "Questtitle"),
+                            questAccordion));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +58,8 @@ public class QuestView extends VBox {
                                         .getText());
                         questAccordion.getPanes()
                                 .add(new QuestTitledPane(
-                                        newQuest));
+                                        newQuest,
+                                        questAccordion));
                         newQuestTitle.clear();
                         validationLabel.setVisible(false);
                     } else {

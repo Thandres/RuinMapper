@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TitledPane?>
-<fx:root type="javafx.scene.control.TitledPane"
-         xmlns:fx="http://javafx.com/fxml">
-
+<fx:root contentDisplay="RIGHT" text="asdfasdf" type="javafx.scene.control.TitledPane"
+         xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <graphic>
+        <Button text="Delete" fx:id="deleteBtn"/>
+    </graphic>
 </fx:root>
