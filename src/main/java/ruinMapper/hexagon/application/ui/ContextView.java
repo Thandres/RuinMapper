@@ -55,7 +55,7 @@ public class ContextView extends Application {
 //                .createNewContext(file.getName());
 
         domainAdapter = new DomainAdapter(
-                "C:\\Users\\arno\\Desktop\\Ideen\\La Mulana Mapper\\Map");
+                "D:\\Repos\\map");
         context = domainAdapter.createNewContext("Map");
         if (mainWindow.getChildren()
                 .contains(startupOptions)) {
