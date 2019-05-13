@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.area;
 
-import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
@@ -38,7 +38,7 @@ public class Area extends ComponentSuper implements
 
     @Override
     public RoomPort createRoom(int x, int y) {
-        RoomPort newRoom = ComponentFactory
+        RoomPort newRoom = DomainInjector
                 .createRoom(new Point(x, y), this);
         areaMap.put(newRoom.accessCoordinates(), newRoom);
         saveState();

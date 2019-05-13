@@ -14,7 +14,7 @@ import ruinMapper.hexagon.domain.tag.Tag;
 import java.awt.*;
 import java.util.UUID;
 
-public class ComponentFactory implements
+public class DomainInjector implements
         ContextSupplierPort {
 
     private static CRUDRepositoryPort<Quest> questRepository;
@@ -25,7 +25,7 @@ public class ComponentFactory implements
     private static CRUDRepositoryPort<Context> contextRepository;
     private static ContextPort currentContext;
 
-    public ComponentFactory(
+    public DomainInjector(
             CRUDRepositoryPort<Quest> questRepository,
             CRUDRepositoryPort<Room> roomRepository,
             CRUDRepositoryPort<Hint> hintRepository,
@@ -96,7 +96,7 @@ public class ComponentFactory implements
     @Override
     public ContextPort createNewContext(String name) {
         Context context = createContext(name);
-        ComponentFactory.currentContext = context;
+        DomainInjector.currentContext = context;
         contextRepository.create(context);
         return context;
     }

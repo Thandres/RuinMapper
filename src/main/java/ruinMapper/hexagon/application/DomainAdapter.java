@@ -3,7 +3,7 @@ package ruinMapper.hexagon.application;
 import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
-import ruinMapper.hexagon.infrastructure.persistence.RepositoryFactory;
+import ruinMapper.hexagon.infrastructure.persistence.RepositoryInjector;
 
 
 public class DomainAdapter {
@@ -29,17 +29,17 @@ public class DomainAdapter {
         return factory.loadContextByName(name);
     }
 
-    private void preparePersistence() {
-        RepositoryFactory.prepareRepositories(
-                workingDirectoryPath);
-        factory = new ComponentFactory(
-                RepositoryFactory.getQuestRepository(),
-                RepositoryFactory.getRoomRepository(),
-                RepositoryFactory
+    private void preparePersistence(String contextName) {
+        RepositoryInjector.prepareRepositories(
+                workingDirectoryPath + contextName);
+        factory = new DomainInjector(
+                RepositoryInjector.getQuestRepository(),
+                RepositoryInjector.getRoomRepository(),
+                RepositoryInjector
                         .getHintRepository(),
-                RepositoryFactory.getTagRepository(),
-                RepositoryFactory.getAreaRepository(),
-                RepositoryFactory
+                RepositoryInjector.getTagRepository(),
+                RepositoryInjector.getAreaRepository(),
+                RepositoryInjector
                         .getContextRepository());// makes the Factory inject the prepared Repositories
     }
 }
