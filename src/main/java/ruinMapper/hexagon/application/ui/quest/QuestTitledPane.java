@@ -44,6 +44,9 @@ public class QuestTitledPane extends TitledPane {
 
     private void setupEventHandler() {
         deleteBtn.setOnMouseClicked(
-                event -> parent.getPanes().remove(this));
+                event -> {
+                    quest.deleteQuest();
+                    parent.getPanes().remove(this);
+                });
     }
 }
