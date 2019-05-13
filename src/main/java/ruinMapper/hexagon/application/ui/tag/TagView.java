@@ -43,7 +43,7 @@ public class TagView extends HBox {
     private ContextPort context;
 
     private List<TagPort> keywordList;
-    private List<TagPort> roomTagList;
+    private List<TagPort> validTagList;
 
 
     public TagView(ContextPort context) {
@@ -74,15 +74,15 @@ public class TagView extends HBox {
         keywordList.sort(Comparator
                 .comparing(TagPort::accessTag));
         keywords.getItems().clear();
-
         keywordList.forEach(tag -> keywords.getItems()
                 .add(tag.accessTag()));
-        roomTagList = new ArrayList<>(
+
+        validTagList = new ArrayList<>(
                 context.accessValidTags());
-        roomTagList.sort(Comparator
+        validTagList.sort(Comparator
                 .comparing(TagPort::accessTag));
         validTags.getItems().clear();
-        roomTagList.forEach(tag -> validTags.getItems()
+        validTagList.forEach(tag -> validTags.getItems()
                 .add(tag.accessTag()));
     }
 
@@ -103,7 +103,7 @@ public class TagView extends HBox {
                             .createValidTag(
                                     newTagField
                                             .getText());
-                    roomTagList.add(roomTag);
+                    validTagList.add(roomTag);
                     validTags.getItems()
                             .add(roomTag.accessTag());
                 });
@@ -125,16 +125,29 @@ public class TagView extends HBox {
                             .getSelectedIndex();
                     validTags.getItems().remove(index);
                     this.context.deleteValidTag(
-                            roomTagList.get(index));
-                    roomTagList.remove(index);
-                    deleteKeywordBtn.setDisable(true);
+                            validTagList.get(index));
+                    validTagList.remove(index);
+                    validTags.getSelectionModel()
+                            .clearSelection();
+                    deleteRoomTagBtn.setDisable(true);
+                });
+        validTags.onMouseClickedProperty()
+                .setValue(event -> {
+                    if (isItemSelected(validTags)) {
+                        deleteRoomTagBtn.setDisable(false);
+                    }
+                });
+        keywords.onMouseClickedProperty()
+                .setValue(event -> {
+                    if (isItemSelected(keywords)) {
+                        deleteKeywordBtn.setDisable(false);
+                    }
                 });
 
-        keywords.onMouseClickedProperty()
-                .setValue(event ->
-                        deleteKeywordBtn.setDisable(false));
-        validTags.onMouseClickedProperty()
-                .setValue(event ->
-                        deleteRoomTagBtn.setDisable(false));
+    }
+
+    private boolean isItemSelected(ListView listView) {
+        return listView.getSelectionModel()
+                .getSelectedIndex() != -1;
     }
 }
