@@ -2,12 +2,16 @@
 
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml" spacing="5">
     <HBox spacing="5">
-        <Button text="New Quest"></Button>
+        <Button text="New Quest" fx:id="newQuestBtn"></Button>
+        <TextField fx:id="newQuestTitle" promptText="Questtitle"></TextField>
+        <Label fx:id="validationLabel" visible="false" text="Please enter a title befoer adding a quest"></Label>
     </HBox>
     <Accordion fx:id="questAccordion">
     </Accordion>

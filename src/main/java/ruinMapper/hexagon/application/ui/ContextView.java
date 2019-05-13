@@ -70,7 +70,8 @@ public class ContextView extends Application {
         // Visible Tab wouldnt have any content before changing the active Tab to another
         areaTab = new Tab("Areas", new AreaView());
         hintTab = new Tab("Hints", new HintView());
-        questTab = new Tab("Quests", new QuestView());
+        questTab = new Tab("Quests",
+                new QuestView(context));
         tagTab = new Tab("Tags", new TagView(context));
         tabs.getTabs()
                 .addAll(areaTab, hintTab, questTab, tagTab);
