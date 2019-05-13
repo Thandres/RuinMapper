@@ -21,7 +21,7 @@ public class QuestRoomColumn extends VBox {
         fxmlLoader.setController(this);
         try {
             fxmlLoader.load();
-            this.getChildren().add(new RoomRow());
+            this.getChildren().add(new QuestRoomRow());
         } catch (IOException e) {
             e.printStackTrace();
         }
