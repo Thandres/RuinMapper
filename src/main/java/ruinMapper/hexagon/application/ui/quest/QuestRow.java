@@ -32,17 +32,33 @@ public class QuestRow extends HBox {
         try {
             fxmlLoader.load();
             setupEventHandler();
-
-            description.setText(
-                    this.quest.accessDescription());
-            notes.setText(this.quest.accessNotes());
+            setupComponents();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void setupEventHandler() {
+    private void setupComponents() {
+        description.setText(
+                quest.accessDescription());
+        notes.setText(quest.accessNotes());
+    }
 
+    private void setupEventHandler() {
+        description.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (oldValue) {
+                        quest.changeDescription(
+                                description.getText());
+                    }
+                });
+        notes.focusedProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (oldValue) {
+                        quest.changeNotes(
+                                notes.getText());
+                    }
+                });
     }
 }
