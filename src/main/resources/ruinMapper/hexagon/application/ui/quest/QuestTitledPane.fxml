@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
 <fx:root contentDisplay="RIGHT" text="asdfasdf" type="javafx.scene.control.TitledPane"
          xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <graphic>
-        <Button text="Delete" fx:id="deleteBtn"/>
+        <HBox>
+            <Button text="Delete" fx:id="deleteBtn"/>
+            <ComboBox fx:id="status" promptText="Status"/>
+        </HBox>
     </graphic>
 </fx:root>
