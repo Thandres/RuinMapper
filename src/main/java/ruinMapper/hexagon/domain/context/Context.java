@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.context;
 
-import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
@@ -44,7 +44,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public AreaPort createArea(String title) {
-        AreaPort newArea = ComponentFactory
+        AreaPort newArea = DomainInjector
                 .createArea(title);
         areas.add(newArea);
         saveState();
@@ -74,7 +74,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public TagPort createValidTag(String name) {
-        TagPort tag = ComponentFactory.createTag(name);
+        TagPort tag = DomainInjector.createTag(name);
         validTags.add(tag);
         saveState();
         return tag;
@@ -106,7 +106,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public TagPort createKeyword(String keyword) {
-        TagPort keyTag = ComponentFactory
+        TagPort keyTag = DomainInjector
                 .createTag(keyword);
         keywords.add(keyTag);
         saveState();
@@ -125,7 +125,7 @@ public class Context extends ComponentSuper implements
 
     @Override
     public QuestPort createQuest(String title) {
-        QuestPort quest = ComponentFactory
+        QuestPort quest = DomainInjector
                 .createQuest(title);
         quests.add(quest);
         saveState();

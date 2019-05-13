@@ -13,7 +13,7 @@ import ruinMapper.hexagon.infrastructure.persistence.room.RoomRepository;
 import ruinMapper.hexagon.infrastructure.persistence.tag.TagMapper;
 import ruinMapper.hexagon.infrastructure.persistence.tag.TagRepository;
 
-public class RepositoryFactory {
+public class RepositoryInjector {
 
     private static QuestRepository questRepository;
     private static QuestMapper questMapper;
@@ -75,7 +75,7 @@ public class RepositoryFactory {
 
     public static void setQuestRepository(
             QuestRepository questRepository) {
-        RepositoryFactory.questRepository = questRepository;
+        RepositoryInjector.questRepository = questRepository;
     }
 
     public static TagRepository getTagRepository() {
@@ -84,7 +84,7 @@ public class RepositoryFactory {
 
     public static void setTagRepository(
             TagRepository tagRepository) {
-        RepositoryFactory.tagRepository = tagRepository;
+        RepositoryInjector.tagRepository = tagRepository;
     }
 
     public static AreaRepository getAreaRepository() {
@@ -93,7 +93,7 @@ public class RepositoryFactory {
 
     public static void setAreaRepository(
             AreaRepository areaRepository) {
-        RepositoryFactory.areaRepository = areaRepository;
+        RepositoryInjector.areaRepository = areaRepository;
     }
 
     public static ContextRepository getContextRepository() {
@@ -102,7 +102,7 @@ public class RepositoryFactory {
 
     public static void setContextRepository(
             ContextRepository contextRepository) {
-        RepositoryFactory.contextRepository = contextRepository;
+        RepositoryInjector.contextRepository = contextRepository;
     }
 
     public static HintRepository getHintRepository() {
@@ -111,7 +111,7 @@ public class RepositoryFactory {
 
     public static void setHintRepository(
             HintRepository hintRepository) {
-        RepositoryFactory.hintRepository = hintRepository;
+        RepositoryInjector.hintRepository = hintRepository;
     }
 
     public static RoomRepository getRoomRepository() {
@@ -120,6 +120,6 @@ public class RepositoryFactory {
 
     public static void setRoomRepository(
             RoomRepository roomRepository) {
-        RepositoryFactory.roomRepository = roomRepository;
+        RepositoryInjector.roomRepository = roomRepository;
     }
 }

@@ -1,9 +1,9 @@
 package ruinMapper.hexagon.domain;
 
 import ruinMapper.hexagon.domain.context.ContextPort;
-import ruinMapper.hexagon.infrastructure.persistence.RepositoryFactory;
+import ruinMapper.hexagon.infrastructure.persistence.RepositoryInjector;
 
-import static ruinMapper.hexagon.domain.ComponentFactory.createContext;
+import static ruinMapper.hexagon.domain.DomainInjector.createContext;
 
 public class ContextSupplier implements
         ContextSupplierPort {
@@ -30,16 +30,16 @@ public class ContextSupplier implements
     }
 
     private void preparePersistence(String contextName) {
-        RepositoryFactory.prepareRepositories(
+        RepositoryInjector.prepareRepositories(
                 workingDirectoryPath + contextName);
-        factory = new ComponentFactory(
-                RepositoryFactory.getQuestRepository(),
-                RepositoryFactory.getRoomRepository(),
-                RepositoryFactory
+        factory = new DomainInjector(
+                RepositoryInjector.getQuestRepository(),
+                RepositoryInjector.getRoomRepository(),
+                RepositoryInjector
                         .getHintRepository(),
-                RepositoryFactory.getTagRepository(),
-                RepositoryFactory.getAreaRepository(),
-                RepositoryFactory
+                RepositoryInjector.getTagRepository(),
+                RepositoryInjector.getAreaRepository(),
+                RepositoryInjector
                         .getContextRepository());// makes the Factory inject the prepared Repositories
     }
 }

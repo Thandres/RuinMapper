@@ -1,7 +1,7 @@
 package ruinMapper.hexagon.domain.room;
 
-import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
@@ -77,7 +77,7 @@ Room extends ComponentSuper implements
 
     @Override
     public HintPort createHint(String content) {
-        HintPort newHint = ComponentFactory
+        HintPort newHint = DomainInjector
                 .createHint(content, this);
         hints.add(newHint);
         saveState();

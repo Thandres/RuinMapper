@@ -3,8 +3,8 @@ package ruinMapper.hexagon.domain.tag;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.repository.*;
-import ruinMapper.hexagon.domain.ComponentFactory;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
+import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
@@ -30,7 +30,7 @@ public class TagPortTest {
     // for testing your own implementation just write another method that returns
     // a a different ContextSupplierPort implementation and switch out the setup() method
     private ContextSupplierPort implementationOne() {
-        return new ComponentFactory(
+        return new DomainInjector(
                 new QuestRepoDummy(), new RoomRepoDummy(),
                 new HintRepoDummy(), new TagRepoDummy(),
                 new AreaRepoDummy(),
