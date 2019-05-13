@@ -1,7 +1,8 @@
 package ruinMapper.hexagon.application;
 
-import ruinMapper.hexagon.domain.ComponentFactory;
+
 import ruinMapper.hexagon.domain.ContextSupplierPort;
+import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.infrastructure.persistence.RepositoryInjector;
 
@@ -29,9 +30,9 @@ public class DomainAdapter {
         return factory.loadContextByName(name);
     }
 
-    private void preparePersistence(String contextName) {
+    private void preparePersistence() {
         RepositoryInjector.prepareRepositories(
-                workingDirectoryPath + contextName);
+                workingDirectoryPath);
         factory = new DomainInjector(
                 RepositoryInjector.getQuestRepository(),
                 RepositoryInjector.getRoomRepository(),
