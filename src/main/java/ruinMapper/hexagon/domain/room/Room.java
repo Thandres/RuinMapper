@@ -74,6 +74,11 @@ Room extends ComponentSuper implements
         return notes;
     }
 
+    @Override
+    public AreaPort accessArea() {
+        return area;
+    }
+
 
     @Override
     public HintPort createHint(String content) {

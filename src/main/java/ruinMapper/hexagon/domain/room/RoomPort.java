@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.room;
 
+import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
@@ -40,6 +41,13 @@ public interface RoomPort {
      * @return The notes of the Room
      */
     public String accessNotes();
+
+    /**
+     * Returns the Area the Room is assigned to.
+     *
+     * @return The Rooms Area
+     */
+    public AreaPort accessArea();
 
     /**
      * Creates a Hint with the specified content for this Room,
