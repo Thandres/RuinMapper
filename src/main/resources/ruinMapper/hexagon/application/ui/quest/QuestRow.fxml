@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
-<?import ruinMapper.hexagon.application.ui.quest.QuestRoomColumn?>
+<?import javafx.scene.layout.VBox?>
 <fx:root spacing="5" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.172-ea"
          xmlns:fx="http://javafx.com/fxml/1">
-    <TextArea fx:id="description" prefHeight="100" prefWidth="200"/>
-    <TextArea fx:id="notes" prefHeight="100" prefWidth="200"/>
-    <QuestRoomColumn fx:id="roomColumn" HBox.hgrow="ALWAYS">
-    </QuestRoomColumn>
+    <VBox spacing="5">
+        <Label text="Description"></Label>
+        <TextArea fx:id="description" prefHeight="100" prefWidth="250"/>
+    </VBox>
+    <VBox spacing="5">
+        <Label text="Notes"></Label>
+        <TextArea fx:id="notes" prefHeight="100" prefWidth="250"/>
+    </VBox>
+
 </fx:root>

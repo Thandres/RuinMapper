@@ -43,6 +43,8 @@ public class QuestRow extends HBox {
         description.setText(
                 quest.accessDescription());
         notes.setText(quest.accessNotes());
+        this.getChildren().add(new QuestRoomColumn(
+                quest.accessQuestRooms()));
     }
 
     private void setupEventHandler() {

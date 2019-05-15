@@ -1,25 +1,45 @@
 package ruinMapper.hexagon.application.ui.quest;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.HBox;
+import ruinMapper.hexagon.domain.room.RoomPort;
 
-import java.io.IOException;
+public class QuestRoomRow {
 
-public class QuestRoomRow extends HBox {
+    private RoomPort room;
 
+    private String areaName;
+    private String coordinates;
+    private String roomName;
 
-    public QuestRoomRow() {
-        // hooking up custom component to FXML
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass()
-                        .getResource("QuestRoomRow.fxml"));
+    public QuestRoomRow(RoomPort room) {
+        this.room = room;
+        areaName = room.accessArea().accessTitle();
+        coordinates = "X: " + room
+                .accessCoordinates().x + " Y: " +
+                room.accessCoordinates().y;
+        roomName = room.accessTitle();
+    }
 
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }
