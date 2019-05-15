@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<fx:root prefHeight="100" type="javafx.scene.control.TableView" xmlns="http://javafx.com/javafx/8.0.172-ea"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <columns>
+        <TableColumn fx:id="areaColumn" text="Area"/>
+        <TableColumn fx:id="coordinateColumn" text="Coordinates"/>
+        <TableColumn fx:id="roomColumn" text="Room"/>
+    </columns>
+</fx:root>

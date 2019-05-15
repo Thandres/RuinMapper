@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.TableView?>
-<fx:root type="javafx.scene.control.TableView"
-         xmlns:fx="http://javafx.com/fxml" prefHeight="100">
-
-</fx:root>

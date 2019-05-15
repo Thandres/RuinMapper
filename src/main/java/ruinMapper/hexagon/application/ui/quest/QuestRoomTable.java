@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.application.ui.quest;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -9,17 +10,24 @@ import ruinMapper.hexagon.domain.room.RoomPort;
 import java.io.IOException;
 import java.util.Set;
 
-public class QuestRoomColumn extends
+public class QuestRoomTable extends
         TableView<QuestRoomRow> {
+    @FXML
+    TableColumn<QuestRoomRow, String> areaColumn;
 
+    @FXML
+    TableColumn<QuestRoomRow, String> coordinateColumn;
+
+    @FXML
+    TableColumn<QuestRoomRow, String> roomColumn;
     private Set<RoomPort> roomSet;
 
-    public QuestRoomColumn(Set<RoomPort> roomSet) {
+    public QuestRoomTable(Set<RoomPort> roomSet) {
         this.roomSet = roomSet;
         // hooking up custom component to FXML
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource(
-                        "QuestRoomColumn.fxml"));
+                        "QuestRoomTable.fxml"));
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -35,21 +43,14 @@ public class QuestRoomColumn extends
     }
 
     private void setupTable() {
-        TableColumn<QuestRoomRow, String> areaColumn = new TableColumn<>(
-                "Area");
+
         areaColumn.setCellValueFactory(
                 new PropertyValueFactory<>("areaName"));
-        TableColumn<QuestRoomRow, String> coordinateColumn = new TableColumn<>(
-                "Coordinates");
+
         coordinateColumn.setCellValueFactory(
                 new PropertyValueFactory<>("coordinates"));
-        TableColumn<QuestRoomRow, String> roomNameColumn = new TableColumn<>(
-                "Roomname");
-        roomNameColumn.setCellValueFactory(
-                new PropertyValueFactory<>("roomName"));
-        this.getColumns()
-                .addAll(areaColumn, coordinateColumn,
-                        roomNameColumn);
 
+        roomColumn.setCellValueFactory(
+                new PropertyValueFactory<>("roomName"));
     }
 }

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class QuestRow extends HBox {
     TextArea notes;
 
     @FXML
-    QuestRoomColumn roomColumn;
+    VBox roomColumn;
 
     private QuestPort quest;
 
@@ -43,7 +44,7 @@ public class QuestRow extends HBox {
         description.setText(
                 quest.accessDescription());
         notes.setText(quest.accessNotes());
-        this.getChildren().add(new QuestRoomColumn(
+        roomColumn.getChildren().add(new QuestRoomTable(
                 quest.accessQuestRooms()));
     }
 
