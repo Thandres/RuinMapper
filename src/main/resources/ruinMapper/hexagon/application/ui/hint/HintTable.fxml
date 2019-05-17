@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TableView?>
-<fx:root type="javafx.scene.control.TableView" xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml">
 
+<?import javafx.scene.control.*?>
+<fx:root type="javafx.scene.control.TableView" xmlns="http://javafx.com/javafx/8.0.172-ea"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <columns>
+        <TableColumn fx:id="contentColumn" text="Content"/>
+        <TableColumn fx:id="notesColumn" text="Notes"/>
+        <TableColumn fx:id="roomColumn" text="Room"/>
+        <TableColumn fx:id="keywordColumn" text="Keywords"/>
+        <TableColumn fx:id="statusColumn" text="Status"/>
+    </columns>
 </fx:root>

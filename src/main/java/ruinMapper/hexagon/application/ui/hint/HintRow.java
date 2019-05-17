@@ -1,24 +1,41 @@
 package ruinMapper.hexagon.application.ui.hint;
 
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+import ruinMapper.hexagon.application.ui.quest.QuestRoomRow;
+import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.hint.HintStatus;
 
 public class HintRow {
     private TextArea content;
     private TextArea notes;
-    private String room;
+    private VBox roomColumn;
     private KeywordList keywords;
-    private String status;
+    private ChoiceBox<HintStatus> statusChoiceBox;
 
-    public HintRow(TextArea content,
-                   TextArea notes, String room,
-                   KeywordList keywords,
-                   HintStatus status) {
-        this.content = content;
-        this.notes = notes;
-        this.room = room;
-        this.keywords = keywords;
-        this.status = status.toString();
+    private final int ROW_HEIGHT = 100;
+    private final int TEXT_AREA_WIDTH = 200;
+
+    private HintPort hint;
+
+    public HintRow(HintPort hint) {
+        this.hint = hint;
+        content = new TextArea();
+        content.setPrefHeight(ROW_HEIGHT);
+        content.setPrefWidth(TEXT_AREA_WIDTH);
+        notes = new TextArea();
+        notes.setPrefHeight(ROW_HEIGHT);
+        notes.setPrefWidth(TEXT_AREA_WIDTH);
+        roomColumn = QuestRoomRowTransposer
+                .transposeToColumn(new QuestRoomRow(
+                        hint.accessRoom()));
+        keywords = new KeywordList(hint.accessKeyWords());
+        statusChoiceBox = new ChoiceBox<>();
+        statusChoiceBox.getItems()
+                .addAll(HintStatus.values());
+        statusChoiceBox.getSelectionModel()
+                .select(hint.getHintStatus());
     }
 
     public TextArea getContent() {
@@ -37,12 +54,12 @@ public class HintRow {
         this.notes = notes;
     }
 
-    public String getRoom() {
-        return room;
+    public VBox getRoomColumn() {
+        return roomColumn;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public void setRoomColumn(VBox roomColumn) {
+        this.roomColumn = roomColumn;
     }
 
     public KeywordList getKeywords() {
@@ -54,12 +71,12 @@ public class HintRow {
         this.keywords = keywords;
     }
 
-    public String getStatus() {
-        return status;
+    public ChoiceBox<HintStatus> getStatusChoiceBox() {
+        return statusChoiceBox;
     }
 
-    public void setStatus(
-            String status) {
-        this.status = status;
+    public void setStatusChoiceBox(
+            ChoiceBox<HintStatus> statusChoiceBox) {
+        this.statusChoiceBox = statusChoiceBox;
     }
 }

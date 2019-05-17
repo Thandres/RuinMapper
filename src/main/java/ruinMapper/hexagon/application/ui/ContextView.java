@@ -19,6 +19,8 @@ import ruinMapper.hexagon.application.ui.quest.QuestView;
 import ruinMapper.hexagon.application.ui.tag.TagView;
 import ruinMapper.hexagon.domain.context.ContextPort;
 
+import java.io.File;
+
 
 public class ContextView extends Application {
     @FXML
@@ -56,7 +58,13 @@ public class ContextView extends Application {
 
         domainAdapter = new DomainAdapter(
                 "D:\\Repos\\map");
-        context = domainAdapter.createNewContext("Map");
+        if (new File("D:\\Repos\\map\\Map.json").exists()) {
+            context = domainAdapter
+                    .loadContextByName("Map");
+        } else {
+
+            context = domainAdapter.createNewContext("Map");
+        }
         if (mainWindow.getChildren()
                 .contains(startupOptions)) {
             mainWindow.getChildren().remove(startupOptions);
@@ -69,7 +77,7 @@ public class ContextView extends Application {
         // create new Tabs instead of setting content on predefined Tabs because the first
         // Visible Tab wouldnt have any content before changing the active Tab to another
         areaTab = new Tab("Areas", new AreaView());
-        hintTab = new Tab("Hints", new HintView());
+        hintTab = new Tab("Hints", new HintView(context));
         questTab = new Tab("Quests",
                 new QuestView(context));
         tagTab = new Tab("Tags", new TagView(context));
