@@ -11,6 +11,7 @@ public class RoomDto {
     private Set<String> hints;
     private Set<String> quests;
     private Set<String> tags;
+    private String areaID;
     private String contextID;
 
     private String roomID;
@@ -87,4 +88,11 @@ public class RoomDto {
         this.contextID = contextID;
     }
 
+    public String getAreaID() {
+        return areaID;
+    }
+
+    public void setAreaID(String areaID) {
+        this.areaID = areaID;
+    }
 }

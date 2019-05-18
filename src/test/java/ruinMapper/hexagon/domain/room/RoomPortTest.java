@@ -4,7 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.repository.*;
-import ruinMapper.hexagon.domain.ContextSupplier;
+import ruinMapper.hexagon.application.DomainAdapter;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.area.AreaPort;
@@ -33,7 +33,7 @@ public class RoomPortTest {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        ContextSupplierPort lifecyclePort = new ContextSupplier(
+        DomainAdapter lifecyclePort = new DomainAdapter(
                 TEST_DIRECTORY);
         context = lifecyclePort
                 .createNewContext(CONTEXT_NAME);

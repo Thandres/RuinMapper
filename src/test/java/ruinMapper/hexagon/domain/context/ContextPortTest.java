@@ -3,8 +3,7 @@ package ruinMapper.hexagon.domain.context;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.hexagon.domain.ContextSupplier;
-import ruinMapper.hexagon.domain.ContextSupplierPort;
+import ruinMapper.hexagon.application.DomainAdapter;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
@@ -30,7 +29,7 @@ public class ContextPortTest {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        ContextSupplierPort lifecyclePort = new ContextSupplier(
+        DomainAdapter lifecyclePort = new DomainAdapter(
                 TEST_DIRECTORY);
         contextToTest = lifecyclePort
                 .createNewContext(CONTEXT_NAME);

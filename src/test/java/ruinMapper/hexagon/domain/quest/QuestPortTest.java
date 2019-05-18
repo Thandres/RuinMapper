@@ -3,8 +3,7 @@ package ruinMapper.hexagon.domain.quest;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.hexagon.domain.ContextSupplier;
-import ruinMapper.hexagon.domain.ContextSupplierPort;
+import ruinMapper.hexagon.application.DomainAdapter;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
@@ -27,7 +26,7 @@ public class QuestPortTest {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        ContextSupplierPort lifecyclePort = new ContextSupplier(
+        DomainAdapter lifecyclePort = new DomainAdapter(
                 TEST_DIRECTORY);
         context = lifecyclePort
                 .createNewContext(CONTEXT_NAME);
@@ -44,6 +43,7 @@ public class QuestPortTest {
             dir.delete();
         }
     }
+
     @Test
     public void changeTitle() {
         String nStr = "Save the Kingdom";

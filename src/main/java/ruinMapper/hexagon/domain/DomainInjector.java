@@ -83,10 +83,11 @@ public class DomainInjector implements
     public static Room createRoom(Point point,
                                   AreaPort area) {
         Room newRoom = new Room(point,
-                currentContext.toString(), roomRepository,
+                area.toString(), currentContext.toString(),
+                roomRepository,
                 hintRepository, questRepository,
                 tagRepository, contextRepository,
-                UUID.randomUUID());
+                areaRepository, UUID.randomUUID());
         roomRepository.create(newRoom);
         return newRoom;
     }

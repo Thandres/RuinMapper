@@ -1,16 +1,16 @@
 package ruinMapper.hexagon.application.ui.quest;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import ruinMapper.hexagon.application.ui.ComponentLoader;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 
-import java.io.IOException;
+import java.util.Set;
 
 public class QuestView extends VBox {
 
@@ -30,23 +30,26 @@ public class QuestView extends VBox {
 
     public QuestView(ContextPort context) {
         this.context = context;
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("QuestView.fxml"));
+        ComponentLoader.loadCustomComponent(this,
+                "QuestView.fxml");
 
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        try {
-            fxmlLoader.load();
-            setupEventHandler();
-            questAccordion.getPanes()
-                    .add(new QuestTitledPane(
-                            context.createQuest(
-                                    "Questtitle"),
-                            questAccordion));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setupEventHandler();
+        questAccordion.getPanes()
+                .add(new QuestTitledPane(
+                        context.createQuest(
+                                "Questtitle"),
+                        questAccordion));
+        reloadFromContext();
 
+    }
+
+    public void reloadFromContext() {
+        Set<QuestPort> quests = context.accessEveryQuest();
+        questAccordion.getPanes().clear();
+        quests.forEach(
+                questPort -> questAccordion.getPanes()
+                        .add(new QuestTitledPane(questPort,
+                                questAccordion)));
     }
 
     private void setupEventHandler() {

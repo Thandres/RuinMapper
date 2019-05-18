@@ -1,8 +1,10 @@
 package ruinMapper.hexagon.domain.area;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.repository.*;
+import ruinMapper.hexagon.application.DomainAdapter;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.context.ContextPort;
@@ -10,6 +12,8 @@ import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,12 +25,31 @@ public class AreaPortTest {
 
     private AreaPort areaToTest;
 
+    private static final String CONTEXT_NAME = "map";
+    private static final String TEST_DIRECTORY = "D:\\Repos\\map";
+
     @Before
     public void setup() {
-        lifecyclePort = implementationOne();
-        context = lifecyclePort.createNewContext("");
+        File dir = new File(TEST_DIRECTORY);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        DomainAdapter lifecyclePort = new DomainAdapter(
+                TEST_DIRECTORY);
+        context = lifecyclePort
+                .createNewContext(CONTEXT_NAME);
         areaToTest = context
                 .createArea("A1");
+    }
+
+    @AfterClass
+    public static void deleteTestFiles() {
+        File dir = new File(TEST_DIRECTORY);
+        if (dir.exists()) {
+            Arrays.stream(dir.listFiles())
+                    .forEach(file -> file.delete());
+            dir.delete();
+        }
     }
 
     // notes the type of Implementation of the test uses.
@@ -72,7 +95,6 @@ public class AreaPortTest {
 
         assertFalse(assignedQuest.accessQuestRooms()
                 .contains(roomToDelete));
-        assertNull(assignedHint.accessRoom());
     }
 
     @Test

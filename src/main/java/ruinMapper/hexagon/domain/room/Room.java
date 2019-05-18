@@ -2,6 +2,8 @@ package ruinMapper.hexagon.domain.room;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.DomainInjector;
+import ruinMapper.hexagon.domain.area.Area;
+import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
@@ -26,6 +28,7 @@ Room extends ComponentSuper implements
     private Set<String> hints;
     private Set<String> quests;
     private Set<String> tags;
+    private String areaID;
     private String contextID;
 
     private CRUDRepositoryPort<Room> roomRepository;
@@ -33,24 +36,28 @@ Room extends ComponentSuper implements
     private CRUDRepositoryPort<Quest> questRepository;
     private CRUDRepositoryPort<Tag> tagRepository;
     private CRUDRepositoryPort<Context> contextRepository;
+    private CRUDRepositoryPort<Area> areaRepository;
     private UUID roomID;
 
 
     public Room(Point coordinates,
-                String contextID,
+                String areaID, String contextID,
 
                 CRUDRepositoryPort<Room> roomRepository,
                 CRUDRepositoryPort<Hint> hintRepository,
                 CRUDRepositoryPort<Quest> questRepository,
                 CRUDRepositoryPort<Tag> tagRepository,
                 CRUDRepositoryPort<Context> contextRepository,
+                CRUDRepositoryPort<Area> areaRepository,
                 UUID roomID) {
+        this.areaID = areaID;
         this.contextID = contextID;
         this.hintRepository = hintRepository;
         this.questRepository = questRepository;
         this.tagRepository = tagRepository;
         this.roomRepository = roomRepository;
         this.contextRepository = contextRepository;
+        this.areaRepository = areaRepository;
 
         this.title = "";
         this.notes = "";
@@ -92,7 +99,7 @@ Room extends ComponentSuper implements
 
     @Override
     public AreaPort accessArea() {
-        return area;
+        return areaRepository.read(areaID);
     }
 
 
@@ -286,5 +293,13 @@ Room extends ComponentSuper implements
 
     public void setRoomID(UUID roomID) {
         this.roomID = roomID;
+    }
+
+    public String getAreaID() {
+        return areaID;
+    }
+
+    public void setAreaID(String areaID) {
+        this.areaID = areaID;
     }
 }

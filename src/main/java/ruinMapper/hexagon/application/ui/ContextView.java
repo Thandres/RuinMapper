@@ -55,7 +55,10 @@ public class ContextView extends Application {
 //                file.getAbsolutePath());
 //        domainAdapter
 //                .createNewContext(file.getName());
-
+        File dir = new File("D:\\Repos\\map");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         domainAdapter = new DomainAdapter(
                 "D:\\Repos\\map");
         if (new File("D:\\Repos\\map\\Map.json").exists()) {
