@@ -31,7 +31,7 @@ public class ContextSupplier implements
 
     private void preparePersistence(String contextName) {
         RepositoryInjector.prepareRepositories(
-                workingDirectoryPath + contextName);
+                workingDirectoryPath);
         factory = new DomainInjector(
                 RepositoryInjector.getQuestRepository(),
                 RepositoryInjector.getRoomRepository(),

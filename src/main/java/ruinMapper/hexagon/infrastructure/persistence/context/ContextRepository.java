@@ -28,15 +28,15 @@ public class ContextRepository extends
 
     @Override
     public Context read(String ID) {
-        if (currentContext.getName().equals(ID)) {
+        if (currentContext != null && currentContext
+                .getName().equals(ID)) {
             return currentContext;
         } else {
-            ContextDto areaDto = FileHelper
+            ContextDto contextDto = FileHelper
                     .readFromFile(createFilelocation(ID),
                             ContextDto.class);
-
             currentContext = contextMapper
-                    .toDomain(areaDto, this);
+                    .toDomain(contextDto, this);
             return currentContext;
         }
     }

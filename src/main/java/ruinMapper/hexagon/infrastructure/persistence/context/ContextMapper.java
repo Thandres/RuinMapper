@@ -1,19 +1,11 @@
 package ruinMapper.hexagon.infrastructure.persistence.context;
 
 import ruinMapper.hexagon.domain.area.Area;
-import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.quest.Quest;
-import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.tag.Tag;
-import ruinMapper.hexagon.domain.tag.TagPort;
 import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
-
-import java.util.Set;
-
-import static ruinMapper.hexagon.infrastructure.persistence.MappingHelper.toDomainSet;
-import static ruinMapper.hexagon.infrastructure.persistence.MappingHelper.toStringSet;
 
 public class ContextMapper implements
         DtoMapper<Context, ContextDto> {
@@ -35,22 +27,12 @@ public class ContextMapper implements
     public Context toDomain(ContextDto dto,
                             CRUDRepositoryPort<Context> repository) {
         Context domain = new Context(dto.getName(),
-                repository);
-        Set<AreaPort> areas = toDomainSet(dto.getAreas(),
+                repository, tagRepository, questRepository,
                 areaRepository);
-        domain.setAreas(areas);
-
-        Set<QuestPort> quests = toDomainSet(dto.getQuests(),
-                questRepository);
-        domain.setQuests(quests);
-
-        Set<TagPort> tags = toDomainSet(dto.getValidTags(),
-                tagRepository);
-        domain.setValidTags(tags);
-
-        Set<TagPort> keywords = toDomainSet(
-                dto.getKeywords(), tagRepository);
-        domain.setKeywords(keywords);
+        domain.setAreas(dto.getAreas());
+        domain.setQuests(dto.getQuests());
+        domain.setValidTags(dto.getValidTags());
+        domain.setKeywords(dto.getKeywords());
         return domain;
     }
 
@@ -58,13 +40,13 @@ public class ContextMapper implements
     public ContextDto toDto(Context domain) {
         ContextDto contextDto = new ContextDto();
         contextDto.setName(domain.accessName());
-        contextDto.setAreas(toStringSet(domain.getAreas()));
+        contextDto.setAreas(domain.getAreas());
         contextDto
-                .setQuests(toStringSet(domain.getQuests()));
+                .setQuests(domain.getQuests());
         contextDto.setValidTags(
-                toStringSet(domain.getValidTags()));
+                domain.getValidTags());
         contextDto.setKeywords(
-                toStringSet(domain.getKeywords()));
+                domain.getKeywords());
         return contextDto;
     }
 }

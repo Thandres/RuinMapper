@@ -44,8 +44,9 @@ public class DomainInjector implements
 
     public static Quest createQuest(String title) {
         Quest newQuest = new Quest(title,
-                currentContext,
-                questRepository);
+                currentContext.toString(),
+                questRepository, roomRepository,
+                contextRepository, UUID.randomUUID());
         questRepository.create(newQuest);
         return newQuest;
     }
@@ -90,7 +91,8 @@ public class DomainInjector implements
 
     public static Context createContext(String name) {
         Context newContext = new Context(name,
-                contextRepository);
+                contextRepository, tagRepository,
+                questRepository, areaRepository);
         currentContext = newContext;
         contextRepository.create(newContext);
         newContext.createArea("New Area");

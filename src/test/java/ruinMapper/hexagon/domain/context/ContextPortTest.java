@@ -2,15 +2,15 @@ package ruinMapper.hexagon.domain.context;
 
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.fixtures.repository.*;
+import ruinMapper.hexagon.domain.ContextSupplier;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
-import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
+import java.io.File;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -18,26 +18,21 @@ import static org.junit.Assert.*;
 public class ContextPortTest {
     private ContextPort contextToTest;
 
-    private static final String CONTEXT_NAME = "Metroid";
+    private static final String CONTEXT_NAME = "map";
+    private static final String TEST_DIRECTORY = "D:\\Repos\\map";
 
 
     @Before
     public void setup() {
-        ContextSupplierPort lifecyclePort = implementationOne();
+        File dir = new File(TEST_DIRECTORY);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        ContextSupplierPort lifecyclePort = new ContextSupplier(
+                TEST_DIRECTORY);
         contextToTest = lifecyclePort
                 .createNewContext(CONTEXT_NAME);
 
-    }
-
-    // notes the type of Implementation of the test uses.
-    // for testing your own implementation just write another method that returns
-    // a a different ContextSupplierPort implementation and switch out the setup() method
-    private ContextSupplierPort implementationOne() {
-        return new DomainInjector(
-                new QuestRepoDummy(), new RoomRepoDummy(),
-                new HintRepoDummy(), new TagRepoDummy(),
-                new AreaRepoDummy(),
-                new ContextRepoDummy());
     }
 
     @Test
