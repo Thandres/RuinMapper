@@ -6,20 +6,27 @@ import javafx.scene.layout.VBox;
 import ruinMapper.hexagon.application.ui.quest.QuestRoomRow;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.hint.HintStatus;
+import ruinMapper.hexagon.domain.tag.TagPort;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class HintRow {
     private TextArea content;
     private TextArea notes;
     private VBox roomColumn;
-    private KeywordList keywords;
+    private KeywordColumn keywordColumn;
     private ChoiceBox<HintStatus> statusChoiceBox;
 
     private final int ROW_HEIGHT = 100;
     private final int TEXT_AREA_WIDTH = 200;
 
+
     private HintPort hint;
 
-    public HintRow(HintPort hint) {
+    public HintRow(HintPort hint,
+                   Map<String, TagPort> allKeywords) {
         this.hint = hint;
         content = new TextArea();
         content.setPrefHeight(ROW_HEIGHT);
@@ -30,14 +37,18 @@ public class HintRow {
         roomColumn = QuestRoomRowTransposer
                 .transposeToColumn(new QuestRoomRow(
                         hint.accessRoom()));
-        keywords = new KeywordList(hint.accessKeyWords());
+        keywordColumn = new KeywordColumn(hint,
+                allKeywords);
         statusChoiceBox = new ChoiceBox<>();
         statusChoiceBox.getItems()
                 .addAll(HintStatus.values());
         statusChoiceBox.getSelectionModel()
                 .select(hint.getHintStatus());
+
     }
 
+
+    // Getter/Setter needed for databinding with table
     public TextArea getContent() {
         return content;
     }
@@ -62,13 +73,13 @@ public class HintRow {
         this.roomColumn = roomColumn;
     }
 
-    public KeywordList getKeywords() {
-        return keywords;
+    public KeywordColumn getKeywordColumn() {
+        return keywordColumn;
     }
 
-    public void setKeywords(
-            KeywordList keywords) {
-        this.keywords = keywords;
+    public void setKeywordColumn(
+            KeywordColumn keywordColumn) {
+        this.keywordColumn = keywordColumn;
     }
 
     public ChoiceBox<HintStatus> getStatusChoiceBox() {
@@ -79,4 +90,9 @@ public class HintRow {
             ChoiceBox<HintStatus> statusChoiceBox) {
         this.statusChoiceBox = statusChoiceBox;
     }
+
+    public List<TagPort> getKeywords() {
+        return new ArrayList<>(hint.accessKeyWords());
+    }
+
 }

@@ -7,28 +7,37 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import ruinMapper.hexagon.application.ui.ComponentLoader;
-import ruinMapper.hexagon.domain.context.ContextPort;
+import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.hint.HintStatus;
+import ruinMapper.hexagon.domain.tag.TagPort;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class HintTable extends TableView<HintRow> {
     @FXML
-    TableColumn<HintRow, TextArea> contentColumn;
+    private TableColumn<HintRow, TextArea> contentColumn;
 
     @FXML
-    TableColumn<HintRow, TextArea> notesColumn;
+    private TableColumn<HintRow, TextArea> notesColumn;
 
     @FXML
-    TableColumn<HintRow, VBox> roomColumn;
+    private TableColumn<HintRow, VBox> roomColumn;
 
     @FXML
-    TableColumn<HintRow, KeywordList> keywordColumn;
+    private TableColumn<HintRow, KeywordColumn> keywordColumn;
 
     @FXML
-    TableColumn<HintRow, HintStatus> statusColumn;
+    private TableColumn<HintRow, HintStatus> statusColumn;
 
-    private ContextPort context;
+    private Set<HintPort> allHints;
+
+    private Map<String, TagPort> allKeywords;
 
     public HintTable() {
+        this.allKeywords = allKeywords;
         // hooking up custom component to FXML
         ComponentLoader.loadCustomComponent(this,
                 "HintTable.fxml");
@@ -39,16 +48,43 @@ public class HintTable extends TableView<HintRow> {
      * Injecting the context afterwards lets us use the Component
      * in FXML, so the overall design can be held entirely in FXML
      */
-    public void injectContext(ContextPort context) {
-        this.context = context;
+    public void injectContext(Set<HintPort> allHints,
+                              Map<String, TagPort> allKeywords) {
+        this.allHints = allHints;
+        this.allKeywords = allKeywords;
+
         reloadDataFromContext();
+    }
+
+    /**
+     * Filters out all hints not containing the keywords in filter
+     *
+     * @param keywordsToShow
+     */
+    public void applyFilter(List<TagPort> keywordsToShow) {
+        if (keywordsToShow.size() > 0) {
+            this.getItems().clear();
+            Set<HintPort> visibleHints = new HashSet<>(
+                    allHints);
+            visibleHints.removeIf(
+                    hint -> !hint
+                            .accessKeyWords()
+                            .containsAll(keywordsToShow));
+
+            visibleHints.forEach(hint -> this.getItems()
+                    .add(new HintRow(hint,
+                            allKeywords)));
+        } else {
+            reloadDataFromContext();
+        }
     }
 
     public void reloadDataFromContext() {
         this.getItems().clear();
-        context.accessEveryHint()
+        allHints
                 .forEach(hint -> this.getItems()
-                        .add(new HintRow(hint)));
+                        .add(new HintRow(hint,
+                                allKeywords)));
     }
 
     // looks for getter/setter in HintRow with the name of the String literal
@@ -64,7 +100,8 @@ public class HintTable extends TableView<HintRow> {
                 new PropertyValueFactory<>("room"));
 
         keywordColumn.setCellValueFactory(
-                new PropertyValueFactory<>("keywords"));
+                new PropertyValueFactory<>(
+                        "keywordColumn"));
 
         statusColumn.setCellValueFactory(
                 new PropertyValueFactory<>("status"));
