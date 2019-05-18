@@ -1,5 +1,6 @@
 package ruinMapper.hexagon.domain.context;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.hexagon.domain.ContextSupplier;
@@ -11,6 +12,7 @@ import ruinMapper.hexagon.domain.room.RoomPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -33,6 +35,16 @@ public class ContextPortTest {
         contextToTest = lifecyclePort
                 .createNewContext(CONTEXT_NAME);
 
+    }
+
+    @AfterClass
+    public static void deleteTestFiles() {
+        File dir = new File(TEST_DIRECTORY);
+        if (dir.exists()) {
+            Arrays.stream(dir.listFiles())
+                    .forEach(file -> file.delete());
+            dir.delete();
+        }
     }
 
     @Test

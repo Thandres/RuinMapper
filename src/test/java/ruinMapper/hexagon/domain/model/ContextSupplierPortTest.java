@@ -13,7 +13,7 @@ public class ContextSupplierPortTest {
 
     @Before
     public void setup() {
-        supplierToTest = implementationOne();
+//        supplierToTest = implementationOne();
 
     }
 

@@ -1,8 +1,10 @@
 package ruinMapper.hexagon.domain.room;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import ruinMapper.fixtures.repository.*;
+import ruinMapper.hexagon.domain.ContextSupplier;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
 import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.area.AreaPort;
@@ -12,6 +14,8 @@ import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.awt.*;
+import java.io.File;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -19,15 +23,33 @@ public class RoomPortTest {
     private ContextPort context;
 
     private RoomPort roomToTest;
+    private static final String CONTEXT_NAME = "map";
+    private static final String TEST_DIRECTORY = "D:\\Repos\\map";
+
 
     @Before
     public void setup() {
-        ContextSupplierPort lifecyclePort = implementationOne();
-        context = lifecyclePort.createNewContext("");
+        File dir = new File(TEST_DIRECTORY);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        ContextSupplierPort lifecyclePort = new ContextSupplier(
+                TEST_DIRECTORY);
+        context = lifecyclePort
+                .createNewContext(CONTEXT_NAME);
         roomToTest = context
                 .createArea("A1").accessRoom(0, 0);
     }
 
+    @AfterClass
+    public static void deleteTestFiles() {
+        File dir = new File(TEST_DIRECTORY);
+        if (dir.exists()) {
+            Arrays.stream(dir.listFiles())
+                    .forEach(file -> file.delete());
+            dir.delete();
+        }
+    }
     // notes the type of Implementation of the test uses.
     // for testing your own implementation just write another method that returns
     // a a different ContextSupplierPort implementation and switch out the setup() method

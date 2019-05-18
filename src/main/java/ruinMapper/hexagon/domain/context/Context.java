@@ -106,7 +106,8 @@ public class Context extends ComponentSuper implements
                                             tagToDelete)));
             tagToDelete.deleteTag();
             saveState();
-        } else if (keywords.remove(tagToDelete)) {
+        } else if (keywords
+                .remove(tagToDelete.toString())) {
             accessEveryHint()
                     .forEach(hintPort -> hintPort
                             .removeKeyWord(tagToDelete));
