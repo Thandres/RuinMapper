@@ -69,15 +69,21 @@ public class DomainInjector implements
 
     public static Area createArea(String title) {
         Area newArea = new Area(title,
-                currentContext, areaRepository);
+                currentContext.toString(),
+                areaRepository, roomRepository,
+                contextRepository, UUID.randomUUID());
         areaRepository.create(newArea);
+        newArea.createRoom(0, 0);
         return newArea;
     }
 
     public static Room createRoom(Point point,
                                   AreaPort area) {
         Room newRoom = new Room(point,
-                currentContext, area, roomRepository);
+                currentContext.toString(), roomRepository,
+                hintRepository, questRepository,
+                tagRepository, contextRepository,
+                UUID.randomUUID());
         roomRepository.create(newRoom);
         return newRoom;
     }
@@ -87,6 +93,7 @@ public class DomainInjector implements
                 contextRepository);
         currentContext = newContext;
         contextRepository.create(newContext);
+        newContext.createArea("New Area");
         return newContext;
     }
 
