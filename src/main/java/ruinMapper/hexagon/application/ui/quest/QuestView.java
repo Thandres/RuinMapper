@@ -34,11 +34,6 @@ public class QuestView extends VBox {
                 "QuestView.fxml");
 
         setupEventHandler();
-        questAccordion.getPanes()
-                .add(new QuestTitledPane(
-                        context.createQuest(
-                                "Questtitle"),
-                        questAccordion));
         reloadFromContext();
 
     }
