@@ -2,17 +2,20 @@ package ruinMapper.hexagon.domain.room;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.DomainInjector;
-import ruinMapper.hexagon.domain.area.AreaPort;
-import ruinMapper.hexagon.domain.context.ContextPort;
+import ruinMapper.hexagon.domain.context.Context;
+import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
+import ruinMapper.hexagon.domain.tag.Tag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class
 Room extends ComponentSuper implements
@@ -20,29 +23,42 @@ Room extends ComponentSuper implements
     private String title;
     private String notes;
     private Point coordinates;
-    private Set<HintPort> hints;
-    private Set<QuestPort> quests;
-    private Set<TagPort> tags;
-    private ContextPort context;
-    private AreaPort area;
+    private Set<String> hints;
+    private Set<String> quests;
+    private Set<String> tags;
+    private String contextID;
+
     private CRUDRepositoryPort<Room> roomRepository;
+    private CRUDRepositoryPort<Hint> hintRepository;
+    private CRUDRepositoryPort<Quest> questRepository;
+    private CRUDRepositoryPort<Tag> tagRepository;
+    private CRUDRepositoryPort<Context> contextRepository;
     private UUID roomID;
 
 
     public Room(Point coordinates,
-                ContextPort context,
-                AreaPort area,
-                CRUDRepositoryPort<Room> roomRepository) {
-        this.context = context;
-        this.area = area;
+                String contextID,
+
+                CRUDRepositoryPort<Room> roomRepository,
+                CRUDRepositoryPort<Hint> hintRepository,
+                CRUDRepositoryPort<Quest> questRepository,
+                CRUDRepositoryPort<Tag> tagRepository,
+                CRUDRepositoryPort<Context> contextRepository,
+                UUID roomID) {
+        this.contextID = contextID;
+        this.hintRepository = hintRepository;
+        this.questRepository = questRepository;
+        this.tagRepository = tagRepository;
+        this.roomRepository = roomRepository;
+        this.contextRepository = contextRepository;
+
         this.title = "";
         this.notes = "";
         this.coordinates = coordinates;
 
         quests = new HashSet<>();
         tags = new HashSet<>();
-        this.roomRepository = roomRepository;
-        this.roomID = UUID.randomUUID();
+        this.roomID = roomID;
 
         hints = new HashSet<>();
     }
@@ -79,14 +95,14 @@ Room extends ComponentSuper implements
     public HintPort createHint(String content) {
         HintPort newHint = DomainInjector
                 .createHint(content, this);
-        hints.add(newHint);
+        hints.add(newHint.toString());
         saveState();
         return newHint;
     }
 
     @Override
     public void deleteHint(HintPort hintToDelete) {
-        if (hints.remove(hintToDelete)) {
+        if (hints.remove(hintToDelete.toString())) {
             hintToDelete.deleteHint();
             saveState();
         }
@@ -94,14 +110,17 @@ Room extends ComponentSuper implements
 
     @Override
     public Set<HintPort> accessHints() {
-        return new HashSet<>(hints);
+        return hints.stream()
+                .map(hintID -> hintRepository.read(hintID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public QuestPort createQuest(String title) {
-        QuestPort newQuest = context
+        QuestPort newQuest = contextRepository
+                .read(contextID)
                 .createQuest(title);
-        quests.add(newQuest);
+        quests.add(newQuest.toString());
         newQuest.addQuestRoom(this);
 
         saveState();
@@ -110,7 +129,7 @@ Room extends ComponentSuper implements
 
     @Override
     public void addQuest(QuestPort questToAdd) {
-        if (quests.add(questToAdd)) {
+        if (quests.add(questToAdd.toString())) {
             questToAdd.addQuestRoom(this);
             saveState();
         }
@@ -119,7 +138,7 @@ Room extends ComponentSuper implements
 
     @Override
     public void removeQuest(QuestPort questToRemove) {
-        if (quests.remove(questToRemove)) {
+        if (quests.remove(questToRemove.toString())) {
             questToRemove.removeQuestRoom(this);
             saveState();
         }
@@ -127,27 +146,33 @@ Room extends ComponentSuper implements
 
     @Override
     public Set<QuestPort> accessQuests() {
-        return new HashSet<>(quests);
+        return quests.stream()
+                .map(questID -> questRepository
+                        .read(questID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public void tagRoom(TagPort validTag) {
-        if (context.accessValidTags().contains(validTag)) {
-            tags.add(validTag);
+        if (contextRepository.read(contextID)
+                .accessValidTags().contains(validTag)) {
+            tags.add(validTag.toString());
             saveState();
         }
     }
 
     @Override
     public void removeTag(TagPort tagToRemove) {
-        if (tags.remove(tagToRemove)) {
+        if (tags.remove(tagToRemove.toString())) {
             saveState();
         }
     }
 
     @Override
     public Set<TagPort> accessTags() {
-        return new HashSet<>(tags);
+        return tags.stream()
+                .map(tagID -> tagRepository.read(tagID))
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -167,31 +192,28 @@ Room extends ComponentSuper implements
 
     @Override
     public void deleteRoom() {
-        if (area != null) {
-            Set<HintPort> temp = new HashSet<>(hints);
-            hints.clear();
-            temp.forEach(HintPort::deleteHint);
 
-            Set<QuestPort> tempQ = new HashSet<>(quests);
-            quests.clear();
-            tempQ.forEach(questPort -> questPort
-                    .removeQuestRoom(this));
+        hints.forEach(
+                hintID -> hintRepository.delete(hintID));
+        hints.clear();
 
-            tags.clear();
+        Set<QuestPort> tempQ = accessQuests();
+        quests.clear();
+        tempQ.forEach(questPort -> questPort
+                .removeQuestRoom(this));
 
-            AreaPort tempC = area;
-            area = null;
-            tempC.deleteRoom(coordinates.x, coordinates.y);
+        tags.clear();
 
-            context = null;
-            roomRepository.delete(toString());
-        }
+        contextID = null;
+        roomRepository.delete(toString());
+
     }
 
     @Override
     public Point accessCoordinates() {
         return coordinates;
     }
+
 
     public String getTitle() {
         return title;
@@ -217,48 +239,40 @@ Room extends ComponentSuper implements
         this.coordinates = coordinates;
     }
 
-    public Set<HintPort> getHints() {
+    public Set<String> getHints() {
         return hints;
     }
 
     public void setHints(
-            Set<HintPort> hints) {
+            Set<String> hints) {
         this.hints = hints;
     }
 
-    public Set<QuestPort> getQuests() {
+    public Set<String> getQuests() {
         return quests;
     }
 
     public void setQuests(
-            Set<QuestPort> quests) {
+            Set<String> quests) {
         this.quests = quests;
     }
 
-    public Set<TagPort> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
     public void setTags(
-            Set<TagPort> tags) {
+            Set<String> tags) {
         this.tags = tags;
     }
 
-    public ContextPort getContext() {
-        return context;
+    public String getContextID() {
+        return contextID;
     }
 
-    public void setContext(
-            ContextPort context) {
-        this.context = context;
-    }
-
-    public AreaPort getArea() {
-        return area;
-    }
-
-    public void setArea(AreaPort area) {
-        this.area = area;
+    public void setContextID(
+            String contextID) {
+        this.contextID = contextID;
     }
 
     public UUID getRoomID() {

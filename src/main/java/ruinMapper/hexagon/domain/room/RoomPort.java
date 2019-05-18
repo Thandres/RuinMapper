@@ -139,7 +139,6 @@ public interface RoomPort {
      * Deletes the Room from Context.
      * All Hints assigned to the Room are deleted as well.
      * All Quests assigned to this room remove the Room from themselves.
-     * The Area of the Room removes the Room from its assigned rooms
      */
     public void deleteRoom();
 

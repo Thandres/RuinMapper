@@ -1,17 +1,18 @@
 package ruinMapper.hexagon.infrastructure.persistence.room;
 
-import java.awt.*;
 import java.util.Set;
 
 public class RoomDto {
     private String title;
     private String notes;
-    private Point cooridnates;
+
+    private int x;
+    private int y;
     private Set<String> hints;
     private Set<String> quests;
     private Set<String> tags;
     private String contextID;
-    private String areaID;
+
     private String roomID;
 
     public String getTitle() {
@@ -30,12 +31,20 @@ public class RoomDto {
         this.notes = notes;
     }
 
-    public Point getCooridnates() {
-        return cooridnates;
+    public int getX() {
+        return x;
     }
 
-    public void setCooridnates(Point cooridnates) {
-        this.cooridnates = cooridnates;
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public String getRoomID() {
@@ -78,11 +87,4 @@ public class RoomDto {
         this.contextID = contextID;
     }
 
-    public String getAreaID() {
-        return areaID;
-    }
-
-    public void setAreaID(String areaID) {
-        this.areaID = areaID;
-    }
 }

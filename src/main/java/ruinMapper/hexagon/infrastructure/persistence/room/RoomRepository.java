@@ -26,7 +26,7 @@ public class RoomRepository extends
         loadedRooms.put(object.toString(), object);
         RoomDto roomDto = roomMapper.toDto(object);
         FileHelper.writeToFile(
-                createFilelocation(roomDto.toString()),
+                createFilelocation(object.toString()),
                 roomDto);
     }
 
