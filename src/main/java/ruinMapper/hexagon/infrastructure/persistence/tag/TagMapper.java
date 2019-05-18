@@ -20,8 +20,9 @@ public class TagMapper implements DtoMapper<Tag, TagDto> {
     public Tag toDomain(TagDto dto,
                         CRUDRepositoryPort<Tag> repository) {
         Tag domain = new Tag(dto.getTagType(),
-                contextRepository.read(dto.getContextID()),
+                dto.getContextID(),
                 repository,
+                contextRepository,
                 UUID.fromString(dto.getTagID()));
         return domain;
     }
@@ -29,8 +30,8 @@ public class TagMapper implements DtoMapper<Tag, TagDto> {
     @Override
     public TagDto toDto(Tag domain) {
         TagDto tagDto = new TagDto();
-        tagDto.setContextID(domain.getContext().toString());
-        tagDto.setTagType(domain.accessTag());
+        tagDto.setContextID(domain.getContextID());
+        tagDto.setTagType(domain.getTagType());
         tagDto.setTagID(domain.toString());
         return tagDto;
     }

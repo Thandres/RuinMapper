@@ -54,16 +54,18 @@ public class DomainInjector implements
     public static Hint createHint(String content,
                                   RoomPort room) {
         Hint newHint = new Hint(content,
-                room, currentContext,
-                hintRepository, UUID.randomUUID());
+                room.toString(), currentContext.toString(),
+                hintRepository, contextRepository,
+                roomRepository, tagRepository,
+                UUID.randomUUID());
         hintRepository.create(newHint);
         return newHint;
     }
 
     public static Tag createTag(String type) {
         Tag newTag = new Tag(type,
-                currentContext, tagRepository,
-                UUID.randomUUID());
+                currentContext.toString(), tagRepository,
+                contextRepository, UUID.randomUUID());
         tagRepository.create(newTag);
         return newTag;
     }
