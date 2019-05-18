@@ -2,37 +2,44 @@ package ruinMapper.hexagon.domain.area;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.DomainInjector;
+import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
+import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import java.awt.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Area extends ComponentSuper implements
         AreaPort {
     private String title;
     private String notes;
-    private Map<Point, RoomPort> areaMap;
+    private Map<Point, String> areaMap;
 
-    private ContextPort contextPort;
+    private String contextID;
 
     private CRUDRepositoryPort<Area> areaRepository;
+    private CRUDRepositoryPort<Room> roomRepository;
+    private CRUDRepositoryPort<Context> contextRepository;
     private UUID areaID;
 
     public Area(String title,
-                ContextPort contextPort,
-                CRUDRepositoryPort<Area> areaRepository) {
+                String contextID,
+                CRUDRepositoryPort<Area> areaRepository,
+                CRUDRepositoryPort<Room> roomRepository,
+                CRUDRepositoryPort<Context> contextRepository,
+                UUID areaID) {
+        this.roomRepository = roomRepository;
+        this.areaRepository = areaRepository;
         this.title = title;
+        this.contextRepository = contextRepository;
+        this.areaID = areaID;
+        this.contextID = contextID;
         this.notes = "";
         this.areaMap = new HashMap<>();
-        this.contextPort = contextPort;
-
-        this.areaRepository = areaRepository;
-        this.areaID = UUID.randomUUID();
-
-        createRoom(0, 0);
     }
 
 
@@ -40,7 +47,8 @@ public class Area extends ComponentSuper implements
     public RoomPort createRoom(int x, int y) {
         RoomPort newRoom = DomainInjector
                 .createRoom(new Point(x, y), this);
-        areaMap.put(newRoom.accessCoordinates(), newRoom);
+        areaMap.put(newRoom.accessCoordinates(),
+                newRoom.toString());
         saveState();
         return newRoom;
     }
@@ -48,20 +56,23 @@ public class Area extends ComponentSuper implements
     @Override
     public RoomPort accessRoom(int x, int y) {
         Point pointToRetrieve = new Point(x, y);
-        return areaMap.get(pointToRetrieve);
+        String roomID = areaMap.get(pointToRetrieve);
+        return roomRepository.read(roomID);
     }
 
     @Override
     public Set<RoomPort> accessRooms() {
-        return new HashSet<>(areaMap.values());
+        return areaMap.values().stream()
+                .map(roomID -> roomRepository.read(roomID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public void deleteRoom(int x, int y) {
         Point point = new Point(x, y);
         if (areaMap.containsKey(point)) {
-            RoomPort roomToDelete = areaMap.remove(point);
-            roomToDelete.deleteRoom();
+            String roomToDelete = areaMap.remove(point);
+            roomRepository.read(roomToDelete).deleteRoom();
             saveState();
         }
     }
@@ -91,21 +102,24 @@ public class Area extends ComponentSuper implements
     @Override
     public Set<HintPort> accessHintsOnArea() {
         Set<HintPort> hintSet = new HashSet<>();
-        for (RoomPort room : areaMap.values()) {
-            hintSet.addAll(room.accessHints());
-        }
+        areaMap.values().stream()
+                .map(roomID -> roomRepository.read(roomID))
+                .forEach(room -> hintSet
+                        .addAll(room.accessHints()));
         return hintSet;
     }
 
     @Override
     public void deleteArea() {
-        if (contextPort != null) {
-            ContextPort temp = contextPort;
-            contextPort = null;
-            Set<RoomPort> entries = new HashSet<>(
+        if (contextID != null) {
+            ContextPort temp = contextRepository
+                    .read(contextID);
+            contextID = null;
+            Set<String> entries = new HashSet<>(
                     areaMap.values());
-            for (RoomPort room : entries) {
-                Point coordinates = room
+            for (String roomID : entries) {
+                Point coordinates = roomRepository
+                        .read(roomID)
                         .accessCoordinates();
                 deleteRoom(coordinates.x, coordinates.y);
             }
@@ -142,22 +156,22 @@ public class Area extends ComponentSuper implements
         this.notes = notes;
     }
 
-    public Map<Point, RoomPort> getAreaMap() {
+    public Map<Point, String> getAreaMap() {
         return areaMap;
     }
 
     public void setAreaMap(
-            Map<Point, RoomPort> areaMap) {
+            Map<Point, String> areaMap) {
         this.areaMap = areaMap;
     }
 
-    public ContextPort getContextPort() {
-        return contextPort;
+    public String getContextID() {
+        return contextID;
     }
 
-    public void setContextPort(
-            ContextPort contextPort) {
-        this.contextPort = contextPort;
+    public void setContextID(
+            String contextID) {
+        this.contextID = contextID;
     }
 
     public UUID getAreaID() {

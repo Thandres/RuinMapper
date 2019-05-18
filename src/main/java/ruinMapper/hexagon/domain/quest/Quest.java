@@ -1,13 +1,15 @@
 package ruinMapper.hexagon.domain.quest;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
-import ruinMapper.hexagon.domain.context.ContextPort;
+import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
+import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Quest extends ComponentSuper implements
         QuestPort {
@@ -15,24 +17,32 @@ public class Quest extends ComponentSuper implements
     private String title;
     private String description;
     private String notes;
-    private Set<RoomPort> rooms;
-    private ContextPort context;
+    private Set<String> rooms;
+    private String contextId;
     private QuestStatus status;
     private CRUDRepositoryPort<Quest> questRepository;
+    private CRUDRepositoryPort<Room> roomRepository;
+    private CRUDRepositoryPort<Context> contextRepository;
     private UUID questID;
 
 
     public Quest(String title,
-                 ContextPort context,
-                 CRUDRepositoryPort<Quest> questRepository) {
+                 String contextId,
+                 CRUDRepositoryPort<Quest> questRepository,
+                 CRUDRepositoryPort<Room> roomRepository,
+                 CRUDRepositoryPort<Context> contextRepository,
+                 UUID questID) {
         this.title = title;
-        this.context = context;
+        this.contextId = contextId;
+        this.roomRepository = roomRepository;
+        this.contextRepository = contextRepository;
+        this.questID = questID;
         this.description = "";
         this.notes = "";
         this.status = QuestStatus.ACTIVE;
         rooms = new HashSet<>();
         this.questRepository = questRepository;
-        this.questID = UUID.randomUUID();
+
     }
 
 
@@ -82,12 +92,14 @@ public class Quest extends ComponentSuper implements
 
     @Override
     public Set<RoomPort> accessQuestRooms() {
-        return new HashSet<>(rooms);
+        return rooms.stream()
+                .map(roomID -> roomRepository.read(roomID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public void addQuestRoom(RoomPort roomToAdd) {
-        if (rooms.add(roomToAdd)) {
+        if (rooms.add(roomToAdd.toString())) {
             roomToAdd.addQuest(this);
             saveState();
         }
@@ -95,7 +107,7 @@ public class Quest extends ComponentSuper implements
 
     @Override
     public void removeQuestRoom(RoomPort roomToRemove) {
-        if (rooms.remove(roomToRemove)) {
+        if (rooms.remove(roomToRemove.toString())) {
             roomToRemove.removeQuest(this);
             saveState();
         }
@@ -103,14 +115,13 @@ public class Quest extends ComponentSuper implements
 
     @Override
     public void deleteQuest() {
-        if (context != null) {
-            Set<RoomPort> temp = new HashSet<>(rooms);
-            rooms.clear();
-            temp.forEach(
+        if (contextId != null) {
+
+            accessQuestRooms().forEach(
                     roomPort -> roomPort.removeQuest(this));
-            ContextPort tempC = context;
-            context = null;
-            tempC.deleteQuest(this);
+            String tempC = contextId;
+            contextId = null;
+            contextRepository.read(tempC).deleteQuest(this);
             questRepository.delete(questID.toString());
         }
     }
@@ -149,22 +160,22 @@ public class Quest extends ComponentSuper implements
         this.notes = notes;
     }
 
-    public Set<RoomPort> getRooms() {
+    public Set<String> getRooms() {
         return rooms;
     }
 
     public void setRooms(
-            Set<RoomPort> rooms) {
+            Set<String> rooms) {
         this.rooms = rooms;
     }
 
-    public ContextPort getContext() {
-        return context;
+    public String getContextId() {
+        return contextId;
     }
 
-    public void setContext(
-            ContextPort context) {
-        this.context = context;
+    public void setContextId(
+            String contextId) {
+        this.contextId = contextId;
     }
 
     public QuestStatus getStatus() {

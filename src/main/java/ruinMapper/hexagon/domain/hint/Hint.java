@@ -1,37 +1,48 @@
 package ruinMapper.hexagon.domain.hint;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
-import ruinMapper.hexagon.domain.context.ContextPort;
+import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
+import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
+import ruinMapper.hexagon.domain.tag.Tag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Hint extends ComponentSuper implements
         HintPort {
 
     private String content;
     private String notes;
-    private RoomPort room;
-    private Set<TagPort> keywords;
+    private String roomID;
+    private Set<String> keywords;
     private HintStatus status;
-    private ContextPort context;
+    private String contextID;
     private CRUDRepositoryPort<Hint> hintRepository;
+    private CRUDRepositoryPort<Context> contextRepository;
+    private CRUDRepositoryPort<Room> roomRepository;
+    private CRUDRepositoryPort<Tag> tagRepository;
     private UUID hintID;
 
-
-    public Hint(String content, RoomPort room,
-                ContextPort context,
+    public Hint(String content, String roomID,
+                String contextID,
                 CRUDRepositoryPort<Hint> hintRepository,
+                CRUDRepositoryPort<Context> contextRepository,
+                CRUDRepositoryPort<Room> roomRepository,
+                CRUDRepositoryPort<Tag> tagRepository,
                 UUID hintID) {
         // Injected
         this.content = content;
-        this.context = context;
-        this.room = room;
+        this.contextID = contextID;
+        this.roomID = roomID;
         this.hintRepository = hintRepository;
+        this.contextRepository = contextRepository;
+        this.roomRepository = roomRepository;
+        this.tagRepository = tagRepository;
         this.hintID = hintID;
         // Self
         this.notes = "";
@@ -63,36 +74,41 @@ public class Hint extends ComponentSuper implements
 
     @Override
     public RoomPort accessRoom() {
-        return room;
+        return roomRepository.read(roomID);
     }
 
     @Override
     public void addKeyWord(TagPort keyword) {
-        if (context.accessEveryKeyWord()
+        if (contextRepository.read(contextID)
+                .accessEveryKeyWord()
                 .contains(keyword)) {
-            keywords.add(keyword);
+            keywords.add(keyword.toString());
             saveState();
         }
     }
 
     @Override
     public void removeKeyWord(TagPort keywordToRemove) {
-        if (keywords.remove(keywordToRemove)) {
+        if (keywords.remove(keywordToRemove.toString())) {
             saveState();
         }
     }
 
     @Override
     public Set<TagPort> accessKeyWords() {
-        return new HashSet<>(keywords);
+        return keywords.stream()
+                .map(keywordID -> tagRepository
+                        .read(keywordID))
+                .collect(Collectors.toSet());
+
     }
 
     @Override
     public void deleteHint() {
-        if (room != null) {
-            RoomPort roomToDelete = room;
-            room = null;
-            roomToDelete.deleteHint(this);
+        if (roomID != null) {
+            RoomPort room = roomRepository.read(roomID);
+            roomID = null;
+            room.deleteHint(this);
             keywords.clear();
             hintRepository.delete(hintID.toString());
         }
@@ -127,12 +143,12 @@ public class Hint extends ComponentSuper implements
         this.notes = notes;
     }
 
-    public RoomPort getRoom() {
-        return room;
+    public String getRoomID() {
+        return roomID;
     }
 
-    public void setRoom(RoomPort room) {
-        this.room = room;
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
     }
 
     public void setStatus(
@@ -140,21 +156,41 @@ public class Hint extends ComponentSuper implements
         this.status = status;
     }
 
-    public Set<TagPort> getKeywords() {
+    public Set<String> getKeywords() {
         return keywords;
     }
 
     public void setKeywords(
-            Set<TagPort> keywords) {
+            Set<String> keywords) {
         this.keywords = keywords;
     }
 
-    public ContextPort getContext() {
-        return context;
+    public String getContextID() {
+        return contextID;
     }
 
-    public void setContext(
-            ContextPort context) {
-        this.context = context;
+    public void setContextID(
+            String contextID) {
+        this.contextID = contextID;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public HintStatus getStatus() {
+        return status;
+    }
+
+    public UUID getHintID() {
+        return hintID;
+    }
+
+    public void setHintID(UUID hintID) {
+        this.hintID = hintID;
     }
 }

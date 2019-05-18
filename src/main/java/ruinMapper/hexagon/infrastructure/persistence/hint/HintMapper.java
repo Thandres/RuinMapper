@@ -5,14 +5,9 @@ import ruinMapper.hexagon.domain.hint.Hint;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.tag.Tag;
-import ruinMapper.hexagon.domain.tag.TagPort;
 import ruinMapper.hexagon.infrastructure.persistence.DtoMapper;
 
-import java.util.Set;
 import java.util.UUID;
-
-import static ruinMapper.hexagon.infrastructure.persistence.MappingHelper.toDomainSet;
-import static ruinMapper.hexagon.infrastructure.persistence.MappingHelper.toStringSet;
 
 public class HintMapper implements
         DtoMapper<Hint, HintDto> {
@@ -35,29 +30,30 @@ public class HintMapper implements
     public Hint toDomain(HintDto dto,
                          CRUDRepositoryPort<Hint> repository) {
         Hint domain = new Hint(dto.getContent(),
-                roomRepository.read(dto.getRoomID()),
-                contextRepository.read(dto.getContextID()),
+                dto.getRoomID(),
+                dto.getContextID(),
                 repository,
+                contextRepository, roomRepository,
+                tagRepository,
                 UUID.fromString(dto.getHintID()));
         domain.setStatus(dto.getStatus());
         domain.setNotes(dto.getNotes());
-        Set<TagPort> keywords = toDomainSet(
-                dto.getKeywords(), tagRepository);
-        domain.setKeywords(keywords);
+
+        domain.setKeywords(dto.getKeywords());
         return domain;
     }
 
     @Override
     public HintDto toDto(Hint domain) {
         HintDto hintDto = new HintDto();
-        hintDto.setContent(domain.accessContent());
-        hintDto.setNotes(domain.accessNotes());
-        hintDto.setRoomID(domain.accessRoom().toString());
+        hintDto.setContent(domain.getContent());
+        hintDto.setNotes(domain.getNotes());
+        hintDto.setRoomID(domain.getRoomID());
         hintDto.setStatus(domain.getHintStatus());
         hintDto.setKeywords(
-                toStringSet(domain.getKeywords()));
+                domain.getKeywords());
         hintDto.setContextID(
-                domain.getContext().toString());
+                domain.getContextID());
         hintDto.setHintID(domain.toString());
         return hintDto;
     }

@@ -2,7 +2,6 @@ package ruinMapper.hexagon.infrastructure.persistence.area;
 
 import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.context.Context;
-import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 import ruinMapper.hexagon.domain.room.Room;
 import ruinMapper.hexagon.domain.room.RoomPort;
@@ -31,17 +30,21 @@ public class AreaMapper implements
     @Override
     public Area toDomain(AreaDto dto,
                          CRUDRepositoryPort<Area> repository) {
-        ContextPort contextPort = contextRepository
-                .read(dto.getContextID());
-        Map<Point, RoomPort> roomMap = new HashMap<>();
-        for (String roomID : dto.getRoomMap().values()) {
-            RoomPort room = roomRepository.read(roomID);
-            roomMap.put(room.accessCoordinates(), room);
+        Area domain = new Area(dto.getTitle(),
+                dto.getContextID(),
+                repository, roomRepository,
+                contextRepository,
+                UUID.fromString(dto.getAreaID()));
+
+        Map<Point, String> roomMap = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : dto
+                .getRoomMap().entrySet()) {
+            Point coordinates = convertToPoint(
+                    entry.getKey());
+            roomMap.put(coordinates, entry.getValue());
         }
 
-        Area domain = new Area(dto.getTitle(), contextPort,
-                repository);
-        domain.setAreaID(UUID.fromString(dto.getAreaID()));
         domain.setAreaMap(roomMap);
 
         domain.setNotes(dto.getNotes());
@@ -54,14 +57,28 @@ public class AreaMapper implements
         AreaDto dto = new AreaDto();
         dto.setTitle(domain.accessTitle());
         dto.setNotes(domain.accessNotes());
-        Map<Point, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         for (RoomPort room : domain.accessRooms()) {
-            map.put(room.accessCoordinates(),
+            map.put(convertToString(
+                    room.accessCoordinates()),
                     room.toString());
         }
+        dto.setContextID(
+                domain.getContextID());
         dto.setRoomMap(map);
         dto.setAreaID(domain.toString());
         return dto;
     }
 
+    private String convertToString(Point coordinate) {
+        return coordinate.x + "," + coordinate.y;
+    }
+
+    private Point convertToPoint(String pointString) {
+        String[] coordinatesAsString = pointString
+                .split(",");
+        return new Point(
+                Integer.valueOf(coordinatesAsString[0]),
+                Integer.valueOf(coordinatesAsString[1]));
+    }
 }

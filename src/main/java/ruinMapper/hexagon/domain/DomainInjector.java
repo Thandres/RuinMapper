@@ -44,8 +44,9 @@ public class DomainInjector implements
 
     public static Quest createQuest(String title) {
         Quest newQuest = new Quest(title,
-                currentContext,
-                questRepository);
+                currentContext.toString(),
+                questRepository, roomRepository,
+                contextRepository, UUID.randomUUID());
         questRepository.create(newQuest);
         return newQuest;
     }
@@ -53,42 +54,52 @@ public class DomainInjector implements
     public static Hint createHint(String content,
                                   RoomPort room) {
         Hint newHint = new Hint(content,
-                room, currentContext,
-                hintRepository, UUID.randomUUID());
+                room.toString(), currentContext.toString(),
+                hintRepository, contextRepository,
+                roomRepository, tagRepository,
+                UUID.randomUUID());
         hintRepository.create(newHint);
         return newHint;
     }
 
     public static Tag createTag(String type) {
         Tag newTag = new Tag(type,
-                currentContext, tagRepository,
-                UUID.randomUUID());
+                currentContext.toString(), tagRepository,
+                contextRepository, UUID.randomUUID());
         tagRepository.create(newTag);
         return newTag;
     }
 
     public static Area createArea(String title) {
         Area newArea = new Area(title,
-                currentContext, areaRepository);
+                currentContext.toString(),
+                areaRepository, roomRepository,
+                contextRepository, UUID.randomUUID());
         areaRepository.create(newArea);
+        newArea.createRoom(0, 0);
         return newArea;
     }
 
     public static Room createRoom(Point point,
                                   AreaPort area) {
         Room newRoom = new Room(point,
-                currentContext, area, roomRepository);
+                currentContext.toString(), roomRepository,
+                hintRepository, questRepository,
+                tagRepository, contextRepository,
+                UUID.randomUUID());
         roomRepository.create(newRoom);
         return newRoom;
     }
 
     public static Context createContext(String name) {
         Context newContext = new Context(name,
-                contextRepository);
+                contextRepository, tagRepository,
+                questRepository, areaRepository);
         currentContext = newContext;
         // only create the area after the factory produced the context
         createArea("New Area");
         contextRepository.create(newContext);
+        newContext.createArea("New Area");
         return newContext;
     }
 

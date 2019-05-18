@@ -1,6 +1,7 @@
 package ruinMapper.hexagon.domain.tag;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
+import ruinMapper.hexagon.domain.context.Context;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
 
@@ -10,17 +11,20 @@ import java.util.UUID;
 public class Tag extends ComponentSuper implements TagPort {
     private String tagType;
     private CRUDRepositoryPort<Tag> tagRepository;
-    private ContextPort context;
+    private CRUDRepositoryPort<Context> contextRepository;
+    private String contextID;
     private UUID tagID;
 
     public Tag(String tagType,
-               ContextPort context,
+               String contextID,
                CRUDRepositoryPort<Tag> tagRepository,
+               CRUDRepositoryPort<Context> contextRepository,
                UUID tagID) {
         this.tagType = tagType;
         this.tagRepository = tagRepository;
 
-        this.context = context;
+        this.contextID = contextID;
+        this.contextRepository = contextRepository;
         this.tagID = tagID;
     }
 
@@ -39,9 +43,10 @@ public class Tag extends ComponentSuper implements TagPort {
 
     @Override
     public void deleteTag() {
-        if (context != null) {
-            ContextPort temp = context;
-            context = null;
+        if (contextID != null) {
+            ContextPort temp = contextRepository
+                    .read(contextID);
+            contextID = null;
             temp.deleteValidTag(this);
             tagRepository.delete(tagID.toString());
         }
@@ -64,13 +69,13 @@ public class Tag extends ComponentSuper implements TagPort {
         this.tagType = tagType;
     }
 
-    public ContextPort getContext() {
-        return context;
+    public String getContextID() {
+        return contextID;
     }
 
-    public void setContext(
-            ContextPort context) {
-        this.context = context;
+    public void setContextID(
+            String contextID) {
+        this.contextID = contextID;
     }
 
     public UUID getTagID() {

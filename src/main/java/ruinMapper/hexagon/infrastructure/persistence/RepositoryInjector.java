@@ -64,7 +64,7 @@ public class RepositoryInjector {
         hintRepository.setHintMapper(hintMapper);
 
         roomMapper = new RoomMapper(contextRepository,
-                areaRepository, hintRepository,
+                hintRepository,
                 questRepository, tagRepository);
         roomRepository.setRoomMapper(roomMapper);
     }

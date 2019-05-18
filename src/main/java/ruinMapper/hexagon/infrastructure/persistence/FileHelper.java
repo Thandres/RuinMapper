@@ -9,22 +9,22 @@ public class FileHelper {
     private static ObjectMapper jacksonMapper = new ObjectMapper();
 
     public static <T> void writeToFile(String pathToFile,
-                                       T dto) {
+                                       T objectToWrite) {
         try {
             jacksonMapper.writeValue(new File(pathToFile),
-                    dto);
+                    objectToWrite);
         } catch (IOException e) {//TODO error handling
             e.printStackTrace();
         }
     }
 
     public static <T> T readFromFile(String pathToFile,
-                                     Class<T> dtoClass) {
+                                     Class<T> objectClass) {
         try {
             return jacksonMapper
                     .readValue(new File(
                                     pathToFile),
-                            dtoClass);
+                            objectClass);
         } catch (IOException e) {
             e.printStackTrace();
         }

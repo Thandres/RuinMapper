@@ -1,12 +1,11 @@
 package ruinMapper.hexagon.infrastructure.persistence.area;
 
-import java.awt.*;
 import java.util.Map;
 
 public class AreaDto {
     private String title;
     private String notes;
-    private Map<Point, String> roomMap;
+    private Map<String, String> roomMap;
     private String contextID;
     private String areaID;
 
@@ -34,12 +33,12 @@ public class AreaDto {
         this.notes = notes;
     }
 
-    public Map<Point, String> getRoomMap() {
+    public Map<String, String> getRoomMap() {
         return roomMap;
     }
 
     public void setRoomMap(
-            Map<Point, String> roomMap) {
+            Map<String, String> roomMap) {
         this.roomMap = roomMap;
     }
 

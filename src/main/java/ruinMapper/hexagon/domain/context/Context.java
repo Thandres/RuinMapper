@@ -2,10 +2,13 @@ package ruinMapper.hexagon.domain.context;
 
 import ruinMapper.hexagon.domain.ComponentSuper;
 import ruinMapper.hexagon.domain.DomainInjector;
+import ruinMapper.hexagon.domain.area.Area;
 import ruinMapper.hexagon.domain.area.AreaPort;
 import ruinMapper.hexagon.domain.hint.HintPort;
+import ruinMapper.hexagon.domain.quest.Quest;
 import ruinMapper.hexagon.domain.quest.QuestPort;
 import ruinMapper.hexagon.domain.repository.CRUDRepositoryPort;
+import ruinMapper.hexagon.domain.tag.Tag;
 import ruinMapper.hexagon.domain.tag.TagPort;
 
 import java.util.HashSet;
@@ -16,22 +19,33 @@ public class Context extends ComponentSuper implements
         ContextPort {
 
     private String name;
-    private Set<AreaPort> areas;
-    private Set<TagPort> validTags;
-    private Set<QuestPort> quests;
-    private Set<TagPort> keywords;
+    private Set<String> areas;
+    private Set<String> validTags;
+    private Set<String> quests;
+    private Set<String> keywords;
     private CRUDRepositoryPort<Context> contextRepository;
+    private CRUDRepositoryPort<Tag> tagRepository;
+    private CRUDRepositoryPort<Quest> questRepository;
+    private CRUDRepositoryPort<Area> areaRepository;
 
 
     public Context(
             String name,
-            CRUDRepositoryPort<Context> contextRepository) {
+            CRUDRepositoryPort<Context> contextRepository,
+            CRUDRepositoryPort<Tag> tagRepository,
+            CRUDRepositoryPort<Quest> questRepository,
+            CRUDRepositoryPort<Area> areaRepository) {
         this.name = name;
+        this.tagRepository = tagRepository;
+        this.questRepository = questRepository;
+        this.areaRepository = areaRepository;
+
         areas = new HashSet<>();
         validTags = new HashSet<>();
         quests = new HashSet<>();
         keywords = new HashSet<>();
         this.contextRepository = contextRepository;
+
 
     }
 
@@ -44,14 +58,14 @@ public class Context extends ComponentSuper implements
     public AreaPort createArea(String title) {
         AreaPort newArea = DomainInjector
                 .createArea(title);
-        areas.add(newArea);
+        areas.add(newArea.toString());
         saveState();
         return newArea;
     }
 
     @Override
     public void deleteArea(AreaPort areaToDelete) {
-        if (areas.remove(areaToDelete)) {
+        if (areas.remove(areaToDelete.toString())) {
             areaToDelete.deleteArea();
             saveState();
         }
@@ -60,28 +74,31 @@ public class Context extends ComponentSuper implements
     @Override
     public AreaPort accessArea(String titleOfArea) {
         return areas.stream()
-                .filter(areaPort -> areaPort.accessTitle()
+                .map(areaID -> areaRepository.read(areaID))
+                .filter(area -> area.accessTitle()
                         .equals(titleOfArea)).findFirst()
                 .orElseGet(null);//TODO error object
     }
 
     @Override
     public Set<AreaPort> accessEveryArea() {
-        return new HashSet<>(areas);
+        return areas.stream()
+                .map(areaID -> areaRepository.read(areaID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public TagPort createValidTag(String name) {
         TagPort tag = DomainInjector.createTag(name);
-        validTags.add(tag);
+        validTags.add(tag.toString());
         saveState();
         return tag;
     }
 
     @Override
     public void deleteValidTag(TagPort tagToDelete) {
-        if (validTags.remove(tagToDelete)) {
-            areas
+        if (validTags.remove(tagToDelete.toString())) {
+            accessEveryArea()
                     .forEach(areaPort -> areaPort
                             .accessRooms()
                             .forEach(roomPort -> roomPort
@@ -89,24 +106,28 @@ public class Context extends ComponentSuper implements
                                             tagToDelete)));
             tagToDelete.deleteTag();
             saveState();
-        } else if (keywords.remove(tagToDelete)) {
-            Set<HintPort> allHints = accessEveryHint();
-            allHints.forEach(hintPort -> hintPort
-                    .removeKeyWord(tagToDelete));
+        } else if (keywords
+                .remove(tagToDelete.toString())) {
+            accessEveryHint()
+                    .forEach(hintPort -> hintPort
+                            .removeKeyWord(tagToDelete));
+            tagToDelete.deleteTag();
             saveState();
         }
     }
 
     @Override
     public Set<TagPort> accessValidTags() {
-        return new HashSet<>(validTags);
+        return validTags.stream()
+                .map(tagID -> tagRepository.read(tagID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public TagPort createKeyword(String keyword) {
         TagPort keyTag = DomainInjector
                 .createTag(keyword);
-        keywords.add(keyTag);
+        keywords.add(keyTag.toString());
         saveState();
         return keyTag;
     }
@@ -118,21 +139,24 @@ public class Context extends ComponentSuper implements
 
     @Override
     public Set<TagPort> accessEveryKeyWord() {
-        return new HashSet<>(keywords);
+        return keywords.stream()
+                .map(keywordID -> tagRepository
+                        .read(keywordID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public QuestPort createQuest(String title) {
         QuestPort quest = DomainInjector
                 .createQuest(title);
-        quests.add(quest);
+        quests.add(quest.toString());
         saveState();
         return quest;
     }
 
     @Override
     public void deleteQuest(QuestPort quest) {
-        if (quests.remove(quest)) {
+        if (quests.remove(quest.toString())) {
             quest.accessQuestRooms().forEach(
                     roomPort -> roomPort
                             .removeQuest(quest));
@@ -142,12 +166,15 @@ public class Context extends ComponentSuper implements
 
     @Override
     public Set<QuestPort> accessEveryQuest() {
-        return new HashSet<>(quests);
+        return quests.stream()
+                .map(questID -> questRepository
+                        .read(questID))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Set<HintPort> accessEveryHint() {
-        return areas.stream()
+        return accessEveryArea().stream()
                 .flatMap(
                         area -> area.accessHintsOnArea()
                                 .stream())
@@ -156,15 +183,17 @@ public class Context extends ComponentSuper implements
 
     @Override
     public void deleteContext() {
-        Set<AreaPort> tempA = new HashSet<>(areas);
+        accessEveryArea().forEach(AreaPort::deleteArea);
         areas.clear();
-        tempA.forEach(AreaPort::deleteArea);
-        Set<QuestPort> tempQ = new HashSet<>(quests);
+        accessEveryQuest().forEach(QuestPort::deleteQuest);
         quests.clear();
-        tempQ.forEach(QuestPort::deleteQuest);
-        Set<TagPort> tempT = validTags;
+
+        accessEveryKeyWord().forEach(TagPort::deleteTag);
+        keywords.clear();
+
+        accessValidTags().forEach(TagPort::deleteTag);
         validTags.clear();
-        tempT.forEach(TagPort::deleteTag);
+
         contextRepository.delete(toString());
     }
 
@@ -186,39 +215,39 @@ public class Context extends ComponentSuper implements
         this.name = name;
     }
 
-    public Set<AreaPort> getAreas() {
+    public Set<String> getAreas() {
         return areas;
     }
 
     public void setAreas(
-            Set<AreaPort> areas) {
+            Set<String> areas) {
         this.areas = areas;
     }
 
-    public Set<TagPort> getValidTags() {
+    public Set<String> getValidTags() {
         return validTags;
     }
 
     public void setValidTags(
-            Set<TagPort> validTags) {
+            Set<String> validTags) {
         this.validTags = validTags;
     }
 
-    public Set<QuestPort> getQuests() {
+    public Set<String> getQuests() {
         return quests;
     }
 
     public void setQuests(
-            Set<QuestPort> quests) {
+            Set<String> quests) {
         this.quests = quests;
     }
 
-    public Set<TagPort> getKeywords() {
+    public Set<String> getKeywords() {
         return keywords;
     }
 
     public void setKeywords(
-            Set<TagPort> keywords) {
+            Set<String> keywords) {
         this.keywords = keywords;
     }
 }

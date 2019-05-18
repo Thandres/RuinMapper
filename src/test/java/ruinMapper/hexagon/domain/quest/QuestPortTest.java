@@ -1,13 +1,15 @@
 package ruinMapper.hexagon.domain.quest;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import ruinMapper.fixtures.repository.*;
+import ruinMapper.hexagon.domain.ContextSupplier;
 import ruinMapper.hexagon.domain.ContextSupplierPort;
-import ruinMapper.hexagon.domain.DomainInjector;
 import ruinMapper.hexagon.domain.context.ContextPort;
 import ruinMapper.hexagon.domain.room.RoomPort;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -16,26 +18,32 @@ public class QuestPortTest {
     private ContextPort context;
 
     private QuestPort questToTest;
+    private static final String CONTEXT_NAME = "map";
+    private static final String TEST_DIRECTORY = "D:\\Repos\\map";
 
     @Before
     public void setup() {
-        ContextSupplierPort lifecyclePort = implementationOne();
-        context = lifecyclePort.createNewContext("");
+        File dir = new File(TEST_DIRECTORY);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        ContextSupplierPort lifecyclePort = new ContextSupplier(
+                TEST_DIRECTORY);
+        context = lifecyclePort
+                .createNewContext(CONTEXT_NAME);
         questToTest = context
                 .createQuest("");
     }
 
-    // notes the type of Implementation of the test uses.
-    // for testing your own implementation just write another method that returns
-    // a a different ContextSupplierPort implementation and switch out the setup() method
-    private ContextSupplierPort implementationOne() {
-        return new DomainInjector(
-                new QuestRepoDummy(), new RoomRepoDummy(),
-                new HintRepoDummy(), new TagRepoDummy(),
-                new AreaRepoDummy(),
-                new ContextRepoDummy());
+    @AfterClass
+    public static void deleteTestFiles() {
+        File dir = new File(TEST_DIRECTORY);
+        if (dir.exists()) {
+            Arrays.stream(dir.listFiles())
+                    .forEach(file -> file.delete());
+            dir.delete();
+        }
     }
-
     @Test
     public void changeTitle() {
         String nStr = "Save the Kingdom";

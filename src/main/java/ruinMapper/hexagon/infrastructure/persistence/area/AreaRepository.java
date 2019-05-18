@@ -41,7 +41,10 @@ public class AreaRepository extends
             AreaDto areaDto = FileHelper
                     .readFromFile(createFilelocation(ID),
                             AreaDto.class);
-            return areaMapper.toDomain(areaDto, this);
+            Area loadedArea = areaMapper
+                    .toDomain(areaDto, this);
+            loadedAreas.put(ID, loadedArea);
+            return loadedArea;
         }
     }
 
